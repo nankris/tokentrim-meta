@@ -36,7 +36,7 @@ def segment_key(segment: PromptSegment) -> tuple[str, str, str]:
 def from_context(item: ContextItem) -> PromptSegment:
     return PromptSegment(item.id, item.text, item.kind,
                          "system" if item.kind == "system" else item.role,
-                         item.kind == "system" or item.pinned)
+                         item.kind in {"system", "tool_schema", "repo_map"} or item.pinned)
 
 
 class CacheAwarePlanner:

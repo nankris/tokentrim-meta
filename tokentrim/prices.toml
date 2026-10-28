@@ -1,5 +1,5 @@
-# USD per 1M tokens. From PREP.md; verify against dev.meta.ai pricing.
-# Meta credits have not yet been claimed. No prices were checked online.
+# USD per 1M tokens. Meta rows match dev.meta.ai/docs/pricing-rate-limits (checked 2026-10-28; not yet bill-verified).
+# Page states no min cacheable prefix, TTL or cache-write charge; measure before relying on it.
 [models."meta/muse-spark-1.3"]
 input = 1.25
 output = 4.25
@@ -11,7 +11,7 @@ output = 20.00
 cached_input = 0.20
 
 # Contributor mode: Meta may train on content. Explicit opt-in only.
-# Values from PREP.md; verify against dev.meta.ai pricing.
+# Not offered for Wonder. Values match the same pricing page.
 [models."meta/muse-spark-1.3-contributor"]
 input = 0.10
 output = 0.20

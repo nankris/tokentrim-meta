@@ -1,0 +1,510 @@
+{
+  "data_kind": "SIMULATION",
+  "repeats": 1,
+  "rows": [
+    {
+      "config": "default",
+      "tokentrim": {
+        "saving_pct": 11.538119050726893,
+        "saving_ci95": [
+          9.356039970493546,
+          13.775014097071384
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 44.65388305884904,
+        "saving_ci95": [
+          34.452683780851906,
+          53.77150564112059
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": 1.540792225051648,
+        "saving_ci95": [
+          -1.569008481096188,
+          4.024506086587289
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 60.79838125319726,
+        "saving_ci95": [
+          58.26701853245992,
+          62.99285517898842
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -15.0,
+          7.5
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.15536772000000001
+    },
+    {
+      "config": "cheap_success_x0.70",
+      "tokentrim": {
+        "saving_pct": 10.095481867147175,
+        "saving_ci95": [
+          7.113285093691484,
+          12.936213238139452
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 39.30915878150237,
+        "saving_ci95": [
+          29.749531325423103,
+          50.121713391566246
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": -0.45843660446325474,
+        "saving_ci95": [
+          -4.5587974681773975,
+          3.1553452750891693
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 58.225222073156516,
+        "saving_ci95": [
+          55.47498184794141,
+          61.07459108132173
+        ],
+        "pass_diff_pp": -12.5,
+        "pass_diff_ci95": [
+          -27.5,
+          0.0
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.15536772000000001
+    },
+    {
+      "config": "cheap_success_x0.85",
+      "tokentrim": {
+        "saving_pct": 10.504900889322453,
+        "saving_ci95": [
+          7.415021328900225,
+          13.302667472723435
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 42.57190135763079,
+        "saving_ci95": [
+          33.16436670357648,
+          52.43024964853416
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": 0.10470643451550046,
+        "saving_ci95": [
+          -3.9261529317808503,
+          3.6698798829544197
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 59.828734855605795,
+        "saving_ci95": [
+          57.2345926422303,
+          62.18861507984092
+        ],
+        "pass_diff_pp": -7.5,
+        "pass_diff_ci95": [
+          -20.0,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.15536772000000001
+    },
+    {
+      "config": "min_cacheable_0",
+      "tokentrim": {
+        "saving_pct": 11.538119050726893,
+        "saving_ci95": [
+          9.356039970493546,
+          13.775014097071384
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 44.65388305884904,
+        "saving_ci95": [
+          34.452683780851906,
+          53.77150564112059
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": 1.540792225051648,
+        "saving_ci95": [
+          -1.569008481096188,
+          4.024506086587289
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 60.79838125319726,
+        "saving_ci95": [
+          58.26701853245992,
+          62.99285517898842
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -15.0,
+          7.5
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.15536772000000001
+    },
+    {
+      "config": "min_cacheable_4096",
+      "tokentrim": {
+        "saving_pct": 11.538119050726893,
+        "saving_ci95": [
+          9.356039970493546,
+          13.775014097071384
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 44.65388305884904,
+        "saving_ci95": [
+          34.452683780851906,
+          53.77150564112059
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": 1.540792225051648,
+        "saving_ci95": [
+          -1.569008481096188,
+          4.024506086587289
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 60.79838125319726,
+        "saving_ci95": [
+          58.26701853245992,
+          62.99285517898842
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -15.0,
+          7.5
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.15536772000000001
+    },
+    {
+      "config": "cache_write_1.25x_ILLUSTRATIVE",
+      "tokentrim": {
+        "saving_pct": 9.529234597166505,
+        "saving_ci95": [
+          7.461225876423261,
+          11.727677391188454
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 44.38499158573787,
+        "saving_ci95": [
+          33.94376946105937,
+          53.81386406241773
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": -1.2668541843482788,
+        "saving_ci95": [
+          -4.267873795359567,
+          1.0746496413805882
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 61.57120823128194,
+        "saving_ci95": [
+          59.16443518459109,
+          63.62951232379212
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -15.0,
+          7.5
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.17829252
+    },
+    {
+      "config": "trim_penalty_3pp",
+      "tokentrim": {
+        "saving_pct": 10.90946932219899,
+        "saving_ci95": [
+          8.176094267514168,
+          13.47211381849804
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 44.348311219344666,
+        "saving_ci95": [
+          34.109649442989436,
+          53.67600733208648
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": 1.540792225051648,
+        "saving_ci95": [
+          -1.569008481096188,
+          4.024506086587289
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 60.79838125319726,
+        "saving_ci95": [
+          58.26701853245992,
+          62.99285517898842
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -15.0,
+          7.5
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.15536772000000001
+    },
+    {
+      "config": "trim_penalty_8pp",
+      "tokentrim": {
+        "saving_pct": 9.91152875899834,
+        "saving_ci95": [
+          6.742443639421889,
+          12.795680538577608
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 42.239209180645766,
+        "saving_ci95": [
+          31.970839081191585,
+          52.31444231935278
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": 1.540792225051648,
+        "saving_ci95": [
+          -1.569008481096188,
+          4.024506086587289
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 60.79838125319726,
+        "saving_ci95": [
+          58.26701853245992,
+          62.99285517898842
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -15.0,
+          7.5
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.15536772000000001
+    },
+    {
+      "config": "scenario_toy",
+      "tokentrim": {
+        "saving_pct": 24.415678060354406,
+        "saving_ci95": [
+          20.854381696036615,
+          27.65066737104043
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "tokentrim-cheapfirst": {
+        "saving_pct": 54.035007255664176,
+        "saving_ci95": [
+          44.9620210687905,
+          61.94621841634685
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -12.5,
+          5.0
+        ],
+        "noninferior": false
+      },
+      "route-percall": {
+        "saving_pct": 19.090290650255795,
+        "saving_ci95": [
+          15.181231784185444,
+          22.48902836541058
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -7.5,
+          0.0
+        ],
+        "noninferior": true
+      },
+      "cheap-only": {
+        "saving_pct": 68.64655647237021,
+        "saving_ci95": [
+          66.108445023781,
+          70.72478195012413
+        ],
+        "pass_diff_pp": -2.5,
+        "pass_diff_ci95": [
+          -15.0,
+          7.5
+        ],
+        "noninferior": false
+      },
+      "baseline_usd_per_task": 0.047204499999999996
+    }
+  ]
+}
