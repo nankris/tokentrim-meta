@@ -1,0 +1,554 @@
+{
+  "metadata": {
+    "schema_version": 1,
+    "data_kind": "FAKE",
+    "usage_simulated": true,
+    "checks_simulated": true,
+    "notice": "FAKE default: simulated usage and checks; no edits or check commands executed. Not evidence of task correctness.",
+    "task_count": 3,
+    "tasks_path": "bench/tasks/example_tasks.jsonl",
+    "bootstrap": {
+      "method": "paired task percentile",
+      "confidence": 0.95,
+      "samples": 2000,
+      "seed": 42
+    },
+    "token_definition": "input (including cached input) + output; summed over steps per task",
+    "cost_definition": "USD estimates from configured prices; cached tokens are an input subset",
+    "cache_policy": "cold per task/mode; fake full stable-prefix hits are scoped to model",
+    "paired_difference": "tokentrim - baseline; pass-rate differences are proportions",
+    "percent_saving": "100 * (mean baseline - mean tokentrim) / mean baseline; undefined at zero"
+  },
+  "results": [
+    {
+      "task_id": "example-add",
+      "mode": "baseline",
+      "category": "bugfix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 3062,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 3096,
+      "dollars": 0.012928,
+      "passed": true,
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 1518,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.006412,
+          "pruning": {
+            "tokens_before": 1518,
+            "tokens_after": 1518,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 1544,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.006516,
+          "pruning": {
+            "tokens_before": 1544,
+            "tokens_after": 1544,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 1518,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "example-add",
+      "mode": "tokentrim",
+      "category": "bugfix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 414,
+        "cached_input": 28,
+        "output": 34
+      },
+      "tokens": 448,
+      "dollars": 0.00045680000000000004,
+      "passed": true,
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 194,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000228,
+          "pruning": {
+            "tokens_before": 1518,
+            "tokens_after": 194,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "c5f8d78b5254825ea0e6caecef110866f98caa3a135ef99032b00641cac88d3e",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Single small edit"
+          },
+          "usage": {
+            "input": 220,
+            "cached_input": 28,
+            "output": 17
+          },
+          "dollars": 0.0002288,
+          "pruning": {
+            "tokens_before": 1544,
+            "tokens_after": 220,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "c5f8d78b5254825ea0e6caecef110866f98caa3a135ef99032b00641cac88d3e",
+          "estimated_cacheable_tokens": 194,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "example-reverse",
+      "mode": "baseline",
+      "category": "implementation",
+      "difficulty": "easy",
+      "usage": {
+        "input": 3076,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 3110,
+      "dollars": 0.012984,
+      "passed": true,
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 1525,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00644,
+          "pruning": {
+            "tokens_before": 1525,
+            "tokens_after": 1525,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 1551,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.006544,
+          "pruning": {
+            "tokens_before": 1551,
+            "tokens_after": 1551,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 1525,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "example-reverse",
+      "mode": "tokentrim",
+      "category": "implementation",
+      "difficulty": "easy",
+      "usage": {
+        "input": 428,
+        "cached_input": 29,
+        "output": 34
+      },
+      "tokens": 462,
+      "dollars": 0.0004699,
+      "passed": true,
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 201,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000235,
+          "pruning": {
+            "tokens_before": 1525,
+            "tokens_after": 201,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "0fff21bd9d6b66c3022ec7a5d8c1885eb278e60d37c3dd701105e063c35881a6",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Single small edit"
+          },
+          "usage": {
+            "input": 227,
+            "cached_input": 29,
+            "output": 17
+          },
+          "dollars": 0.00023490000000000002,
+          "pruning": {
+            "tokens_before": 1551,
+            "tokens_after": 227,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "0fff21bd9d6b66c3022ec7a5d8c1885eb278e60d37c3dd701105e063c35881a6",
+          "estimated_cacheable_tokens": 201,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "example-clamp",
+      "mode": "baseline",
+      "category": "edge-cases",
+      "difficulty": "easy",
+      "usage": {
+        "input": 3104,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 3138,
+      "dollars": 0.013096,
+      "passed": true,
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 1539,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.006496,
+          "pruning": {
+            "tokens_before": 1539,
+            "tokens_after": 1539,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 1565,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.0066,
+          "pruning": {
+            "tokens_before": 1565,
+            "tokens_after": 1565,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 1539,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "example-clamp",
+      "mode": "tokentrim",
+      "category": "edge-cases",
+      "difficulty": "easy",
+      "usage": {
+        "input": 456,
+        "cached_input": 28,
+        "output": 34
+      },
+      "tokens": 490,
+      "dollars": 0.0004988,
+      "passed": true,
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 215,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000249,
+          "pruning": {
+            "tokens_before": 1539,
+            "tokens_after": 215,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "b4dbb9b19744c19a70499253152ef003cf096bf6d501025840dbf4b99926be80",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Single small edit"
+          },
+          "usage": {
+            "input": 241,
+            "cached_input": 28,
+            "output": 17
+          },
+          "dollars": 0.0002498,
+          "pruning": {
+            "tokens_before": 1565,
+            "tokens_after": 241,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "b4dbb9b19744c19a70499253152ef003cf096bf6d501025840dbf4b99926be80",
+          "estimated_cacheable_tokens": 215,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "tokens": {
+        "mean": 3114.6666666666665,
+        "ci95": [
+          3096.0,
+          3138.0
+        ],
+        "n": 3
+      },
+      "dollars": {
+        "mean": 0.013002666666666668,
+        "ci95": [
+          0.012928,
+          0.013096000000000002
+        ],
+        "n": 3
+      },
+      "pass_rate": {
+        "mean": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "n": 3
+      }
+    },
+    "tokentrim": {
+      "tokens": {
+        "mean": 466.6666666666667,
+        "ci95": [
+          448.0,
+          490.0
+        ],
+        "n": 3
+      },
+      "dollars": {
+        "mean": 0.0004751666666666667,
+        "ci95": [
+          0.00045680000000000004,
+          0.0004988
+        ],
+        "n": 3
+      },
+      "pass_rate": {
+        "mean": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "n": 3
+      }
+    },
+    "paired": {
+      "tokens": {
+        "difference": {
+          "mean": -2648.0,
+          "ci95": [
+            -2648.0,
+            -2648.0
+          ],
+          "n": 3
+        },
+        "percent_saving": {
+          "mean": 85.01712328767124,
+          "ci95": [
+            84.38495857233907,
+            85.5297157622739
+          ],
+          "n": 3
+        }
+      },
+      "dollars": {
+        "difference": {
+          "mean": -0.012527499999999999,
+          "ci95": [
+            -0.012597199999999998,
+            -0.0124712
+          ],
+          "n": 3
+        },
+        "percent_saving": {
+          "mean": 96.3456214109926,
+          "ci95": [
+            96.19120342089188,
+            96.46658415841584
+          ],
+          "n": 3
+        }
+      },
+      "pass_rate": {
+        "difference": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 3
+        },
+        "percent_saving": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 3
+        }
+      }
+    }
+  }
+}

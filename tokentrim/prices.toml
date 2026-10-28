@@ -1,0 +1,29 @@
+# USD per 1M tokens. From PREP.md; verify against dev.meta.ai pricing.
+# Meta credits have not yet been claimed. No prices were checked online.
+[models."meta/muse-spark-1.3"]
+input = 1.25
+output = 4.25
+cached_input = 0.15
+
+[models."meta/muse-wonder-1.0"]
+input = 4.00
+output = 20.00
+cached_input = 0.20
+
+# Contributor mode: Meta may train on content. Explicit opt-in only.
+# Values from PREP.md; verify against dev.meta.ai pricing.
+[models."meta/muse-spark-1.3-contributor"]
+input = 0.10
+output = 0.20
+cached_input = 0.002
+
+# Synthetic test prices, not vendor quotes.
+[models."fake/cheap"]
+input = 1.0
+output = 2.0
+cached_input = 0.1
+
+[models."fake/strong"]
+input = 4.0
+output = 20.0
+cached_input = 0.2

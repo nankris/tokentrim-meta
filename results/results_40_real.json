@@ -1,0 +1,6291 @@
+{
+  "metadata": {
+    "schema_version": 1,
+    "data_kind": "FAKE",
+    "usage_simulated": true,
+    "checks_simulated": false,
+    "notice": "Usage is simulated. Checks use the selected checker; see per-task outcomes.",
+    "task_count": 40,
+    "tasks_path": "bench/tasks/tasks_40.jsonl",
+    "bootstrap": {
+      "method": "paired task percentile",
+      "confidence": 0.95,
+      "samples": 20,
+      "seed": 42
+    },
+    "token_definition": "input (including cached input) + output; summed over steps per task",
+    "cost_definition": "USD estimates from configured prices; cached tokens are an input subset",
+    "cache_policy": "cold per task/mode; fake full stable-prefix hits are scoped to model",
+    "paired_difference": "tokentrim - baseline; pass-rate differences are proportions",
+    "percent_saving": "100 * (mean baseline - mean tokentrim) / mean baseline; undefined at zero"
+  },
+  "results": [
+    {
+      "task_id": "t01_escaped_fields",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4132,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4166,
+      "dollars": 0.017208,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2053,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008552,
+          "pruning": {
+            "tokens_before": 2053,
+            "tokens_after": 2053,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2079,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008656,
+          "pruning": {
+            "tokens_before": 2079,
+            "tokens_after": 2079,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2053,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t01_escaped_fields",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1484,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1518,
+      "dollars": 0.004123,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 729,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000763,
+          "pruning": {
+            "tokens_before": 2053,
+            "tokens_after": 729,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "6735b1cb4681f5525fe28402ba96d1c2f5b0d71f5b9d7df251b20e07397579a4",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 755,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00336,
+          "pruning": {
+            "tokens_before": 2079,
+            "tokens_after": 755,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "6735b1cb4681f5525fe28402ba96d1c2f5b0d71f5b9d7df251b20e07397579a4",
+          "estimated_cacheable_tokens": 729,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t02_month_rollover",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4096,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4130,
+      "dollars": 0.017064,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2035,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00848,
+          "pruning": {
+            "tokens_before": 2035,
+            "tokens_after": 2035,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2061,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008584,
+          "pruning": {
+            "tokens_before": 2061,
+            "tokens_after": 2061,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2035,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t02_month_rollover",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1448,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1482,
+      "dollars": 0.004033,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 711,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000745,
+          "pruning": {
+            "tokens_before": 2035,
+            "tokens_after": 711,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "fcf86601eaf75767724d5cc93355c0310766e8563497e6128988f1d47cf5df38",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 737,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003288,
+          "pruning": {
+            "tokens_before": 2061,
+            "tokens_after": 737,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "fcf86601eaf75767724d5cc93355c0310766e8563497e6128988f1d47cf5df38",
+          "estimated_cacheable_tokens": 711,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t03_invoice_rounding",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4236,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4270,
+      "dollars": 0.017624,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2105,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00876,
+          "pruning": {
+            "tokens_before": 2105,
+            "tokens_after": 2105,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2131,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008864,
+          "pruning": {
+            "tokens_before": 2131,
+            "tokens_after": 2131,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2105,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t03_invoice_rounding",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1588,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1622,
+      "dollars": 0.004383,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 781,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000815,
+          "pruning": {
+            "tokens_before": 2105,
+            "tokens_after": 781,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "9147d1e1660b93f90287801e3954acae35ddcd86b8c9364c843e584bde230c43",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 807,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003568,
+          "pruning": {
+            "tokens_before": 2131,
+            "tokens_after": 807,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "9147d1e1660b93f90287801e3954acae35ddcd86b8c9364c843e584bde230c43",
+          "estimated_cacheable_tokens": 781,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t04_falsey_cache",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4386,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4420,
+      "dollars": 0.018224,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2180,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00906,
+          "pruning": {
+            "tokens_before": 2180,
+            "tokens_after": 2180,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2206,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009164,
+          "pruning": {
+            "tokens_before": 2206,
+            "tokens_after": 2206,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2180,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t04_falsey_cache",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1738,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1772,
+      "dollars": 0.004758,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 856,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00089,
+          "pruning": {
+            "tokens_before": 2180,
+            "tokens_after": 856,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "8b4ad26ceffd97a5571a562141ceaccc535dd7f8abcd99f7c18fcda6b58b9d03",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 882,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003868,
+          "pruning": {
+            "tokens_before": 2206,
+            "tokens_after": 882,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "8b4ad26ceffd97a5571a562141ceaccc535dd7f8abcd99f7c18fcda6b58b9d03",
+          "estimated_cacheable_tokens": 856,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t05_cli_separator",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4258,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4292,
+      "dollars": 0.017712,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2116,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008804,
+          "pruning": {
+            "tokens_before": 2116,
+            "tokens_after": 2116,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2142,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008908,
+          "pruning": {
+            "tokens_before": 2142,
+            "tokens_after": 2142,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2116,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t05_cli_separator",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1610,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1644,
+      "dollars": 0.004438,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 792,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000826,
+          "pruning": {
+            "tokens_before": 2116,
+            "tokens_after": 792,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "ca148370faa956672144a40a8017699009cff9ecb2c279e725d869aac6df6abb",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 818,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003612,
+          "pruning": {
+            "tokens_before": 2142,
+            "tokens_after": 818,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "ca148370faa956672144a40a8017699009cff9ecb2c279e725d869aac6df6abb",
+          "estimated_cacheable_tokens": 792,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t06_unicode_counts",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4236,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4270,
+      "dollars": 0.017624,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2105,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00876,
+          "pruning": {
+            "tokens_before": 2105,
+            "tokens_after": 2105,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2131,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008864,
+          "pruning": {
+            "tokens_before": 2131,
+            "tokens_after": 2131,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2105,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t06_unicode_counts",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1588,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1622,
+      "dollars": 0.004383,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 781,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000815,
+          "pruning": {
+            "tokens_before": 2105,
+            "tokens_after": 781,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "d5693823331c75e2fc06910ffc702d143ab8a0d7b1cf6dbdbbe01a3a6e128848",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 807,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003568,
+          "pruning": {
+            "tokens_before": 2131,
+            "tokens_after": 807,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "d5693823331c75e2fc06910ffc702d143ab8a0d7b1cf6dbdbbe01a3a6e128848",
+          "estimated_cacheable_tokens": 781,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t07_interval_union",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4260,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4294,
+      "dollars": 0.01772,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2117,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008808,
+          "pruning": {
+            "tokens_before": 2117,
+            "tokens_after": 2117,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2143,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008912,
+          "pruning": {
+            "tokens_before": 2143,
+            "tokens_after": 2143,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2117,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t07_interval_union",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1612,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1646,
+      "dollars": 0.004443,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 793,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000827,
+          "pruning": {
+            "tokens_before": 2117,
+            "tokens_after": 793,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "36b9f1424fbcd2ec0594ea1aa681b97ff9604e012c4680c641c1ecce55b15cef",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 819,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003616,
+          "pruning": {
+            "tokens_before": 2143,
+            "tokens_after": 819,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "36b9f1424fbcd2ec0594ea1aa681b97ff9604e012c4680c641c1ecce55b15cef",
+          "estimated_cacheable_tokens": 793,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t08_config_isolation",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4418,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4452,
+      "dollars": 0.018352,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2196,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009124,
+          "pruning": {
+            "tokens_before": 2196,
+            "tokens_after": 2196,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2222,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009228,
+          "pruning": {
+            "tokens_before": 2222,
+            "tokens_after": 2222,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2196,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t08_config_isolation",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1770,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1804,
+      "dollars": 0.004837999999999999,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 872,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000906,
+          "pruning": {
+            "tokens_before": 2196,
+            "tokens_after": 872,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "d8edd55c6b990dfcbd209042e28622ee8fa0c73cfb717f8ad550112f7843468f",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 898,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003932,
+          "pruning": {
+            "tokens_before": 2222,
+            "tokens_after": 898,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "d8edd55c6b990dfcbd209042e28622ee8fa0c73cfb717f8ad550112f7843468f",
+          "estimated_cacheable_tokens": 872,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t09_ttl_boundary",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4466,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4500,
+      "dollars": 0.018544,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2220,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00922,
+          "pruning": {
+            "tokens_before": 2220,
+            "tokens_after": 2220,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2246,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009324,
+          "pruning": {
+            "tokens_before": 2246,
+            "tokens_after": 2246,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2220,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t09_ttl_boundary",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1818,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1852,
+      "dollars": 0.004958000000000001,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 896,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00093,
+          "pruning": {
+            "tokens_before": 2220,
+            "tokens_after": 896,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "4c1e62e173b165bc95d90c64eb90b8bd1c9c1e9ef0b73edb4841102bd6970d75",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 922,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004028,
+          "pruning": {
+            "tokens_before": 2246,
+            "tokens_after": 922,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "4c1e62e173b165bc95d90c64eb90b8bd1c9c1e9ef0b73edb4841102bd6970d75",
+          "estimated_cacheable_tokens": 896,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t10_stable_priority",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4244,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4278,
+      "dollars": 0.017656,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2109,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008776,
+          "pruning": {
+            "tokens_before": 2109,
+            "tokens_after": 2109,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2135,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00888,
+          "pruning": {
+            "tokens_before": 2135,
+            "tokens_after": 2135,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2109,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t10_stable_priority",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1596,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1630,
+      "dollars": 0.004403,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 785,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000819,
+          "pruning": {
+            "tokens_before": 2109,
+            "tokens_after": 785,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "134b531836235af3c4e18b2533d78d3dc65fa44531ddf2940ab61f3e5f885f83",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 811,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003584,
+          "pruning": {
+            "tokens_before": 2135,
+            "tokens_after": 811,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "134b531836235af3c4e18b2533d78d3dc65fa44531ddf2940ab61f3e5f885f83",
+          "estimated_cacheable_tokens": 785,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t11_csv_records",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4368,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4402,
+      "dollars": 0.018152,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2171,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009024,
+          "pruning": {
+            "tokens_before": 2171,
+            "tokens_after": 2171,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2197,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009128,
+          "pruning": {
+            "tokens_before": 2197,
+            "tokens_after": 2197,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2171,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t11_csv_records",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1720,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1754,
+      "dollars": 0.004713,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 847,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000881,
+          "pruning": {
+            "tokens_before": 2171,
+            "tokens_after": 847,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "aa05c59a3ca8690f012e701ad5d49724c4ac4996b4757cf2c39d4e4f7ea30526",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 873,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003832,
+          "pruning": {
+            "tokens_before": 2197,
+            "tokens_after": 873,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "aa05c59a3ca8690f012e701ad5d49724c4ac4996b4757cf2c39d4e4f7ea30526",
+          "estimated_cacheable_tokens": 847,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t12_retry_budget",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4620,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4654,
+      "dollars": 0.01916,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2297,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009528,
+          "pruning": {
+            "tokens_before": 2297,
+            "tokens_after": 2297,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2323,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009632,
+          "pruning": {
+            "tokens_before": 2323,
+            "tokens_after": 2323,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2297,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t12_retry_budget",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1972,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2006,
+      "dollars": 0.005343,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 973,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001007,
+          "pruning": {
+            "tokens_before": 2297,
+            "tokens_after": 973,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "1c2338176051ab23f8d0669fcde0c7e33435f4fc1e3aa24130ccf95f7d7335c7",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 999,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004336,
+          "pruning": {
+            "tokens_before": 2323,
+            "tokens_after": 999,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "1c2338176051ab23f8d0669fcde0c7e33435f4fc1e3aa24130ccf95f7d7335c7",
+          "estimated_cacheable_tokens": 973,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t13_nested_lookup",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4406,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4440,
+      "dollars": 0.018304,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2190,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.0091,
+          "pruning": {
+            "tokens_before": 2190,
+            "tokens_after": 2190,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2216,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009204,
+          "pruning": {
+            "tokens_before": 2216,
+            "tokens_after": 2216,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2190,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t13_nested_lookup",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1758,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1792,
+      "dollars": 0.004808,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 866,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.0009,
+          "pruning": {
+            "tokens_before": 2190,
+            "tokens_after": 866,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "66609e5ad995336310b7f6b0b64312ce10465445e3a9d2b579b1ec581068c870",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 892,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003908,
+          "pruning": {
+            "tokens_before": 2216,
+            "tokens_after": 892,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "66609e5ad995336310b7f6b0b64312ce10465445e3a9d2b579b1ec581068c870",
+          "estimated_cacheable_tokens": 866,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t14_stream_windows",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4416,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4450,
+      "dollars": 0.018344,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2195,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00912,
+          "pruning": {
+            "tokens_before": 2195,
+            "tokens_after": 2195,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2221,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009224,
+          "pruning": {
+            "tokens_before": 2221,
+            "tokens_after": 2221,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2195,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t14_stream_windows",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1768,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1802,
+      "dollars": 0.0048330000000000005,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 871,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000905,
+          "pruning": {
+            "tokens_before": 2195,
+            "tokens_after": 871,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "cd81f2cdb11a08489719af6e814b8ce3b91d2fda9d9b92fd13ab3c91296aa9ef",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 897,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003928,
+          "pruning": {
+            "tokens_before": 2221,
+            "tokens_after": 897,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "cd81f2cdb11a08489719af6e814b8ce3b91d2fda9d9b92fd13ab3c91296aa9ef",
+          "estimated_cacheable_tokens": 871,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t15_dependency_order",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "hard",
+      "usage": {
+        "input": 4450,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4484,
+      "dollars": 0.01848,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2212,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009188,
+          "pruning": {
+            "tokens_before": 2212,
+            "tokens_after": 2212,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2238,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009292,
+          "pruning": {
+            "tokens_before": 2238,
+            "tokens_after": 2238,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2212,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t15_dependency_order",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "hard",
+      "usage": {
+        "input": 1802,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1836,
+      "dollars": 0.0049180000000000005,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 888,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000922,
+          "pruning": {
+            "tokens_before": 2212,
+            "tokens_after": 888,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "6e321a5b461b7413a7d90594238561b91b2acbe704a871f8c8e28710a9bc3a3d",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 914,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003996,
+          "pruning": {
+            "tokens_before": 2238,
+            "tokens_after": 914,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "6e321a5b461b7413a7d90594238561b91b2acbe704a871f8c8e28710a9bc3a3d",
+          "estimated_cacheable_tokens": 888,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t16_transaction_rollback",
+      "mode": "baseline",
+      "category": "bug_fix",
+      "difficulty": "hard",
+      "usage": {
+        "input": 4848,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4882,
+      "dollars": 0.020072,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2411,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009984,
+          "pruning": {
+            "tokens_before": 2411,
+            "tokens_after": 2411,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2437,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010088,
+          "pruning": {
+            "tokens_before": 2437,
+            "tokens_after": 2437,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2411,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t16_transaction_rollback",
+      "mode": "tokentrim",
+      "category": "bug_fix",
+      "difficulty": "hard",
+      "usage": {
+        "input": 2200,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2234,
+      "dollars": 0.005913,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1087,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001121,
+          "pruning": {
+            "tokens_before": 2411,
+            "tokens_after": 1087,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "c88d13c8a9a1ece3b891dfbbe015de7f9c089e84f12c044336b3069e6ef2069f",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1113,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004792,
+          "pruning": {
+            "tokens_before": 2437,
+            "tokens_after": 1113,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "c88d13c8a9a1ece3b891dfbbe015de7f9c089e84f12c044336b3069e6ef2069f",
+          "estimated_cacheable_tokens": 1087,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t17_query_pairs",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4252,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4286,
+      "dollars": 0.017688,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2113,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008792,
+          "pruning": {
+            "tokens_before": 2113,
+            "tokens_after": 2113,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2139,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008896,
+          "pruning": {
+            "tokens_before": 2139,
+            "tokens_after": 2139,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2113,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t17_query_pairs",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1604,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1638,
+      "dollars": 0.004423,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 789,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000823,
+          "pruning": {
+            "tokens_before": 2113,
+            "tokens_after": 789,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "44d233386e38c1bc533189719135f55497124d51272ab89623912e53edbacb63",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 815,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.0036,
+          "pruning": {
+            "tokens_before": 2139,
+            "tokens_after": 815,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "44d233386e38c1bc533189719135f55497124d51272ab89623912e53edbacb63",
+          "estimated_cacheable_tokens": 789,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t18_chunk_batches",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4340,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4374,
+      "dollars": 0.01804,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2157,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008968,
+          "pruning": {
+            "tokens_before": 2157,
+            "tokens_after": 2157,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2183,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009072,
+          "pruning": {
+            "tokens_before": 2183,
+            "tokens_after": 2183,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2157,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t18_chunk_batches",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1692,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1726,
+      "dollars": 0.0046429999999999996,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 833,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000867,
+          "pruning": {
+            "tokens_before": 2157,
+            "tokens_after": 833,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "5312179988ec00f9974490d7837661ecb8bd17cf4937771bd0a63047395ea5a1",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 859,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003776,
+          "pruning": {
+            "tokens_before": 2183,
+            "tokens_after": 859,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "5312179988ec00f9974490d7837661ecb8bd17cf4937771bd0a63047395ea5a1",
+          "estimated_cacheable_tokens": 833,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t19_slug_suffix",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4282,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4316,
+      "dollars": 0.017808,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2128,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008852,
+          "pruning": {
+            "tokens_before": 2128,
+            "tokens_after": 2128,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2154,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008956,
+          "pruning": {
+            "tokens_before": 2154,
+            "tokens_after": 2154,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2128,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t19_slug_suffix",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1634,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1668,
+      "dollars": 0.004498,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 804,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000838,
+          "pruning": {
+            "tokens_before": 2128,
+            "tokens_after": 804,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "63835e75ea291f2b9f92372caeb57036c4ab30c7ca4d5711dad18942822eb990",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 830,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00366,
+          "pruning": {
+            "tokens_before": 2154,
+            "tokens_after": 830,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "63835e75ea291f2b9f92372caeb57036c4ab30c7ca4d5711dad18942822eb990",
+          "estimated_cacheable_tokens": 804,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t20_ordered_grouping",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4362,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4396,
+      "dollars": 0.018128,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2168,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009012,
+          "pruning": {
+            "tokens_before": 2168,
+            "tokens_after": 2168,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2194,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009116,
+          "pruning": {
+            "tokens_before": 2194,
+            "tokens_after": 2194,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2168,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t20_ordered_grouping",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1714,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1748,
+      "dollars": 0.004698,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 844,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000878,
+          "pruning": {
+            "tokens_before": 2168,
+            "tokens_after": 844,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "f86a39af1c1a578db289473dcef8cd3106804235c945fac440859e274d640e8d",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 870,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00382,
+          "pruning": {
+            "tokens_before": 2194,
+            "tokens_after": 870,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "f86a39af1c1a578db289473dcef8cd3106804235c945fac440859e274d640e8d",
+          "estimated_cacheable_tokens": 844,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t21_json_merge_patch",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4496,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4530,
+      "dollars": 0.018664,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2235,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00928,
+          "pruning": {
+            "tokens_before": 2235,
+            "tokens_after": 2235,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2261,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009384,
+          "pruning": {
+            "tokens_before": 2261,
+            "tokens_after": 2261,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2235,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t21_json_merge_patch",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1848,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1882,
+      "dollars": 0.005032999999999999,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 911,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000945,
+          "pruning": {
+            "tokens_before": 2235,
+            "tokens_after": 911,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "3cf1410adfd27b393add5d4915b7c8a98c889e8c5cd02596a63556ede25c9d4c",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 937,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004088,
+          "pruning": {
+            "tokens_before": 2261,
+            "tokens_after": 937,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "3cf1410adfd27b393add5d4915b7c8a98c889e8c5cd02596a63556ede25c9d4c",
+          "estimated_cacheable_tokens": 911,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t22_business_days",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4382,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4416,
+      "dollars": 0.018208,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2178,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009052,
+          "pruning": {
+            "tokens_before": 2178,
+            "tokens_after": 2178,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2204,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009156,
+          "pruning": {
+            "tokens_before": 2204,
+            "tokens_after": 2204,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2178,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t22_business_days",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1734,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1768,
+      "dollars": 0.0047480000000000005,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 854,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000888,
+          "pruning": {
+            "tokens_before": 2178,
+            "tokens_after": 854,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "d299cec00776fd32d70b339e8734d9c594cc60337985bcf4ea75d1883d0b2e59",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 880,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00386,
+          "pruning": {
+            "tokens_before": 2204,
+            "tokens_after": 880,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "d299cec00776fd32d70b339e8734d9c594cc60337985bcf4ea75d1883d0b2e59",
+          "estimated_cacheable_tokens": 854,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t23_lru_capacity",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4422,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4456,
+      "dollars": 0.018368,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2198,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009132,
+          "pruning": {
+            "tokens_before": 2198,
+            "tokens_after": 2198,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2224,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009236,
+          "pruning": {
+            "tokens_before": 2224,
+            "tokens_after": 2224,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2198,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t23_lru_capacity",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1774,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1808,
+      "dollars": 0.004848,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 874,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000908,
+          "pruning": {
+            "tokens_before": 2198,
+            "tokens_after": 874,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "bc6d2d13ca0d00f82620736ec927c36288600a8e13be54044f6bd56e769e9a27",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 900,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00394,
+          "pruning": {
+            "tokens_before": 2224,
+            "tokens_after": 900,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "bc6d2d13ca0d00f82620736ec927c36288600a8e13be54044f6bd56e769e9a27",
+          "estimated_cacheable_tokens": 874,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t24_inventory_reservations",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4766,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4800,
+      "dollars": 0.019744,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2370,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00982,
+          "pruning": {
+            "tokens_before": 2370,
+            "tokens_after": 2370,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2396,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009924,
+          "pruning": {
+            "tokens_before": 2396,
+            "tokens_after": 2396,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2370,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t24_inventory_reservations",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "medium",
+      "usage": {
+        "input": 2118,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2152,
+      "dollars": 0.005708,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1046,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00108,
+          "pruning": {
+            "tokens_before": 2370,
+            "tokens_after": 1046,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "67575c944471406d40812ed46ccbff1c610752edc0418601a67db322c3646f2f",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1072,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004628,
+          "pruning": {
+            "tokens_before": 2396,
+            "tokens_after": 1072,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "67575c944471406d40812ed46ccbff1c610752edc0418601a67db322c3646f2f",
+          "estimated_cacheable_tokens": 1046,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t25_config_interpolation",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "hard",
+      "usage": {
+        "input": 4584,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4618,
+      "dollars": 0.019016,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2279,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009456,
+          "pruning": {
+            "tokens_before": 2279,
+            "tokens_after": 2279,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2305,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00956,
+          "pruning": {
+            "tokens_before": 2305,
+            "tokens_after": 2305,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2279,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t25_config_interpolation",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "hard",
+      "usage": {
+        "input": 1936,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1970,
+      "dollars": 0.005253000000000001,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 955,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000989,
+          "pruning": {
+            "tokens_before": 2279,
+            "tokens_after": 955,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "2490e4771a079f657fcc134f3f3ef9e8127cda004bf61b51007155af217ea950",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 981,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004264,
+          "pruning": {
+            "tokens_before": 2305,
+            "tokens_after": 981,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "2490e4771a079f657fcc134f3f3ef9e8127cda004bf61b51007155af217ea950",
+          "estimated_cacheable_tokens": 955,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t26_route_matching",
+      "mode": "baseline",
+      "category": "feature",
+      "difficulty": "hard",
+      "usage": {
+        "input": 5126,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 5160,
+      "dollars": 0.021184,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2550,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.01054,
+          "pruning": {
+            "tokens_before": 2550,
+            "tokens_after": 2550,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2576,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010644,
+          "pruning": {
+            "tokens_before": 2576,
+            "tokens_after": 2576,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2550,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t26_route_matching",
+      "mode": "tokentrim",
+      "category": "feature",
+      "difficulty": "hard",
+      "usage": {
+        "input": 2478,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2512,
+      "dollars": 0.006608,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1226,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00126,
+          "pruning": {
+            "tokens_before": 2550,
+            "tokens_after": 1226,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "30cbb53b2bc93a8338f3de8e51496256b8179bed623b78a1d5f1d1e79cb3c64d",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1252,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.005348,
+          "pruning": {
+            "tokens_before": 2576,
+            "tokens_after": 1252,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "30cbb53b2bc93a8338f3de8e51496256b8179bed623b78a1d5f1d1e79cb3c64d",
+          "estimated_cacheable_tokens": 1226,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t27_temperature_api",
+      "mode": "baseline",
+      "category": "refactor",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4452,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4486,
+      "dollars": 0.018488,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2213,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009192,
+          "pruning": {
+            "tokens_before": 2213,
+            "tokens_after": 2213,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2239,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009296,
+          "pruning": {
+            "tokens_before": 2239,
+            "tokens_after": 2239,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2213,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t27_temperature_api",
+      "mode": "tokentrim",
+      "category": "refactor",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1804,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1838,
+      "dollars": 0.004923,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 889,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000923,
+          "pruning": {
+            "tokens_before": 2213,
+            "tokens_after": 889,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "073aa630439a9a78a6e1515a859f77cf7869db1299df439a153c5fdef0228867",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 915,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004,
+          "pruning": {
+            "tokens_before": 2239,
+            "tokens_after": 915,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "073aa630439a9a78a6e1515a859f77cf7869db1299df439a153c5fdef0228867",
+          "estimated_cacheable_tokens": 889,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t28_sales_pipeline",
+      "mode": "baseline",
+      "category": "refactor",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4606,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4640,
+      "dollars": 0.019104,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2290,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.0095,
+          "pruning": {
+            "tokens_before": 2290,
+            "tokens_after": 2290,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2316,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009604,
+          "pruning": {
+            "tokens_before": 2316,
+            "tokens_after": 2316,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2290,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t28_sales_pipeline",
+      "mode": "tokentrim",
+      "category": "refactor",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1958,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1992,
+      "dollars": 0.005308,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 966,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001,
+          "pruning": {
+            "tokens_before": 2290,
+            "tokens_after": 966,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "d6946d6c329989655d0df147b35e89984669993c3ba1a3b3075e4929b026a2be",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 992,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004308,
+          "pruning": {
+            "tokens_before": 2316,
+            "tokens_after": 992,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "d6946d6c329989655d0df147b35e89984669993c3ba1a3b3075e4929b026a2be",
+          "estimated_cacheable_tokens": 966,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t29_export_dispatch",
+      "mode": "baseline",
+      "category": "refactor",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4632,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4666,
+      "dollars": 0.019208,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2303,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009552,
+          "pruning": {
+            "tokens_before": 2303,
+            "tokens_after": 2303,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2329,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009656,
+          "pruning": {
+            "tokens_before": 2329,
+            "tokens_after": 2329,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2303,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t29_export_dispatch",
+      "mode": "tokentrim",
+      "category": "refactor",
+      "difficulty": "medium",
+      "usage": {
+        "input": 1984,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2018,
+      "dollars": 0.005373,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 979,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001013,
+          "pruning": {
+            "tokens_before": 2303,
+            "tokens_after": 979,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "a2d1a91ca4a3234f9c02fffbe155c89feb003df3203d234fe3bb5396a34ebb04",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1005,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00436,
+          "pruning": {
+            "tokens_before": 2329,
+            "tokens_after": 1005,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "a2d1a91ca4a3234f9c02fffbe155c89feb003df3203d234fe3bb5396a34ebb04",
+          "estimated_cacheable_tokens": 979,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t30_validation_errors",
+      "mode": "baseline",
+      "category": "refactor",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4772,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4806,
+      "dollars": 0.019768,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2373,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009832,
+          "pruning": {
+            "tokens_before": 2373,
+            "tokens_after": 2373,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2399,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009936,
+          "pruning": {
+            "tokens_before": 2399,
+            "tokens_after": 2399,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2373,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t30_validation_errors",
+      "mode": "tokentrim",
+      "category": "refactor",
+      "difficulty": "medium",
+      "usage": {
+        "input": 2124,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2158,
+      "dollars": 0.005723,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1049,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001083,
+          "pruning": {
+            "tokens_before": 2373,
+            "tokens_after": 1049,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "c5e90896a07a648b5cbf349f462557a504e5c63156e31018e2725526de684d2c",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1075,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00464,
+          "pruning": {
+            "tokens_before": 2399,
+            "tokens_after": 1075,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "c5e90896a07a648b5cbf349f462557a504e5c63156e31018e2725526de684d2c",
+          "estimated_cacheable_tokens": 1049,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t31_job_transitions",
+      "mode": "baseline",
+      "category": "refactor",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4914,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4948,
+      "dollars": 0.020336,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2444,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010116,
+          "pruning": {
+            "tokens_before": 2444,
+            "tokens_after": 2444,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2470,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.01022,
+          "pruning": {
+            "tokens_before": 2470,
+            "tokens_after": 2470,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2444,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t31_job_transitions",
+      "mode": "tokentrim",
+      "category": "refactor",
+      "difficulty": "medium",
+      "usage": {
+        "input": 2266,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2300,
+      "dollars": 0.006078,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1120,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001154,
+          "pruning": {
+            "tokens_before": 2444,
+            "tokens_after": 1120,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "a3e0eff0fec4c0e82688d190627c19e68189935b1e0080ab70f9d927b79e80ed",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1146,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004924,
+          "pruning": {
+            "tokens_before": 2470,
+            "tokens_after": 1146,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "a3e0eff0fec4c0e82688d190627c19e68189935b1e0080ab70f9d927b79e80ed",
+          "estimated_cacheable_tokens": 1120,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t32_expression_parser",
+      "mode": "baseline",
+      "category": "refactor",
+      "difficulty": "hard",
+      "usage": {
+        "input": 4598,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4632,
+      "dollars": 0.019072,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2286,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009484,
+          "pruning": {
+            "tokens_before": 2286,
+            "tokens_after": 2286,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2312,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009588,
+          "pruning": {
+            "tokens_before": 2312,
+            "tokens_after": 2312,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2286,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t32_expression_parser",
+      "mode": "tokentrim",
+      "category": "refactor",
+      "difficulty": "hard",
+      "usage": {
+        "input": 1950,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1984,
+      "dollars": 0.005287999999999999,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 962,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000996,
+          "pruning": {
+            "tokens_before": 2286,
+            "tokens_after": 962,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "adcfa36b4d7812550b0c9325d51328ae8f83913a379d4ac7321bc829559bfe1a",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 988,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004292,
+          "pruning": {
+            "tokens_before": 2312,
+            "tokens_after": 988,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "adcfa36b4d7812550b0c9325d51328ae8f83913a379d4ac7321bc829559bfe1a",
+          "estimated_cacheable_tokens": 962,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t33_timeout_cli",
+      "mode": "baseline",
+      "category": "multi_file",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4828,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4862,
+      "dollars": 0.019992,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2401,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009944,
+          "pruning": {
+            "tokens_before": 2401,
+            "tokens_after": 2401,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2427,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010048,
+          "pruning": {
+            "tokens_before": 2427,
+            "tokens_after": 2427,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2401,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t33_timeout_cli",
+      "mode": "tokentrim",
+      "category": "multi_file",
+      "difficulty": "medium",
+      "usage": {
+        "input": 2180,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2214,
+      "dollars": 0.005863,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1077,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001111,
+          "pruning": {
+            "tokens_before": 2401,
+            "tokens_after": 1077,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "8ee98c08385bd897ffddd8929c23bac99c1e75e0f2d4f73c1753f1e47ae5f405",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1103,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004752,
+          "pruning": {
+            "tokens_before": 2427,
+            "tokens_after": 1103,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "8ee98c08385bd897ffddd8929c23bac99c1e75e0f2d4f73c1753f1e47ae5f405",
+          "estimated_cacheable_tokens": 1077,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t34_tagged_records",
+      "mode": "baseline",
+      "category": "multi_file",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4930,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4964,
+      "dollars": 0.0204,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2452,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010148,
+          "pruning": {
+            "tokens_before": 2452,
+            "tokens_after": 2452,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2478,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010252,
+          "pruning": {
+            "tokens_before": 2478,
+            "tokens_after": 2478,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2452,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t34_tagged_records",
+      "mode": "tokentrim",
+      "category": "multi_file",
+      "difficulty": "medium",
+      "usage": {
+        "input": 2282,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2316,
+      "dollars": 0.006118,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1128,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001162,
+          "pruning": {
+            "tokens_before": 2452,
+            "tokens_after": 1128,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "14b99d99faebcefea2148172fc7c7a187cf151d65b8c3c916bab4812a145a210",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1154,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004956,
+          "pruning": {
+            "tokens_before": 2478,
+            "tokens_after": 1154,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "14b99d99faebcefea2148172fc7c7a187cf151d65b8c3c916bab4812a145a210",
+          "estimated_cacheable_tokens": 1128,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t35_framed_stream",
+      "mode": "baseline",
+      "category": "multi_file",
+      "difficulty": "hard",
+      "usage": {
+        "input": 5300,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 5334,
+      "dollars": 0.02188,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2637,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010888,
+          "pruning": {
+            "tokens_before": 2637,
+            "tokens_after": 2637,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2663,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010992,
+          "pruning": {
+            "tokens_before": 2663,
+            "tokens_after": 2663,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2637,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t35_framed_stream",
+      "mode": "tokentrim",
+      "category": "multi_file",
+      "difficulty": "hard",
+      "usage": {
+        "input": 2652,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2686,
+      "dollars": 0.007043,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1313,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001347,
+          "pruning": {
+            "tokens_before": 2637,
+            "tokens_after": 1313,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "fe506b4ba7b6b6afe2781e14d32df7dbf49fca3c944003c30fa159c1a2efc5f8",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1339,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.005696,
+          "pruning": {
+            "tokens_before": 2663,
+            "tokens_after": 1339,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "fe506b4ba7b6b6afe2781e14d32df7dbf49fca3c944003c30fa159c1a2efc5f8",
+          "estimated_cacheable_tokens": 1313,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t36_ledger_transfers",
+      "mode": "baseline",
+      "category": "multi_file",
+      "difficulty": "hard",
+      "usage": {
+        "input": 5398,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 5432,
+      "dollars": 0.022272,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2686,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.011084,
+          "pruning": {
+            "tokens_before": 2686,
+            "tokens_after": 2686,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2712,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.011188,
+          "pruning": {
+            "tokens_before": 2712,
+            "tokens_after": 2712,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2686,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t36_ledger_transfers",
+      "mode": "tokentrim",
+      "category": "multi_file",
+      "difficulty": "hard",
+      "usage": {
+        "input": 2750,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2784,
+      "dollars": 0.007287999999999999,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1362,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001396,
+          "pruning": {
+            "tokens_before": 2686,
+            "tokens_after": 1362,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "3d6bf2795d391b2161f8bbb83ead3e197b3f2a6220446e535d8f2f162c5af521",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1388,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.005892,
+          "pruning": {
+            "tokens_before": 2712,
+            "tokens_after": 1388,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "3d6bf2795d391b2161f8bbb83ead3e197b3f2a6220446e535d8f2f162c5af521",
+          "estimated_cacheable_tokens": 1362,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t37_run_length_codec",
+      "mode": "baseline",
+      "category": "test_driven",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4446,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4480,
+      "dollars": 0.018464,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2210,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00918,
+          "pruning": {
+            "tokens_before": 2210,
+            "tokens_after": 2210,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2236,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009284,
+          "pruning": {
+            "tokens_before": 2236,
+            "tokens_after": 2236,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2210,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t37_run_length_codec",
+      "mode": "tokentrim",
+      "category": "test_driven",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1798,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1832,
+      "dollars": 0.004908,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 886,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.00092,
+          "pruning": {
+            "tokens_before": 2210,
+            "tokens_after": 886,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "fa4c484e1065e903f9c91713707e1c20068b8092382ae442eb0738b9ffea3847",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 912,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003988,
+          "pruning": {
+            "tokens_before": 2236,
+            "tokens_after": 912,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "fa4c484e1065e903f9c91713707e1c20068b8092382ae442eb0738b9ffea3847",
+          "estimated_cacheable_tokens": 886,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t38_histogram_bins",
+      "mode": "baseline",
+      "category": "test_driven",
+      "difficulty": "easy",
+      "usage": {
+        "input": 4338,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4372,
+      "dollars": 0.018032,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2156,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.008964,
+          "pruning": {
+            "tokens_before": 2156,
+            "tokens_after": 2156,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2182,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009068,
+          "pruning": {
+            "tokens_before": 2182,
+            "tokens_after": 2182,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2156,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t38_histogram_bins",
+      "mode": "tokentrim",
+      "category": "test_driven",
+      "difficulty": "easy",
+      "usage": {
+        "input": 1690,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 1724,
+      "dollars": 0.004638,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 832,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.000866,
+          "pruning": {
+            "tokens_before": 2156,
+            "tokens_after": 832,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "b70ed2941a4f546895d11d6c31ebe97b0dfe8d98a0af743f484d5f2ef3db36e1",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 858,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.003772,
+          "pruning": {
+            "tokens_before": 2182,
+            "tokens_after": 858,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "b70ed2941a4f546895d11d6c31ebe97b0dfe8d98a0af743f484d5f2ef3db36e1",
+          "estimated_cacheable_tokens": 832,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t39_prefix_suggestions",
+      "mode": "baseline",
+      "category": "test_driven",
+      "difficulty": "medium",
+      "usage": {
+        "input": 4758,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4792,
+      "dollars": 0.019712,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2366,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009804,
+          "pruning": {
+            "tokens_before": 2366,
+            "tokens_after": 2366,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2392,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.009908,
+          "pruning": {
+            "tokens_before": 2392,
+            "tokens_after": 2392,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2366,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t39_prefix_suggestions",
+      "mode": "tokentrim",
+      "category": "test_driven",
+      "difficulty": "medium",
+      "usage": {
+        "input": 2110,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2144,
+      "dollars": 0.0056879999999999995,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1042,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001076,
+          "pruning": {
+            "tokens_before": 2366,
+            "tokens_after": 1042,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "8ed122dcaa42c2d567b7b80a3329e8eefcb6f6b695e87be1eeab0933eccd4fe7",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1068,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004612,
+          "pruning": {
+            "tokens_before": 2392,
+            "tokens_after": 1068,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "8ed122dcaa42c2d567b7b80a3329e8eefcb6f6b695e87be1eeab0933eccd4fe7",
+          "estimated_cacheable_tokens": 1042,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t40_weighted_paths",
+      "mode": "baseline",
+      "category": "test_driven",
+      "difficulty": "hard",
+      "usage": {
+        "input": 4914,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 4948,
+      "dollars": 0.020336,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2444,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.010116,
+          "pruning": {
+            "tokens_before": 2444,
+            "tokens_after": 2444,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "baseline",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Baseline always uses strong model"
+          },
+          "usage": {
+            "input": 2470,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.01022,
+          "pruning": {
+            "tokens_before": 2470,
+            "tokens_after": 2470,
+            "dropped_ids": [],
+            "truncated_ids": []
+          },
+          "stable_prefix_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "estimated_cacheable_tokens": 2444,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "t40_weighted_paths",
+      "mode": "tokentrim",
+      "category": "test_driven",
+      "difficulty": "hard",
+      "usage": {
+        "input": 2266,
+        "cached_input": 0,
+        "output": 34
+      },
+      "tokens": 2300,
+      "dollars": 0.006078,
+      "passed": false,
+      "check": {
+        "passed": false,
+        "output": "",
+        "returncode": null,
+        "timed_out": false,
+        "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+      },
+      "steps": [
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/cheap",
+            "reason": "Routine read, summary, or formatting"
+          },
+          "usage": {
+            "input": 1120,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.001154,
+          "pruning": {
+            "tokens_before": 2444,
+            "tokens_after": 1120,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "a990b1092045cf1410d698047c3be6089c98c1aa97498b5885401212bf002300",
+          "estimated_cacheable_tokens": 0,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        },
+        {
+          "mode": "tokentrim",
+          "decision": {
+            "model": "fake/strong",
+            "reason": "Multi-file edit"
+          },
+          "usage": {
+            "input": 1146,
+            "cached_input": 0,
+            "output": 17
+          },
+          "dollars": 0.004924,
+          "pruning": {
+            "tokens_before": 2470,
+            "tokens_after": 1146,
+            "dropped_ids": [
+              "unused"
+            ],
+            "truncated_ids": [
+              "old-tool"
+            ]
+          },
+          "stable_prefix_hash": "a990b1092045cf1410d698047c3be6089c98c1aa97498b5885401212bf002300",
+          "estimated_cacheable_tokens": 1120,
+          "warnings": [
+            "Volatile content precedes stable segment system; cache reuse may suffer",
+            "Volatile content precedes stable segment repo-map; cache reuse may suffer"
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "tokens": {
+        "mean": 4577.45,
+        "ci95": [
+          4503.8475,
+          4671.695
+        ],
+        "n": 40
+      },
+      "dollars": {
+        "mean": 0.0188538,
+        "ci95": [
+          0.018559390000000002,
+          0.01923078
+        ],
+        "n": 40
+      },
+      "pass_rate": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 40
+      }
+    },
+    "tokentrim": {
+      "tokens": {
+        "mean": 1929.45,
+        "ci95": [
+          1855.8475,
+          2023.695
+        ],
+        "n": 40
+      },
+      "dollars": {
+        "mean": 0.005151625,
+        "ci95": [
+          0.00496761875,
+          0.0053872375
+        ],
+        "n": 40
+      },
+      "pass_rate": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 40
+      }
+    },
+    "paired": {
+      "tokens": {
+        "difference": {
+          "mean": -2648.0,
+          "ci95": [
+            -2648.0,
+            -2648.0
+          ],
+          "n": 40
+        },
+        "percent_saving": {
+          "mean": 57.84880228074583,
+          "ci95": [
+            56.68243769300841,
+            58.79418757422212
+          ],
+          "n": 40
+        }
+      },
+      "dollars": {
+        "difference": {
+          "mean": -0.013702175,
+          "ci95": [
+            -0.0138435425,
+            -0.01359177125
+          ],
+          "n": 40
+        },
+        "percent_saving": {
+          "mean": 72.67593270322163,
+          "ci95": [
+            71.98675707006207,
+            73.23394002353592
+          ],
+          "n": 40
+        }
+      },
+      "pass_rate": {
+        "difference": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 40
+        },
+        "percent_saving": {
+          "mean": null,
+          "ci95": null,
+          "n": 40
+        }
+      }
+    }
+  }
+}

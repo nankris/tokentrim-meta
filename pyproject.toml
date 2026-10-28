@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tokentrim"
+version = "0.1.0"
+description = "Cost-aware context middleware for coding agents"
+requires-python = ">=3.13"
+dependencies = []
+
+[tool.setuptools.packages.find]
+include = ["tokentrim*", "bench"]
+exclude = ["bench.tasks_repo*"]
+
+[tool.setuptools.package-data]
+tokentrim = ["prices.toml"]

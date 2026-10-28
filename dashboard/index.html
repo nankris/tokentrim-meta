@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TokenTrim · Benchmark</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#101820;color:#e6edf3}*{box-sizing:border-box}body{max-width:1100px;margin:auto;padding:40px 24px}header{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}h1{font-size:36px;margin:0}h1 span{color:#72e0b1}p{color:#aebdc8;line-height:1.6}.badge{padding:10px 16px;border:1px solid #e0b955;border-radius:6px;color:#f6d174;background:#322d21}.controls{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin:28px 0}button,input::file-selector-button{background:#203a45;color:#e6edf3;border:1px solid #56707c;border-radius:5px;padding:9px;cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid #72e0b1;outline-offset:4px}#status{min-height:24px;color:#f6d174}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.card{border:1px solid #34434e;background:#18242e;padding:20px;border-radius:10px}.card h2{font-size:17px;margin:0 0 20px}.bar-label{display:flex;justify-content:space-between;font-size:13px;margin-top:16px;gap:8px}.track{height:12px;background:#0e1720;border-radius:4px;margin:8px 0;overflow:hidden}.bar{height:100%;background:#8da5bb}.bar.trim{background:#72e0b1}.ci{font-size:12px;color:#b1c0ce}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:15px 12px;border-bottom:1px solid #34434e}th{color:#aebdc8}caption{text-align:left;font-size:20px;margin:25px 0 12px}footer{margin-top:35px;border-top:1px solid #34434e;padding-top:12px;font-size:13px}@media(max-width:750px){.cards{grid-template-columns:1fr}body{padding:24px 16px}}
+</style>
+<script src="app.js" defer></script>
+</head>
+<body>
+<header><div><h1>Token<span>Trim</span></h1><p>Spend less context. Measure dollars and correctness.</p></div><strong id="badge" class="badge">Awaiting benchmark data</strong></header>
+<p id="notice">Offline benchmark viewer · baseline vs TokenTrim · 95% bootstrap confidence intervals.</p>
+<div class="controls"><button id="reload" type="button">Reload sample</button><label>Load results JSON <input id="file" type="file" accept=".json,application/json"></label></div>
+<div id="status" role="status" aria-live="polite"></div>
+<main id="results" hidden><div id="cards" class="cards"></div><div class="table-wrap"><table><caption>Mean per task · 95% confidence intervals</caption><thead><tr><th>Metric</th><th>Baseline</th><th>TokenTrim</th><th>Paired difference (Trim − baseline)</th><th>Saving</th></tr></thead><tbody id="summary"></tbody></table></div><div class="table-wrap"><table><caption>Task results</caption><thead><tr><th>Task</th><th>Mode</th><th>Tokens</th><th>Cached input</th><th>USD</th><th>Check result</th></tr></thead><tbody id="tasks"></tbody></table></div></main>
+<footer><p>Tokens include input (cached + uncached) and output. Dollar estimates charge cached input separately. Pass rates in FAKE data are synthetic checks, not evidence that edits work. Percentile bootstrap resamples whole tasks; tiny toy samples do not support general claims.</p><p id="method"></p></footer>
+</body>
+</html>
