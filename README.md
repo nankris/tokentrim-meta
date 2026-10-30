@@ -2,7 +2,7 @@
 
 Open-source middleware that cuts what coding agents (Claude Code, Codex, Muse Code) spend. TokenTrim optimizes **billed dollars, not tokens**: cached input is a subset of input and is billed at its own (much lower) rate, so a trick that saves tokens but breaks the provider's prefix cache can cost more.
 
-> **Status: offline prototype.** No model has been called. Everything under `results/` is **FAKE or SIMULATION data**, not real measurements. Real Meta Muse runs need credits and explicit approval.
+> **Status: prototype with a first small REAL run.** `results/real_meta_2026-10-30/` holds real Meta Model API measurements (6 tasks, one pass, $0.32 total; see [below](#real-meta-run-2026-10-30)). Everything else under `results/` is **FAKE or SIMULATION data**, not real measurements.
 
 ## What it does
 
@@ -22,7 +22,7 @@ Supporting pieces:
 - `tokentrim/clients/mock.py`:
   - `MockProviderClient` simulates a per-model exact-prefix cache with 128-token blocks, a minimum cacheable size, a TTL and optional write charges.
   - `RecordingClient` and `RecordedClient` provide secret-free JSONL record and replay.
-- `tokentrim/clients/meta.py`: an opt-in, unverified transport stub. It is never called by tests.
+- `tokentrim/clients/meta.py`: opt-in Meta Model API client (OpenAI-compatible, `https://api.meta.ai/v1`), key from `META_API_KEY`/`MODEL_API_KEY`, 429/5xx back-off, parses `prompt_tokens`, `cached_tokens`, `completion_tokens` (incl. reasoning). Verified against the live API on 2026-10-30. Tests never call the network.
 
 ## Quickstart (offline, standard library only, Python 3.13)
 
@@ -67,6 +67,26 @@ How to read these numbers:
 - They are simulated. Prices are real list prices, but traces and pass outcomes are synthetic.
 - The cache-busting comparison shows what layout hygiene is worth when a client really does bust its cache. It is not a claim about any particular agent.
 - See [`RESEARCH_2026-10-28.md`](RESEARCH_2026-10-28.md) for the design rationale and [`issues-found/`](issues-found/README.md) for known gaps.
+
+## Real Meta run (2026-10-30)
+
+`bench/real_meta.py` drives the same scripted agent against the live API with real JSON edits checked by the task tests; `bench/meta_cache_probe.py` probes the cache. Model `muse-spark-1.3-contributor`, 6 tasks (t01, t07, t13, t21, t28, t37), one pass each, $0.3166 total under a $0.50 SpendGuard cap. Full tables: [`results/real_meta_2026-10-30/summary.md`](results/real_meta_2026-10-30/summary.md).
+
+| REAL comparison (6 tasks, 1 pass) | Prompt tokens | Billed $ | $ if no cache hits | Pass |
+|---|---:|---:|---:|:-:|
+| tokentrim (all savers, default gates) vs baseline | −2.7% | −9.7% | −5.1% | 6/6 vs 6/6 |
+| tokentrim-eager (prune without break-even gate) vs baseline | **−15.7%** | −13.6% | −15.7% | 6/6 vs 6/6 |
+| tokentrim-naive vs baseline-naive (cache_layout fixes shuffled tool JSON) | −0.1% | **−26.9%** | +0.7% | 6/6 vs 6/6 |
+| baseline-naive vs baseline (cost of busting the cache) | −2.8% | +30.1% | −4.3% | 6/6 vs 6/6 |
+
+Real vs simulated:
+- **cache_layout** is the one saver that clearly paid off: 0 cached tokens with shuffled tool JSON vs 147k cached with TokenTrim's stable layout. The real saving (27%) is well below the simulated 71% because real Meta cache hits are intermittent: only ~31% of calls hit ([issue 46](issues-found/46-meta-cache-hits-intermittent.md)).
+- **prune** with the default break-even gate deferred every drop, because the gate assumes a reliable cache. Eager pruning cut 15.7% of prompt tokens with no pass-rate loss on this tiny sample; the simulation predicted eager pruning would *cost* 13.6% more.
+- **trim** compacted nothing: real test logs on these repos are short. The simulated 11.6% came from synthetic long logs ([issue 48](issues-found/48-trim-route-real-run-gaps.md)).
+- **route** is a no-op with one model. The one Standard-vs-routed check is not like-for-like (the Standard baseline hit the per-task cap).
+- 91% of completion tokens were hidden reasoning; short `max_tokens` truncates replies ([issue 47](issues-found/47-reasoning-tokens-and-max-tokens.md)).
+
+These are single-pass observations on six small tasks, not statistically meaningful estimates.
 
 ## Prices
 
@@ -117,7 +137,7 @@ Summaries report mean total tokens, estimated USD, and pass rate per task. Cache
 
 ## Roadmap
 
-1. **Needs credits and approval.** Measure Muse cache behaviour: minimum prefix, TTL, whether the cache is shared across model versions, and any write premium. Then re-run the simulation with those parameters.
+1. Model Muse cache hits as probabilistic (~30% observed on 2026-10-30) in the simulator and in the prune break-even gate, then re-run the simulation.
 2. Run a real paired benchmark: a sandboxed editing-agent loop on Spark and Wonder, measured billed dollars, real pass rates and paired 95% intervals.
 3. Make cheap-first routing with sticky escalation the default if the real numbers confirm the simulated gap. Add a compact hand-off on escalation.
 4. Add coding-agent adapters (proxy base-URL mode), a live dashboard and real reference tracking.

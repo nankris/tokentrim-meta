@@ -1,0 +1,132 @@
+{
+  "tokentrim_vs_baseline": {
+    "tasks": 6,
+    "prompt_tokens": [
+      470063,
+      457180
+    ],
+    "cached_tokens": [
+      147442,
+      158819
+    ],
+    "completion_tokens": [
+      37988,
+      30575
+    ],
+    "usd": [
+      0.040154584,
+      0.036268738
+    ],
+    "nocache": [
+      0.054603900000000004,
+      0.051833000000000004
+    ],
+    "prompt_pct": -2.7406964598362347,
+    "usd_pct": -9.677216429386988,
+    "nocache_pct": -5.074545957340042
+  },
+  "tokentrim-eager_vs_baseline": {
+    "tasks": 6,
+    "prompt_tokens": [
+      470063,
+      396405
+    ],
+    "cached_tokens": [
+      147442,
+      115314
+    ],
+    "completion_tokens": [
+      37988,
+      31844
+    ],
+    "usd": [
+      0.040154584,
+      0.03470852800000001
+    ],
+    "nocache": [
+      0.054603900000000004,
+      0.046009299999999996
+    ],
+    "prompt_pct": -15.669814471677201,
+    "usd_pct": -13.562725491067198,
+    "nocache_pct": -15.739901362356914
+  },
+  "tokentrim-naive_vs_baseline-naive": {
+    "tasks": 6,
+    "prompt_tokens": [
+      457073,
+      456688
+    ],
+    "cached_tokens": [
+      0,
+      147201
+    ],
+    "completion_tokens": [
+      32747,
+      34683
+    ],
+    "usd": [
+      0.0522567,
+      0.038179702
+    ],
+    "nocache": [
+      0.0522567,
+      0.052605400000000004
+    ],
+    "prompt_pct": -0.08423162164468258,
+    "usd_pct": -26.938168694157877,
+    "nocache_pct": 0.6672828555955511
+  },
+  "baseline-naive_vs_baseline": {
+    "tasks": 6,
+    "prompt_tokens": [
+      470063,
+      457073
+    ],
+    "cached_tokens": [
+      147442,
+      0
+    ],
+    "completion_tokens": [
+      37988,
+      32747
+    ],
+    "usd": [
+      0.040154584,
+      0.0522567
+    ],
+    "nocache": [
+      0.054603900000000004,
+      0.0522567
+    ],
+    "prompt_pct": -2.763459366084972,
+    "usd_pct": 30.138815533489286,
+    "nocache_pct": -4.298594056468495
+  },
+  "tokentrim-route-standard_vs_baseline-standard": {
+    "tasks": 1,
+    "prompt_tokens": [
+      52472,
+      78053
+    ],
+    "cached_tokens": [
+      22867,
+      23635
+    ],
+    "completion_tokens": [
+      3801,
+      5182
+    ],
+    "usd": [
+      0.056590549999999996,
+      0.02181487
+    ],
+    "nocache": [
+      0.08174424999999999,
+      0.0241311
+    ],
+    "prompt_pct": 48.75171520048788,
+    "usd_pct": -61.45139073573238,
+    "nocache_pct": -70.47975851512491
+  }
+}

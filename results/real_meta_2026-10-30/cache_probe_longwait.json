@@ -1,0 +1,73 @@
+{
+  "data_kind": "REAL",
+  "date": "2026-10-30",
+  "rows": [
+    {
+      "label": "wait 90s: cold",
+      "model": "meta/muse-spark-1.3-contributor",
+      "prompt_tokens": 3303,
+      "cached_tokens": 0,
+      "completion_tokens": 237,
+      "reasoning_tokens": 227,
+      "finish_reason": "stop",
+      "usd": 0.0003777,
+      "latency_s": 3.57
+    },
+    {
+      "label": "wait 90s: after 90s",
+      "model": "meta/muse-spark-1.3-contributor",
+      "prompt_tokens": 3303,
+      "cached_tokens": 0,
+      "completion_tokens": 400,
+      "reasoning_tokens": 398,
+      "finish_reason": "length",
+      "usd": 0.0004103,
+      "latency_s": 4.05
+    },
+    {
+      "label": "wait 90s: immediately after that",
+      "model": "meta/muse-spark-1.3-contributor",
+      "prompt_tokens": 3303,
+      "cached_tokens": 0,
+      "completion_tokens": 400,
+      "reasoning_tokens": 398,
+      "finish_reason": "length",
+      "usd": 0.0004103,
+      "latency_s": 2.94
+    },
+    {
+      "label": "wait 150s: cold",
+      "model": "meta/muse-spark-1.3-contributor",
+      "prompt_tokens": 3303,
+      "cached_tokens": 0,
+      "completion_tokens": 400,
+      "reasoning_tokens": 398,
+      "finish_reason": "length",
+      "usd": 0.0004103,
+      "latency_s": 5.15
+    },
+    {
+      "label": "wait 150s: after 150s",
+      "model": "meta/muse-spark-1.3-contributor",
+      "prompt_tokens": 3303,
+      "cached_tokens": 0,
+      "completion_tokens": 258,
+      "reasoning_tokens": 248,
+      "finish_reason": "stop",
+      "usd": 0.0003819,
+      "latency_s": 3.37
+    },
+    {
+      "label": "wait 150s: immediately after that",
+      "model": "meta/muse-spark-1.3-contributor",
+      "prompt_tokens": 3303,
+      "cached_tokens": 0,
+      "completion_tokens": 400,
+      "reasoning_tokens": 398,
+      "finish_reason": "length",
+      "usd": 0.0004103,
+      "latency_s": 2.96
+    }
+  ],
+  "total_usd": 0.0024008
+}

@@ -1,0 +1,51 @@
+{
+  "data_kind": "REAL",
+  "date": "2026-10-30",
+  "rows": [
+    {
+      "label": "standard cold",
+      "model": "meta/muse-spark-1.3",
+      "prompt_tokens": 3302,
+      "cached_tokens": 0,
+      "completion_tokens": 400,
+      "reasoning_tokens": 398,
+      "finish_reason": "length",
+      "usd": 0.0058275,
+      "latency_s": 1.41
+    },
+    {
+      "label": "contributor 30s after standard",
+      "model": "meta/muse-spark-1.3-contributor",
+      "prompt_tokens": 3302,
+      "cached_tokens": 0,
+      "completion_tokens": 400,
+      "reasoning_tokens": 398,
+      "finish_reason": "length",
+      "usd": 0.00041020000000000005,
+      "latency_s": 2.99
+    },
+    {
+      "label": "standard again",
+      "model": "meta/muse-spark-1.3",
+      "prompt_tokens": 3302,
+      "cached_tokens": 0,
+      "completion_tokens": 400,
+      "reasoning_tokens": 398,
+      "finish_reason": "length",
+      "usd": 0.0058275,
+      "latency_s": 1.45
+    },
+    {
+      "label": "contributor again",
+      "model": "meta/muse-spark-1.3-contributor",
+      "prompt_tokens": 3302,
+      "cached_tokens": 0,
+      "completion_tokens": 400,
+      "reasoning_tokens": 398,
+      "finish_reason": "length",
+      "usd": 0.00041020000000000005,
+      "latency_s": 3.27
+    }
+  ],
+  "total_usd": 0.012475400000000001
+}
