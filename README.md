@@ -1,5 +1,101 @@
 # TokenTrim
 
+Open-source, **skill-first** token optimization for coding and tool-using agents on the Meta Model API. The
+objective is the **minimum cost per successful task**, measured in billed dollars (cached input is billed at 2% of
+input on Muse Spark Contributor), not the minimum token count.
+
+> **Contributor-mode disclosure.** All real measurements below use `muse-spark-1.3-contributor`. On the Contributor
+> tier **Meta may use request content for training.** The owner consented; every benchmark task is synthetic.
+
+## Three layers, every module opt-in
+
+| Layer | What | Needs | Where |
+|---|---|---|---|
+| **L1 Skill** | `SKILL.md` with a 6-rung decision ladder (avoid the call, reuse the cache, ask for less, shrink tool output but keep the evidence, summarize stale history, optimize only when it pays) plus a "never trade away" list. Progressive disclosure: references and scripts load only when needed. | nothing (no key, no proxy) | `skills/tokentrim/` |
+| **L2 Hooks** | pipe compressor for command output (`cmd \| python3 -m tokentrim.hooks.compress`, original recoverable), Claude Code loop-guard hook, one-command installer for `.agents/skills`, `.claude/skills` and Codex (project or home) | a supported agent | `tokentrim/hooks/` |
+| **L3 Gateway** | OpenAI Chat Completions + Anthropic Messages proxy: cache-stable prefix, reversible tool-output compression, BM25 tool-schema routing with `search_tools` recovery, optional history compaction, exact per-category accounting, **reserving spend ledger** (worst case reserved before each call, across threads/processes/retries) | direct API calls | `tokentrim/gateway.py`, `server.py`, `ledger.py` |
+
+```sh
+python3 -m tokentrim.hooks.install --project .          # copy the skill into ./.agents/skills and ./.claude/skills
+python3 -m tokentrim.hooks.install --project . --with-hooks   # + Claude Code loop-guard hook (settings.json backed up)
+set -a; . ~/.config/meta/env; set +a                    # META_API_KEY, never printed
+python3 -m tokentrim.server --port 8787 --tool-output --schema-router --run-cap-usd 1
+#   OpenAI clients:    base_url=http://127.0.0.1:8787/v1
+#   Claude Code etc.:  ANTHROPIC_BASE_URL=http://127.0.0.1:8787   (/v1/messages; model ids map to the Meta model)
+```
+
+Every optimization the gateway applies prints an explanation line (real call, 2026-10-30):
+
+![proxy explanation lines](docs/images/proxy_explanations_terminal.png)
+
+## Real results (v4, 2026-10-30)
+
+`benchmarks/` runs paired arms on **identical synthetic tasks** with a unique session tag per (task, arm), arm order
+randomized and interleaved per task, 2 warm-up calls excluded, `max_tokens` 16,000, and paired bootstrap 95% CIs
+(2,000 resamples). All calls are REAL Meta API calls priced from the returned `usage`. "Saving" = reduction in mean
+$ per task vs baseline. "Full" = skill + gateway modules of that workload (hooks share the same optimizer code and
+are tested offline). Raw rows and summaries: `results/v4_2026-10-30/{agentic,longchat,chat}/`.
+
+![ablation table](docs/images/ablation_table.png)
+
+| workload (n paired) | arm | pass | $/task | saving vs baseline [95% CI] |
+|---|---|---|---|---|
+| agentic incident triage, 30 tool schemas, large tool outputs (24) | baseline | 24/24 | $0.00566 | - |
+| | skill only | 24/24 | $0.00553 | +2.4% [-10.7, +13.6] (not significant) |
+| | tool-output compression only | 24/24 | $0.00265 | +53.2% [+37.8, +66.1] |
+| | schema router only | 24/24 | $0.00491 | +13.3% [+3.7, +21.4] |
+| | **full** (skill + cache prefix + compression + router) | 24/24 | **$0.00117** | **+79.3% [+76.3, +81.8]** |
+| long conversation, 24 user turns + graded recall (12) | baseline | 11/12 | $0.00854 | - |
+| | skill only | 10/12 | $0.00765 | +10.4% [+2.4, +18.2] |
+| | history compaction only | 10/12 | $0.01071 | **-25.4% [-37.9, -12.0] (costs more)** |
+| | full (skill + cache prefix + history) | 12/12 | $0.00902 | -5.7% [-28.3, +11.8] |
+| plain chat, 4 graded questions over a 2.5k-token doc (24) | baseline (timestamp + request id in system prompt) | 24/24 | $0.00160 | - |
+| | skill only | 24/24 | $0.00154 | +3.9% [+1.4, +6.2] |
+| | cache prefix only | 24/24 | $0.00157 | +1.8% [-1.6, +4.7] (not significant) |
+| | full (skill + cache prefix) | 24/24 | $0.00152 | +5.1% [+2.8, +7.4] |
+
+What this does and does not show:
+- **Where the money is:** in the agentic workload, uncached input is 94% of baseline spend
+  (53.5k uncached / 8.5k cached / 1.5k output tokens per task). Compression and schema routing attack exactly that;
+  Full cuts uncached input to 8.8k tokens per task. Recovery paths were used, not just offered: 8 full
+  `retrieve_original` calls (compression-only arm) and 17 targeted greps (Full arm).
+- **Skill only** reduces output/reasoning tokens (chat -30% output tokens, median session latency 41.8 s -> 29.6 s;
+  long conversation -25% output tokens), at the price of ~500 extra input tokens per call. Its dollar effect is small
+  where input dominates.
+- **Negative finding:** history compaction **raised** cost by 25% on long conversations, because Meta's cache
+  already covered 55% of prompt tokens there and compaction breaks it, adds a model call, and the model fetched the
+  compacted transcript back in about a third of conversations (issue 63). It stays **off** by default.
+- **Negative finding:** removing volatile prompt lines barely mattered in plain chat (cache hits 0% -> 3% of calls);
+  Meta's cache is intermittent for short prefixes (issues 46, 64).
+- **Quality:** no observed loss in agentic or chat (24/24 in every arm). That is a **ceiling effect, not a
+  non-inferiority proof**: with 24/24 vs 24/24 the 95% interval of the pass-rate difference is about +-14 points
+  (issue 62). Long-conversation pass counts (10-12 of 12) are too small to compare.
+- **Truncation:** 0 of 2,058 benchmark calls ended `finish_reason=length` (`max_tokens` 16,000), vs 114 of 255 in the
+  v2 run, where reasoning tokens exhausted `max_tokens` (issue 47).
+- Workloads are synthetic and generated deterministically (`benchmarks/workloads.py`); they were tuned once on small
+  pilots (issue 58) and then frozen before the reported runs. Latency numbers include periods when the API slowed
+  down under concurrent runs.
+
+![savings attribution](docs/images/savings_attribution_agentic.png)
+![token breakdown](docs/images/token_breakdown_agentic.png)
+![cache hits](docs/images/cache_hit_rate.png)
+![truncation](docs/images/truncation_before_after.png)
+![tool output compression](docs/images/tool_output_before_after.png)
+
+**Recommended defaults from these data:** skill on; gateway cache prefix on; tool-output compression and schema
+router on for tool-heavy agents; history compaction off; lean-skill injection off (the skill covers it).
+
+Cheap-model checks before any Meta spend (`benchmarks/cheap_probe.py`, `claude-haiku-5-5` via the Claude Code CLI on
+the owner's subscription, no API key): the first compressor scored 5/6 vs 6/6 raw, which led to query-aware
+protection (issue 57); the fixed compressor then scored 4/4 on re-probed tasks; the skill kept 6/6 chat answers correct. Total Meta spend for all of v4 (smoke tests, pilots, benchmarks): **$1.35** of a $12 cap.
+
+## Earlier versions (v2/v3, superseded by v4)
+
+The sections below describe the v3 middleware (cache-aware layout + eager prune) and its measurements. They are kept
+for the record.
+
+### v3 overview
+
 Open-source middleware that cuts what coding agents spend on the Meta Model API. TokenTrim optimizes **billed dollars, not tokens**: cached input is a subset of input and is billed at its own, much lower rate (2% of input on Muse Spark Contributor, 12% on Spark Standard), so what matters is whether the provider's prefix cache can hit.
 
 **TokenTrim = cache-aware layout + eager prune + a measurement harness.**
@@ -100,7 +196,7 @@ python3 -m tokentrim.proxy --port 8787 --upstream-base-url https://api.meta.ai/v
 
 A live smoke call on 2026-10-30 worked with curl and with the official `openai` Python client against the real Meta API ([`proxy_smoke.md`](results/real_meta_2026-10-30_v3/proxy_smoke.md)). **Scope:** plain-text chat completions only (`model`, `messages`, `max_tokens`/`max_completion_tokens`). `tools` and `stream: true` are rejected with HTTP 400, so it is **not yet a drop-in for tool-calling coding agents** (issue 51). The proxy uses its own upstream key; the client's `Authorization` header is ignored.
 
-## Works with other agents (planned)
+## Works with other agents (v3 notes; v4 added `/v1/messages`, tools and buffered streaming)
 
 TokenTrim's savers are provider-agnostic; only the transport is OpenAI-chat-shaped today. The proxy's upstream is configurable (`--upstream-base-url` or `TOKENTRIM_UPSTREAM_BASE_URL`, HTTPS or loopback HTTP), so any OpenAI-compatible endpoint can sit behind it. Planned, not built:
 - an **Anthropic Messages** front-end (`/v1/messages`, with `cache_control` breakpoints) so Claude Code can point `ANTHROPIC_BASE_URL` at TokenTrim;
