@@ -164,8 +164,9 @@ def optimize(gw, payload: dict, conversation_id, report):
                              f"selection frozen for this conversation to keep the cache prefix")
         guarded("schema_router", route)
 
-    if conv.get("needs_retrieve") and payload.get("tools") is not None or \
-            (conv.get("needs_retrieve") and cfg.history):
+    # retrieve_original is offered from the FIRST request whenever tool-output compression is on and the
+    # client uses tools, so the tool list does not change mid-conversation (cache-stable).
+    if (cfg.tool_output and payload.get("tools")) or conv.get("needs_retrieve"):
         names = {tool_name(t) for t in payload.get("tools") or []}
         if "retrieve_original" not in names:
             payload["tools"] = list(payload.get("tools") or []) + [RETRIEVE_TOOL]
