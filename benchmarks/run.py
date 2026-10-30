@@ -22,6 +22,7 @@ from tokentrim.guard import SpendCapExceeded
 from tokentrim.ledger import SpendLedger
 from tokentrim.upstream import ChatUpstream, MockChatUpstream
 from . import workloads as W
+from . import workloads_hard as WH
 
 MODEL = "muse-spark-1.3-contributor"
 SKILL = Path(__file__).resolve().parent.parent / "skills" / "tokentrim" / "SKILL.md"
@@ -40,11 +41,20 @@ ARMS = {
         "schema_router": dict(skill=False, cfg=dict(cache_prefix=False, schema_router=True)),
         "full": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True, schema_router=True)),
     },
+    "agentic_hard": {
+        "baseline": dict(skill=False, cfg=dict(cache_prefix=False)),
+        "skill": dict(skill=True, cfg=dict(cache_prefix=False)),
+        "tool_output": dict(skill=False, cfg=dict(cache_prefix=False, tool_output=True)),
+        "schema_router": dict(skill=False, cfg=dict(cache_prefix=False, schema_router=True)),
+        "full_no_router": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True)),
+        "full": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True, schema_router=True)),
+    },
     "longchat": {
         "baseline": dict(skill=False, cfg=dict(cache_prefix=False)),
         "skill": dict(skill=True, cfg=dict(cache_prefix=False)),
         "history": dict(skill=False, cfg=dict(cache_prefix=False, history=True)),
         "full": dict(skill=True, cfg=dict(cache_prefix=True, history=True)),
+        "full_no_history": dict(skill=True, cfg=dict(cache_prefix=True)),  # recommended Full (compaction off)
     },
     "chat": {  # the chat client puts a per-request timestamp + request id in its system prompt (common pattern)
         "baseline": dict(skill=False, cfg=dict(cache_prefix=False)),
@@ -120,6 +130,43 @@ def run_agentic(task, arm, spec, gw, tag, max_tokens, max_steps=10):
     return score, fields, totals, notes, counts, answer
 
 
+def run_agentic_hard(task, arm, spec, gw, tag, max_tokens, max_steps=14):
+    msgs = [{"role": "system", "content": system_for(task["system"], tag, spec["skill"])},
+            {"role": "user", "content": task["prompt"]}]
+    tools, totals, notes, answer, trace = WH.hard_tools(), Totals(), [], "", []
+    counts = {"retrieve_original": 0, "retrieve_grep": 0, "search_tools": 0, "tool_calls": 0}
+    for step in range(max_steps):
+        data, rep = gw.complete({"model": MODEL, "messages": msgs, "tools": tools, "max_tokens": max_tokens},
+                                conversation_id=tag, note=f"{task['id']}/{arm}")
+        totals.add(rep)
+        notes += rep.explanations
+        for e in rep.explanations:
+            if e.startswith("Model retrieved original"):
+                counts["retrieve_original"] += 1
+            if e.startswith("Model grepped original"):
+                counts["retrieve_grep"] += 1
+            if e.startswith("search_tools("):
+                counts["search_tools"] += 1
+        msg = data["choices"][0]["message"]
+        calls = msg.get("tool_calls") or []
+        if not calls:
+            answer = msg.get("content") or ""
+            break
+        msgs.append({"role": "assistant", "content": msg.get("content") or "", "tool_calls": calls})
+        for c in calls:
+            counts["tool_calls"] += 1
+            try:
+                args = json.loads(c["function"].get("arguments") or "{}")
+            except ValueError:
+                args = {}
+            trace.append((c["function"]["name"], args))
+            msgs.append({"role": "tool", "tool_call_id": c.get("id"),
+                         "content": WH.run_hard_stub(task, c["function"]["name"], args)})
+    score, checks = WH.grade_hard(answer, task, trace)
+    counts["tool_trace"] = [[n, a] for n, a in trace]
+    return score, checks, totals, notes, counts, answer
+
+
 def run_longchat(task, arm, spec, gw, tag, max_tokens):
     msgs = [{"role": "system", "content": system_for(W.LONGCHAT_SYSTEM, tag, spec["skill"])}]
     totals, notes = Totals(), []
@@ -156,11 +203,15 @@ def run_chat(task, arm, spec, gw, tag, max_tokens):
     return sum(oks) / len(oks), {f"q{i}": ok for i, ok in enumerate(oks)}, totals, notes, {}, answers
 
 
-RUNNERS = {"agentic": run_agentic, "longchat": run_longchat, "chat": run_chat}
+RUNNERS = {"agentic": run_agentic, "agentic_hard": run_agentic_hard, "longchat": run_longchat, "chat": run_chat}
 
 
-def mock_responder(workload):
+def mock_responder(workload, policy="oracle"):
     """Deterministic offline policy so the harness can be exercised end to end with zero spend."""
+    if workload == "agentic_hard":
+        from .mock_agents import hard_policy
+        return hard_policy(policy)
+
     def respond(payload):
         msgs = payload["messages"]
         if msgs[0]["content"].startswith("You compress a conversation"):
@@ -190,24 +241,30 @@ def main(argv=None):
     p.add_argument("--out", default=None)
     p.add_argument("--mock", action="store_true")
     p.add_argument("--seed", type=int, default=7)
+    p.add_argument("--offset", type=int, default=0, help="first task index (pilots use indices >= 100)")
+    p.add_argument("--mock-policy", default="oracle", choices=("oracle", "lazy", "guess"))
+    p.add_argument("--results-dir", default="results/v4_2026-10-30")
     a = p.parse_args(argv)
     arms = a.arms.split(",") if a.arms else list(ARMS[a.workload])
     run_id = f"v4-{a.workload}-{datetime.now().strftime('%Y%m%d-%H%M%S')}" + ("-mock" if a.mock else "")
-    out = Path(a.out or f"results/v4_2026-10-30/{a.workload}{'_mock' if a.mock else ''}")
+    out = Path(a.out or f"{a.results_dir}/{a.workload}{'_mock' if a.mock else ''}")
     out.mkdir(parents=True, exist_ok=True)
     if a.mock:
         ledger = SpendLedger(out / "_mock_ledger.json", 10**6, 10**6, run_id)
-        upstream = MockChatUpstream(responder=mock_responder(a.workload), ledger=ledger)
+        upstream = MockChatUpstream(responder=mock_responder(a.workload, a.mock_policy), ledger=ledger)
     else:
         ledger = SpendLedger(a.ledger, a.job_cap_usd, a.run_cap_usd, run_id)
         upstream = ChatUpstream(ledger=ledger, rpm=120)
     print(f"[{run_id}] start: {ledger.status()}", flush=True)
+    idx = range(a.offset, a.offset + a.tasks)
     if a.workload == "agentic":
-        tasks = [W.agentic_task(i) for i in range(a.tasks)]
+        tasks = [W.agentic_task(i) for i in idx]
+    elif a.workload == "agentic_hard":
+        tasks = [WH.hard_task(i) for i in idx]
     elif a.workload == "longchat":
-        tasks = [W.longchat_task(i) for i in range(a.tasks)]
+        tasks = [W.longchat_task(i) for i in idx]
     else:
-        tasks = [W.chat_task(i, ITEMS) for i in range(a.tasks)]
+        tasks = [W.chat_task(i, ITEMS) for i in idx]
     rng = random.Random(a.seed)
     jobs = []
     for t in tasks:
@@ -256,7 +313,7 @@ def main(argv=None):
 
     with ThreadPoolExecutor(a.workers) as pool:
         list(pool.map(work, jobs))
-    meta = {"run_id": run_id, "workload": a.workload, "arms": arms, "tasks": len(tasks), "model": MODEL,
+    meta = {"run_id": run_id, "workload": a.workload, "arms": arms, "tasks": len(tasks), "offset": a.offset, "model": MODEL,
             "max_tokens": a.max_tokens, "workers": a.workers, "seed": a.seed, "rows": len(rows),
             "jobs": len(jobs), "stopped_by_cap": stop.is_set(), "spend_this_run_usd": ledger.mine(),
             "ledger_total_usd": ledger.total(), "job_cap_usd": a.job_cap_usd, "run_cap_usd": a.run_cap_usd,

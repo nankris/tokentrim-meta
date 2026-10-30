@@ -67,8 +67,42 @@ class Gateway:
         except Exception as exc:
             return copy.deepcopy(payload), [], [f"all transforms skipped ({type(exc).__name__})"]
 
+    def _replay_internal(self, payload: dict, conversation_id):
+        """Re-insert earlier internal tool exchanges (retrieve_original / search_tools) at the positions where
+        they happened. Without this, a retrieved detail disappears from the conversation on the next client
+        turn (the client never sees internal rounds), and the cached prefix breaks at that point (issue 65)."""
+        from . import transforms
+        conv = self.conversations.get(transforms.conversation_key(payload, conversation_id)) or {}
+        inserts = conv.get("internal_inserts")
+        if not inserts:
+            return payload
+        msgs = list(payload.get("messages") or [])
+        out, done = [], 0
+        for pos in sorted(inserts):
+            if pos > len(msgs):
+                break
+            if transforms.history.digest(msgs[:pos]) != inserts[pos]["digest"]:
+                break  # client rewrote its history: stop replaying (fail safe)
+            out += msgs[done:pos] + copy.deepcopy(inserts[pos]["messages"])
+            done = pos
+        if not out:
+            return payload
+        payload = dict(payload)
+        payload["messages"] = out + msgs[done:]
+        return payload
+
     def complete(self, payload: dict, conversation_id: str | None = None, note: str = ""):
         report = GatewayReport()
+        client_len = len(payload.get("messages") or [])
+        client_digest = None
+        try:
+            from . import transforms
+            client_digest = transforms.history.digest(payload.get("messages") or [])
+            key = transforms.conversation_key(payload, conversation_id)
+            payload = self._replay_internal(payload, conversation_id)
+        except Exception:  # fail open
+            key = None
+        internal_msgs = []
         sent, explanations, fails = self.optimize(payload, conversation_id, report)
         report.explanations += explanations
         report.fail_open += fails
@@ -89,18 +123,28 @@ class Gateway:
                 break
             from . import transforms
             sent = copy.deepcopy(sent)
-            sent["messages"].append({k: v for k, v in message.items() if k in {"role", "content", "tool_calls"}})
+            asst = {k: v for k, v in message.items() if k in {"role", "content", "tool_calls"}}
+            sent["messages"].append(asst)
+            internal_msgs.append(copy.deepcopy(asst))
             for call in calls:
                 if call in internal:
                     result, line = transforms.run_internal_tool(self, call, conversation_id, sent)
                 else:  # mixed internal + client calls: client calls are not executed here
                     result, line = "Not executed by gateway; call again if still needed.", None
                 sent["messages"].append({"role": "tool", "tool_call_id": call.get("id"), "content": result})
+                internal_msgs.append({"role": "tool", "tool_call_id": call.get("id"), "content": result})
                 report.internal_calls += 1
                 if line:
                     report.explanations.append(line)
                     if self.log:
                         self.log(line)
+        if internal_msgs and key is not None and client_digest is not None:
+            conv = self.conversations.setdefault(key, {})
+            conv.setdefault("internal_inserts", {})[client_len] = {"digest": client_digest, "messages": internal_msgs}
+            import hashlib
+            raw = conv.setdefault("raw_tool_outputs", set())  # replayed exactly as first sent: never compressed
+            raw.update(hashlib.sha256(m["content"].encode()).hexdigest() for m in internal_msgs
+                       if m.get("role") == "tool" and isinstance(m.get("content"), str))
         data = copy.deepcopy(data)
         total = {"prompt_tokens": sum(c.prompt_tokens for c in report.calls),
                  "completion_tokens": sum(c.completion_tokens for c in report.calls)}

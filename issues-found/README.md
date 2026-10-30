@@ -34,3 +34,4 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 62 | [Agentic benchmark quality ceiling](62-agentic-ceiling-effect.md) | Open |
 | 63 | [History compaction raised real cost (+25%)](63-history-compaction-costs-more.md) | Disabled by default |
 | 64 | [Plain chat: cache barely hit; skill cut output 30%](64-chat-cache-and-skill.md) | Documented |
+| 65 | [Internal tool rounds forgotten on the next turn](65-internal-rounds-not-replayed.md) | Fixed |
