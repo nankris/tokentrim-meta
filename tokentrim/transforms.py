@@ -1,20 +1,35 @@
 """Orchestrates the opt-in optimizers for one request (each fails open, each logs an explanation line)."""
 import hashlib
 import json
+import re
 
 from .optimizers import cache_prefix, history
 from .optimizers.schema_router import SEARCH_TOOL, SchemaRouter, schema_tokens, tool_name
-from .optimizers.tool_output import ToolOutputCompressor
+from .optimizers.tool_output import ToolOutputCompressor, task_terms
 from .policy import net_saving
 from .tokens import estimate_tokens
 from .upstream import price_name
 
 RETRIEVE_TOOL = {"type": "function", "function": {
     "name": "retrieve_original",
-    "description": ("Return the exact original text that TokenTrim compressed. Use only when the compressed "
-                    "view lacks a detail you need; pass the reference id shown in the compressed text."),
-    "parameters": {"type": "object", "properties": {"reference_id": {"type": "string"}},
-                   "required": ["reference_id"]}}}
+    "description": ("Look up text that TokenTrim compressed, by the reference id shown in the compressed view. "
+                    "Use only when a needed detail is missing. Prefer `pattern` (returns only matching lines, "
+                    "with line numbers); omit it to get the full original."),
+    "parameters": {"type": "object", "properties": {
+        "reference_id": {"type": "string"},
+        "pattern": {"type": "string", "description": "optional case-insensitive regex or substring to grep for"}},
+        "required": ["reference_id"]}}}
+
+
+def grep_original(text: str, pattern: str, limit: int = 200) -> str:
+    try:
+        rx = re.compile(pattern, re.I)
+    except re.error:
+        rx = re.compile(re.escape(pattern), re.I)
+    hits = [f"{n}: {line}" for n, line in enumerate(text.splitlines(), 1) if rx.search(line)]
+    more = f"\n[{len(hits) - limit} more matching lines not shown]" if len(hits) > limit else ""
+    return (f"{len(hits)} matching lines for /{pattern}/:\n" + "\n".join(hits[:limit]) + more) if hits \
+        else f"No lines match /{pattern}/ in the original."
 
 
 def conversation_key(payload: dict, conversation_id: str | None) -> str:
@@ -61,13 +76,18 @@ def optimize(gw, payload: dict, conversation_id, report):
             comp = ToolOutputCompressor(gw.store, cfg.min_tool_output_tokens)
             raw_sent = conv.setdefault("raw_tool_outputs", set())
             done = 0
+            seen_user = []
             for m in payload["messages"]:
+                if m.get("role") == "user":
+                    seen_user.append(m.get("content") if isinstance(m.get("content"), str) else "")
                 if m.get("role") != "tool" or not isinstance(m.get("content"), str):
                     continue
                 h = hashlib.sha256(m["content"].encode()).hexdigest()
                 if h in raw_sent:
                     continue  # already sent uncompressed earlier: changing it now would break the cache
-                result = comp.compress(m["content"])
+                result = comp.compress(m["content"], keep_terms=task_terms(seen_user))
+                if result.ref and result.ref in conv.get("retrieved_refs", ()):
+                    result = None  # the model needed this original once: keep it raw for the rest of the run
                 if result.ref and rates:
                     d = net_saving(rates, result.tokens_before - result.tokens_after, 3, 0, _hit_rate(conv))
                     if not d.apply:
@@ -198,8 +218,19 @@ def run_internal_tool(gw, call, conversation_id, sent):
     name = fn.get("name")
     if name == "retrieve_original":
         ref = str(args.get("reference_id") or args.get("id") or "")
+        pattern = args.get("pattern")
+        if isinstance(pattern, str) and pattern.strip():
+            try:
+                return grep_original(gw.store.get(ref), pattern.strip()), \
+                    f"Model grepped original {ref} for /{pattern.strip()[:40]}/ (TokenTrim recovery path used)"
+            except KeyError:
+                return f"No original stored under {ref!r}.", f"retrieve_original: unknown reference {ref!r}"
         try:
-            return gw.store.get(ref), f"Model retrieved original {ref} (TokenTrim recovery path used)"
+            original = gw.store.get(ref)
+            # from now on this tool result is sent uncompressed, so the model never has to retrieve it again
+            conv = gw.conversations.setdefault(conversation_key(sent, conversation_id), {})
+            conv.setdefault("retrieved_refs", set()).add(ref)
+            return original, f"Model retrieved original {ref} (TokenTrim recovery path used)"
         except KeyError:
             return f"No original stored under {ref!r}.", f"retrieve_original: unknown reference {ref!r}"
     if name == "search_tools":

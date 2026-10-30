@@ -131,7 +131,10 @@ def agentic_task(i: int) -> dict:
     ci[pos] = ci[pos].split(" ")[0] + f" DEBUG request {req_id} handled by worker {worker} in {rng.randint(3, 900)}ms"
     # make sure req_id appears exactly once
     ci = [l if (req_id not in l or k == pos) else l.replace(req_id, "r-000") for k, l in enumerate(ci)]
-    ci.append(ci[-1].split(" ")[0] + f" ERROR job {job_id} failed: pytest exited with exit code {exit_code}")
+    end = ci[-1].split(" ")[0]
+    ci.append(f"{end} INFO pytest finished: {n_fail} failed, {n_pass} passed (full report in the run_tests output)")
+    ci += [f"{end} INFO FAILED {f['file']}::{f['name']}" for f in fails]
+    ci.append(f"{end} ERROR job {job_id} failed: pytest exited with exit code {exit_code}")
     ci_log = "\n".join(ci)
     # code search JSON
     hits = [{"path": f"src/{rng.choice(modules)}/{rng.choice(['core', 'util', 'api'])}.py", "line": rng.randint(1, 400),

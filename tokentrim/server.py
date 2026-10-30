@@ -133,7 +133,7 @@ def main(argv=None):
         ledger = SpendLedger(args.ledger, args.job_cap_usd, args.run_cap_usd, uuid.uuid4().hex)
         upstream = ChatUpstream(base_url=args.upstream_base_url, ledger=ledger)
     server = make_server(lambda: Gateway(upstream, config), args.host, args.port,
-                         default_model=args.default_model)
+                         log=lambda line: print(line, flush=True), default_model=args.default_model)
     print(f"TokenTrim proxy on http://{args.host}:{server.server_port} "
           f"(upstream {getattr(upstream, 'base_url', 'MOCK')})", flush=True)
     try:

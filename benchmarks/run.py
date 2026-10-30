@@ -90,7 +90,7 @@ def run_agentic(task, arm, spec, gw, tag, max_tokens, max_steps=10):
     msgs = [{"role": "system", "content": system_for(task["system"], tag, spec["skill"])},
             {"role": "user", "content": task["prompt"]}]
     tools, totals, notes, answer = W.agentic_tools(), Totals(), [], ""
-    counts = {"retrieve_original": 0, "search_tools": 0, "tool_calls": 0}
+    counts = {"retrieve_original": 0, "retrieve_grep": 0, "search_tools": 0, "tool_calls": 0}
     for step in range(max_steps):
         data, rep = gw.complete({"model": MODEL, "messages": msgs, "tools": tools, "max_tokens": max_tokens},
                                 conversation_id=tag, note=f"{task['id']}/{arm}")
@@ -99,6 +99,8 @@ def run_agentic(task, arm, spec, gw, tag, max_tokens, max_steps=10):
         for e in rep.explanations:
             if e.startswith("Model retrieved original"):
                 counts["retrieve_original"] += 1
+            if e.startswith("Model grepped original"):
+                counts["retrieve_grep"] = counts.get("retrieve_grep", 0) + 1
             if e.startswith("search_tools("):
                 counts["search_tools"] += 1
         msg = data["choices"][0]["message"]

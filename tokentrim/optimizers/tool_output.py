@@ -80,20 +80,22 @@ def _keep_with_context(lines, keep_idx, context=1):
     return out
 
 
-def compress_test(text: str) -> str:
+def compress_test(text: str, protect=None) -> str:
     lines = text.splitlines()
     out, passing, in_fail = [], [], False
     for line in lines:
         if FAIL_START.search(line):
             in_fail = True
-        if TEST_SUMMARY.search(line) or PROTECT.search(line) or in_fail:
+        elif in_fail and re.match(r"^=+ .*\S.* =+\s*$", line):
+            in_fail = False  # next "==== section ====" header ends the FAILURES block
+        if TEST_SUMMARY.search(line) or (protect or PROTECT).search(line) or in_fail:
             if passing:
                 out.append(_note(len(passing), "passing-test lines", passing[0]))
                 passing = []
             out.append(line)
-            if in_fail and (not line.strip() or re.match(r"^(=+|-{10,})\s*$", line)) and len(out) > 1:
-                in_fail = False
-        elif PASS_LINE.search(line) or not line.strip():
+        elif not line.strip():
+            continue  # blank separator lines outside failure blocks carry no information
+        elif PASS_LINE.search(line):
             passing.append(line)
         else:  # unknown line outside a failure block: keep (cheap insurance)
             if passing:
@@ -105,7 +107,7 @@ def compress_test(text: str) -> str:
     return "\n".join(out)
 
 
-def compress_log(text: str) -> str:
+def compress_log(text: str, protect=None) -> str:
     lines = text.splitlines()
     # 1) collapse runs of lines identical after removing a leading timestamp (count kept)
     collapsed, i = [], 0
@@ -117,9 +119,25 @@ def compress_log(text: str) -> str:
         collapsed.append(lines[i] + (f"  [x{j - i} identical lines through {lines[j-1][:30].strip()!r}]"
                                      if j - i > 1 else ""))
         i = j
-    keep = [k for k, l in enumerate(collapsed) if PROTECT.search(l)]
+    keep = [k for k, l in enumerate(collapsed) if (protect or PROTECT).search(l)]
     keep += list(range(min(5, len(collapsed)))) + list(range(max(0, len(collapsed) - 5), len(collapsed)))
-    return "\n".join(_keep_with_context(collapsed, sorted(set(keep)), context=1))
+    body = _keep_with_context(collapsed, sorted(set(keep)), context=1)
+    # Say WHAT was omitted (by log level) so the model can trust the view instead of re-fetching it.
+    shown = set()
+    for k in sorted(set(keep)):
+        shown.update(range(max(0, k - 1), min(len(collapsed), k + 2)))
+    levels = {}
+    for k, l in enumerate(collapsed):
+        if k not in shown:
+            m = LEVEL.search(l)
+            levels[m.group(1).upper() if m else "other"] = levels.get(m.group(1).upper() if m else "other", 0) + 1
+    if levels:
+        body.append("[omitted lines by level: " + ", ".join(f"{k} {v}" for k, v in sorted(levels.items(), key=lambda x: -x[1]))
+                    + "; every WARN/ERROR/FATAL line and every line mentioning a task identifier is shown above]")
+    return "\n".join(body)
+
+
+LEVEL = re.compile(r"\b(TRACE|DEBUG|INFO|NOTICE|WARN|WARNING|ERROR|FATAL|CRITICAL)\b", re.I)
 
 
 def _table(rows: list[dict]) -> str | None:
@@ -132,7 +150,7 @@ def _table(rows: list[dict]) -> str | None:
     return f"[table: {len(rows)} rows; columns: {', '.join(keys)}]\n" + "\n".join(body)
 
 
-def compress_json(text: str, budget_tokens: int = 1500) -> str:
+def compress_json(text: str, budget_tokens: int = 1500, protect=None) -> str:
     value = json.loads(text)
 
     def walk(v):
@@ -159,6 +177,8 @@ def compress_json(text: str, budget_tokens: int = 1500) -> str:
             return [pull(x, f"{path}[{i}]") for i, x in enumerate(v)]
         return v
     skeleton = json.dumps(pull(restructured), ensure_ascii=False, separators=(",", ":"))
+    if skeleton == '"<table $>"' and len(tables) == 1:
+        skeleton, tables = "JSON array rendered as a table (lossless):", [("$", tables[0][1])]
     out = skeleton + "".join(f"\n{p}:\n{t}" for p, t in tables)
     if estimate_tokens(out) <= budget_tokens or not tables:
         return out if len(out) < len(minified) else minified
@@ -167,25 +187,25 @@ def compress_json(text: str, budget_tokens: int = 1500) -> str:
     for p, t in tables:
         rows = t.splitlines()
         head, body = rows[:2], rows[2:]
-        keep = [k for k, r in enumerate(body) if PROTECT.search(r)] + list(range(10)) + \
+        keep = [k for k, r in enumerate(body) if (protect or PROTECT).search(r)] + list(range(10)) + \
                list(range(max(0, len(body) - 3), len(body)))
         final.append(f"\n{p}:\n" + "\n".join(head + _keep_with_context(body, sorted(set(k for k in keep if k < len(body))), 0)))
     return "".join(final)
 
 
-def compress_diff(text: str) -> str:
+def compress_diff(text: str, protect=None) -> str:
     lines = text.splitlines()
     keep = [i for i, l in enumerate(lines)
             if l.startswith(("diff --git", "--- ", "+++ ", "@@", "+", "-", "new file", "deleted file", "rename "))
-            or PROTECT.search(l)]
+            or (protect or PROTECT).search(l)]
     return "\n".join(_keep_with_context(lines, keep, context=1))
 
 
-def compress_text(text: str) -> str:
+def compress_text(text: str, protect=None) -> str:
     lines = text.splitlines()
     if len(lines) < 30:
         return text
-    keep = [i for i, l in enumerate(lines) if PROTECT.search(l)] + list(range(15)) + \
+    keep = [i for i, l in enumerate(lines) if (protect or PROTECT).search(l)] + list(range(15)) + \
            list(range(len(lines) - 10, len(lines)))
     return "\n".join(_keep_with_context(lines, sorted(set(keep)), context=1))
 
@@ -195,22 +215,36 @@ COMPRESSORS = {"test": compress_test, "log": compress_log, "json": compress_json
 
 
 class ToolOutputCompressor:
-    def __init__(self, store: OriginalStore | None = None, min_tokens: int = 400, max_ratio: float = 0.8):
-        self.store = store or OriginalStore()
-        self.min_tokens, self.max_ratio = min_tokens, max_ratio
+    # Plain text (source files, prose) is left alone by default: the model usually asked for exactly
+    # that content and pilot runs showed it then retrieves the original anyway (net cost increase).
+    DEFAULT_KINDS = ("test", "log", "json", "diff")
 
-    def compress(self, text: str) -> Compressed:
+    def __init__(self, store: OriginalStore | None = None, min_tokens: int = 400, max_ratio: float = 0.8,
+                 kinds=DEFAULT_KINDS):
+        self.store = store or OriginalStore()
+        self.min_tokens, self.max_ratio, self.kinds = min_tokens, max_ratio, tuple(kinds)
+
+    def compress(self, text: str, keep_terms=()) -> Compressed:
+        """``keep_terms``: identifiers from the task (e.g. "r-417", "job ci-4000"); lines containing them are
+        protected too (query-aware). Callers must pass a set that is stable for a given message."""
+        protect = PROTECT
+        terms = sorted({t for t in keep_terms if len(t) >= 3})
+        if terms:
+            protect = re.compile(PROTECT.pattern + "|" + "|".join(re.escape(t) for t in terms), PROTECT.flags)
         before = estimate_tokens(text)
         if before < self.min_tokens or "retrieve_original(" in text:
             return Compressed(text, "skip", None, before, before, "")
         kind = classify(text)
+        if kind not in self.kinds:
+            return Compressed(text, kind, None, before, before, "")
         try:
-            body = COMPRESSORS[kind](text)
+            body = COMPRESSORS[kind](text, protect=protect)
         except Exception:  # fail open
             return Compressed(text, kind, None, before, before, f"tool output ({kind}) left unchanged: compressor error")
         ref = self.store.put(text, "orig")
         out = (f"{body}\n[TokenTrim: {kind} output compressed {before:,}->~{estimate_tokens(body):,} tokens; "
-               f"protected lines kept verbatim; exact original: retrieve_original(\"{ref}\")]")
+               f"errors, failures, summaries and task identifiers kept verbatim; "
+               f"full original only if a needed detail is missing: retrieve_original(\"{ref}\")]")
         after = estimate_tokens(out)
         if after > self.max_ratio * before:
             return Compressed(text, kind, None, before, before,
@@ -218,3 +252,15 @@ class ToolOutputCompressor:
         return Compressed(out, kind, ref, before, after,
                           f"Compressed {kind} tool output {before:,}->{after:,} tokens "
                           f"(-{100 * (before - after) / before:.0f}%), original recoverable as {ref}")
+
+
+ID_TERM = re.compile(r"\b(?=[\w.-]*\d)(?=[\w.-]*[A-Za-z])[A-Za-z][\w.-]*[-_.][\w.-]*\w\b|\b[A-Za-z]+\d+[A-Za-z\d]*\b")
+
+
+def task_terms(texts) -> set[str]:
+    """Identifier-like tokens (contain a letter and a digit, e.g. r-417, ci-4000, w-12) from task text."""
+    out = set()
+    for t in texts:
+        if isinstance(t, str):
+            out |= {m.group(0) for m in ID_TERM.finditer(t)}
+    return out

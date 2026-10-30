@@ -257,3 +257,21 @@ class GatewayTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class QueryAwareAndGrepTest(unittest.TestCase):
+    def test_task_identifier_lines_survive_log_compression(self):
+        from tokentrim.optimizers.tool_output import ToolOutputCompressor, task_terms
+        lines = [f"2026-10-01T00:00:{i % 60:02d}Z DEBUG request r-{100 + i} handled by worker w-{i % 90}" for i in range(600)]
+        text = "\n".join(lines)
+        out = ToolOutputCompressor(min_tokens=100).compress(text, task_terms(["Which worker handled request r-417?"]))
+        self.assertIsNotNone(out.ref)
+        self.assertIn("r-417 handled by worker w-47", out.text)
+        self.assertIn("omitted lines by level: DEBUG", out.text)
+
+    def test_grep_original(self):
+        from tokentrim.transforms import grep_original
+        text = "a\nfoo 1\nb\nFOO 2"
+        self.assertEqual(grep_original(text, "foo"), "2 matching lines for /foo/:\n2: foo 1\n4: FOO 2")
+        self.assertIn("No lines match", grep_original(text, "zzz"))
+        self.assertIn("1 matching", grep_original("x(\ny", "x("))  # invalid regex -> substring

@@ -1,0 +1,28 @@
+{"probe": "compression", "task": "ag00", "arm": "raw", "score": 1.0, "retrieved": 0, "input": 47890, "output": 702, "fails": []}
+{"probe": "compression", "task": "ag00", "arm": "compressed", "score": 0.875, "retrieved": 0, "input": 16549, "output": 1025, "fails": ["worker"]}
+{"probe": "compression", "task": "ag01", "arm": "raw", "score": 1.0, "retrieved": 0, "input": 51514, "output": 684, "fails": []}
+{"probe": "compression", "task": "ag01", "arm": "compressed", "score": 1.0, "retrieved": 0, "input": 16816, "output": 763, "fails": []}
+{"probe": "compression", "task": "ag02", "arm": "raw", "score": 1.0, "retrieved": 0, "input": 50721, "output": 637, "fails": []}
+{"probe": "compression", "task": "ag02", "arm": "compressed", "score": 1.0, "retrieved": 0, "input": 16865, "output": 508, "fails": []}
+{"probe": "compression", "task": "ag03", "arm": "raw", "score": 1.0, "retrieved": 0, "input": 51853, "output": 731, "fails": []}
+{"probe": "compression", "task": "ag03", "arm": "compressed", "score": 1.0, "retrieved": 1, "input": 39992, "output": 1639, "fails": []}
+{"probe": "compression", "task": "ag04", "arm": "raw", "score": 1.0, "retrieved": 0, "input": 49893, "output": 506, "fails": []}
+{"probe": "compression", "task": "ag04", "arm": "compressed", "score": 1.0, "retrieved": 0, "input": 16553, "output": 483, "fails": []}
+{"probe": "compression", "task": "ag05", "arm": "raw", "score": 1.0, "retrieved": 0, "input": 50700, "output": 501, "fails": []}
+{"probe": "compression", "task": "ag05", "arm": "compressed", "score": 1.0, "retrieved": 0, "input": 16560, "output": 873, "fails": []}
+{"probe": "skill", "task": "ch00", "arm": "baseline", "ok": true, "input": 17841, "output": 804, "answer_chars": 553}
+{"probe": "skill", "task": "ch00", "arm": "skill", "ok": true, "input": 18630, "output": 515, "answer_chars": 442}
+{"probe": "skill", "task": "ch01", "arm": "baseline", "ok": true, "input": 17839, "output": 401, "answer_chars": 408}
+{"probe": "skill", "task": "ch01", "arm": "skill", "ok": true, "input": 18628, "output": 419, "answer_chars": 401}
+{"probe": "skill", "task": "ch02", "arm": "baseline", "ok": true, "input": 17841, "output": 459, "answer_chars": 405}
+{"probe": "skill", "task": "ch02", "arm": "skill", "ok": true, "input": 18630, "output": 495, "answer_chars": 455}
+{"probe": "skill", "task": "ch03", "arm": "baseline", "ok": true, "input": 17841, "output": 612, "answer_chars": 495}
+{"probe": "skill", "task": "ch03", "arm": "skill", "ok": true, "input": 18630, "output": 460, "answer_chars": 447}
+{"probe": "skill", "task": "ch04", "arm": "baseline", "ok": true, "input": 17841, "output": 553, "answer_chars": 431}
+{"probe": "skill", "task": "ch04", "arm": "skill", "ok": true, "input": 18630, "output": 650, "answer_chars": 491}
+{"probe": "skill", "task": "ch05", "arm": "baseline", "ok": true, "input": 17839, "output": 557, "answer_chars": 505}
+{"probe": "skill", "task": "ch05", "arm": "skill", "ok": true, "input": 18628, "output": 557, "answer_chars": 510}
+{"probe": "compression_v2_query_aware", "task": "ag00", "arm": "compressed", "score": 1.0, "retrieved": 0, "input": 16779, "output": 984, "fails": []}
+{"probe": "compression_v2_query_aware", "task": "ag03", "arm": "compressed", "score": 1.0, "retrieved": 0, "input": 16908, "output": 813, "fails": []}
+{"probe": "compression_v2_query_aware", "task": "ag06", "arm": "compressed", "score": 1.0, "retrieved": 0, "input": 16812, "output": 702, "fails": []}
+{"probe": "compression_v2_query_aware", "task": "ag09", "arm": "compressed", "score": 1.0, "retrieved": 0, "input": 128368, "output": 439, "fails": []}
