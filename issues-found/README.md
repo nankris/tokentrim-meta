@@ -25,3 +25,10 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 53 | [v3 benchmark cost, concurrency and stats notes](53-benchmark-cost-and-stats.md) | Documented |
 | 54 | [Route pilot: Spark-first never escalated](54-route-pilot.md) | Open |
 | 55 | [Moving volatile lines to a trailing message does not restore real Meta cache hits](55-volatile-move-breaks-real-cache.md) | Open |
+| 56 | [Cheap models only reachable through CLIs](56-cheap-models-cli-only.md) | Documented; used as probes |
+| 57 | [Log compression dropped the task's line (cheap probe)](57-compression-dropped-task-line.md) | Fixed (query-aware) |
+| 58 | [Over-retrieval of compressed outputs on Meta](58-over-retrieval-on-meta.md) | Fixed before frozen run |
+| 59 | [PostToolUse hook cannot shrink tool output](59-posttooluse-cannot-replace-output.md) | Fixed (pipe filter) |
+| 60 | [Proxy log lines lost in background; buffered streaming; global lock](60-proxy-log-flush.md) | Fixed / scope noted |
+| 61 | [Reserving spend ledger for concurrency and retries](61-reservation-ledger.md) | Done |
+| 62 | [Agentic benchmark quality ceiling](62-agentic-ceiling-effect.md) | Open |
