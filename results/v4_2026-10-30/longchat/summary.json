@@ -1,0 +1,259 @@
+{
+ "run_id": "v4-longchat-20261030-222007",
+ "workload": "longchat",
+ "model": "muse-spark-1.3-contributor",
+ "tasks_paired": 12,
+ "tasks_total": 12,
+ "harness_errors": 0,
+ "spend_this_run_usd": 0.431226658,
+ "ledger_total_usd": 1.345625624,
+ "data_kind": "REAL",
+ "arms": {
+  "baseline": {
+   "n": 12,
+   "pass_rate": 0.9166666666666666,
+   "mean_score": 0.9895833333333334,
+   "usd_total": 0.102492966,
+   "usd_mean": 0.008541080500000001,
+   "cost_per_success": {
+    "mean": 0.009317542363636366,
+    "ci95": [
+     0.0081631927875,
+     0.011634073505555554
+    ],
+    "n": 12
+   },
+   "tokens_mean": {
+    "prompt_tokens": 63109.666666666664,
+    "uncached_tokens": 28615.25,
+    "cached_tokens": 34494.416666666664,
+    "output_tokens": 28052.833333333332,
+    "reasoning_tokens": 27423.333333333332
+   },
+   "usd_by_category": {
+    "usd_uncached": 0.0343383,
+    "usd_cached": 0.000827866,
+    "usd_output": 0.0673268
+   },
+   "calls_total": 300,
+   "cache_hit_call_rate": 0.63,
+   "cached_share_of_prompt": 0.5465789709975757,
+   "truncated_calls": 0,
+   "truncation_rate": 0.0,
+   "latency_s_median_per_task": 343.52,
+   "retrieve_original": 0,
+   "retrieve_grep": 0,
+   "search_tools": 0
+  },
+  "skill": {
+   "n": 12,
+   "pass_rate": 0.8333333333333334,
+   "mean_score": 0.9791666666666666,
+   "usd_total": 0.09179024000000001,
+   "usd_mean": 0.007649186666666668,
+   "cost_per_success": {
+    "mean": 0.009179024000000001,
+    "ci95": [
+     0.007311897216666667,
+     0.013026519199999987
+    ],
+    "n": 12
+   },
+   "tokens_mean": {
+    "prompt_tokens": 75553.08333333333,
+    "uncached_tokens": 33613.916666666664,
+    "cached_tokens": 41939.166666666664,
+    "output_tokens": 21019.583333333332,
+    "reasoning_tokens": 20418.666666666668
+   },
+   "usd_by_category": {
+    "usd_uncached": 0.0403367,
+    "usd_cached": 0.00100654,
+    "usd_output": 0.050447
+   },
+   "calls_total": 300,
+   "cache_hit_call_rate": 0.66,
+   "cached_share_of_prompt": 0.555095368929351,
+   "truncated_calls": 0,
+   "truncation_rate": 0.0,
+   "latency_s_median_per_task": 290.235,
+   "retrieve_original": 0,
+   "retrieve_grep": 0,
+   "search_tools": 0,
+   "vs_baseline_usd": {
+    "difference": {
+     "mean": -0.0008918938333333336,
+     "ci95": [
+      -0.0015901246166666672,
+      -0.00020045715833333374
+     ],
+     "n": 12
+    },
+    "percent_saving": {
+     "mean": 10.442400505806416,
+     "ci95": [
+      2.4105840713868596,
+      18.177109304812188
+     ],
+     "n": 12
+    }
+   },
+   "vs_baseline_score_diff": {
+    "mean": -0.010416666666666666,
+    "ci95": [
+     -0.03125,
+     0.0
+    ],
+    "n": 12
+   },
+   "vs_baseline_pass_diff": {
+    "mean": -0.08333333333333333,
+    "ci95": [
+     -0.25,
+     0.0
+    ],
+    "n": 12
+   }
+  },
+  "history": {
+   "n": 12,
+   "pass_rate": 0.8333333333333334,
+   "mean_score": 0.9791666666666666,
+   "usd_total": 0.12856393800000002,
+   "usd_mean": 0.0107136615,
+   "cost_per_success": {
+    "mean": 0.012856393800000001,
+    "ci95": [
+     0.010264239101515152,
+     0.017610893612499998
+    ],
+    "n": 12
+   },
+   "tokens_mean": {
+    "prompt_tokens": 58583.666666666664,
+    "uncached_tokens": 40465.416666666664,
+    "cached_tokens": 18118.25,
+    "output_tokens": 33154.416666666664,
+    "reasoning_tokens": 31687.416666666668
+   },
+   "usd_by_category": {
+    "usd_uncached": 0.048558500000000004,
+    "usd_cached": 0.000434838,
+    "usd_output": 0.0795706
+   },
+   "calls_total": 338,
+   "cache_hit_call_rate": 0.363905325443787,
+   "cached_share_of_prompt": 0.30927135549726603,
+   "truncated_calls": 0,
+   "truncation_rate": 0.0,
+   "latency_s_median_per_task": 582.86,
+   "retrieve_original": 0,
+   "retrieve_grep": 0,
+   "search_tools": 0,
+   "vs_baseline_usd": {
+    "difference": {
+     "mean": 0.002172581,
+     "ci95": [
+      0.0010318698541666661,
+      0.0031961872666666676
+     ],
+     "n": 12
+    },
+    "percent_saving": {
+     "mean": -25.436840221796288,
+     "ci95": [
+      -37.887636082021125,
+      -11.983917433510255
+     ],
+     "n": 12
+    }
+   },
+   "vs_baseline_score_diff": {
+    "mean": -0.010416666666666666,
+    "ci95": [
+     -0.03125,
+     0.0
+    ],
+    "n": 12
+   },
+   "vs_baseline_pass_diff": {
+    "mean": -0.08333333333333333,
+    "ci95": [
+     -0.25,
+     0.0
+    ],
+    "n": 12
+   }
+  },
+  "full": {
+   "n": 12,
+   "pass_rate": 1.0,
+   "mean_score": 1.0,
+   "usd_total": 0.10829691400000001,
+   "usd_mean": 0.009024742833333333,
+   "cost_per_success": {
+    "mean": 0.009024742833333333,
+    "ci95": [
+     0.0075947370500000005,
+     0.010977794654166666
+    ],
+    "n": 12
+   },
+   "tokens_mean": {
+    "prompt_tokens": 68465.41666666667,
+    "uncached_tokens": 42635.666666666664,
+    "cached_tokens": 25829.75,
+    "output_tokens": 23547.583333333332,
+    "reasoning_tokens": 21875.5
+   },
+   "usd_by_category": {
+    "usd_uncached": 0.0511628,
+    "usd_cached": 0.0006199140000000001,
+    "usd_output": 0.05651420000000001
+   },
+   "calls_total": 320,
+   "cache_hit_call_rate": 0.465625,
+   "cached_share_of_prompt": 0.37726711174132926,
+   "truncated_calls": 0,
+   "truncation_rate": 0.0,
+   "latency_s_median_per_task": 281.87,
+   "retrieve_original": 0,
+   "retrieve_grep": 0,
+   "search_tools": 0,
+   "vs_baseline_usd": {
+    "difference": {
+     "mean": 0.0004836623333333335,
+     "ci95": [
+      -0.0010304217083333333,
+      0.0024216135541666652
+     ],
+     "n": 12
+    },
+    "percent_saving": {
+     "mean": -5.66277689729458,
+     "ci95": [
+      -28.295992808731164,
+      11.792862430961685
+     ],
+     "n": 12
+    }
+   },
+   "vs_baseline_score_diff": {
+    "mean": 0.010416666666666666,
+    "ci95": [
+     0.0,
+     0.03125
+    ],
+    "n": 12
+   },
+   "vs_baseline_pass_diff": {
+    "mean": 0.08333333333333333,
+    "ci95": [
+     0.0,
+     0.25
+    ],
+    "n": 12
+   }
+  }
+ }
+}

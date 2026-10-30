@@ -32,3 +32,5 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 60 | [Proxy log lines lost in background; buffered streaming; global lock](60-proxy-log-flush.md) | Fixed / scope noted |
 | 61 | [Reserving spend ledger for concurrency and retries](61-reservation-ledger.md) | Done |
 | 62 | [Agentic benchmark quality ceiling](62-agentic-ceiling-effect.md) | Open |
+| 63 | [History compaction raised real cost (+25%)](63-history-compaction-costs-more.md) | Disabled by default |
+| 64 | [Plain chat: cache barely hit; skill cut output 30%](64-chat-cache-and-skill.md) | Documented |
