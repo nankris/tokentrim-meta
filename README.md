@@ -4,13 +4,13 @@ Open-source middleware that cuts what coding agents spend on the Meta Model API.
 
 **TokenTrim = cache-aware layout + eager prune + a measurement harness.**
 
-- **cache_layout** keeps the request prefix byte-stable even when the client is sloppy: name-sorted, key-sorted tool JSON, stable segments first, and volatile lines (timestamps, UUIDs, request ids) taken out of the system prompt (`volatile_policy="move"` to a trailing message, or `"drop"`). See the real results below for what this recovers on Meta's cache.
+- **cache_layout** keeps the request prefix byte-stable even when the client is sloppy: name-sorted, key-sorted tool JSON, stable segments first, and volatile lines (timestamps, UUIDs, request ids) taken out of the system prompt (`volatile_policy="move"` to a trailing message, or `"drop"`). On Meta's real cache only `drop` restored hits (v3b below).
 - **eager prune** drops stale and unreferenced reads as soon as they go stale, and latches each drop so the prefix never oscillates.
 - **measurement harness** runs a real paired benchmark on the live API with hard spend caps: billed $ from the API `usage` fields, real pass/fail from task tests, Wilson and paired-bootstrap intervals, record and replay.
 
 Optional, not in the headline: **trim** (log compaction; it compacted nothing on the benchmark's short real logs) and **route** (cheap-first with escalation; the 3-task pilot never escalated, see below).
 
-> **Status: prototype with real measurements.** `results/real_meta_2026-10-30_v3/` is the current REAL run (20 tasks × 4 modes × 3 repeats, a layout-only follow-up, and a 3-task route pilot). `results/real_meta_2026-10-30/` is the first, smaller real run, whose naive baseline is superseded. Everything else under `results/` is **FAKE or SIMULATION data**.
+> **Status: prototype with real measurements.** `results/real_meta_2026-10-30_v3/` is the current REAL run (20 tasks × 4 modes × 3 repeats, a 2-mode layout-only follow-up, and a 3-task route pilot). `results/real_meta_2026-10-30/` is the first, smaller real run, whose naive baseline is superseded. Everything else under `results/` is **FAKE or SIMULATION data**.
 
 ## Real results (v3, 2026-10-30)
 
@@ -41,11 +41,20 @@ Paired comparisons: repeats are averaged per task, then a paired bootstrap runs 
 
 What this does and does not show:
 - **A volatile timestamp is the costly cache-buster.** It removed every cache hit and added 13% to the bill. Set-ordered tools cost little (−2.5%, and the interval includes 0), because the order only changes when the tool set changes, which breaks even a clean client's cache.
-- **Most of TokenTrim's saving here is eager prune.** It cut 13–14% of prompt tokens. TokenTrim's calls hit the cache *less* often (5%) than the clean baseline (12%). Hoisting volatile lines into a trailing message did not restore real Meta cache hits, although it does in the offline mock. Real hits seem to require the new prompt to extend the previous prompt, and a trailing metadata message breaks that. The follow-up layout-only run (v3b, below) tests this.
+- **Most of TokenTrim's saving here is eager prune.** It cut 13–14% of prompt tokens. TokenTrim's calls hit the cache *less* often (5%) than the clean baseline (12%). Hoisting volatile lines into a trailing message did not restore real Meta cache hits, although it does in the offline mock. Real hits seem to require the new prompt to extend the previous prompt, and a trailing metadata message breaks that. The layout-only follow-up below confirms it.
 - **Pass rate: 240/240 runs passed in every mode**, and the eager-prune pass-rate guard flagged no task. With 20 tasks the task-level difference interval is [−16.1, +16.1] pp. That is wider than the −10 pp margin, so **non-inferiority is not claimed**. The bootstrap pass interval is degenerate ([0, 0]) because every run passed. The tasks are too easy to discriminate.
 - 91% of completion tokens were hidden reasoning, and 835 of 1,930 calls ended with `length` at the harness's `max_tokens` (issue 47).
 
-**Layout-only follow-up (v3b):** running at the time of this commit; see the next commit.
+**Layout-only follow-up (v3b, $1.02, 120 runs, same 20 tasks × 3 repeats, run right after the main run).** These runs use cache_layout alone, with no prune, on the same naive client:
+
+| Mode | Mean $/run | Calls with a cache hit | Billed $ vs baseline-ts [95% CI] | Billed $ vs clean baseline [95% CI] |
+|---|---:|---:|---:|---:|
+| layout-move (default: volatile lines moved to a trailing message) | 0.00885 | 3% | 2.3% cheaper [0.3, 4.5] | 10.4% dearer [7.6, 13.5] |
+| layout-drop (`volatile_policy="drop"`) | 0.00814 | 12% | **10.1% cheaper** [7.9, 12.4] | 1.6% dearer [−1.9, +5.0], not significant |
+
+- **Moving the timestamp to the end does not restore Meta's cache; dropping it does,** back to the clean client's level. Real hits appear to require each request to extend the previous one, and a trailing metadata message breaks that. The offline mock matches any common prefix, so it did not show this. This is issue 55.
+- `tokentrim vs layout-move`: 13.5% cheaper [11.8, 15.4], with 14.1% fewer prompt tokens. That is roughly the prune effect, measured across two invocations. No prune-only mode was run.
+- The default is still the lossless `move`, so the `tokentrim` numbers above describe the shipped defaults. Switching to `drop`, or to an append-only placement, is an open decision; the combination with eager prune has not been measured.
 
 **Route pilot** (3 tasks, 1 pass each, $1.24, sub-cap $3): Wonder alone vs Spark-first (Standard `muse-spark-1.3` with all savers, sticky escalation to Wonder).
 

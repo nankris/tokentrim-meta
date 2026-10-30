@@ -24,3 +24,4 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 52 | [Prune default switched to eager](52-eager-prune-default.md) | Done; pass-rate guard in report |
 | 53 | [v3 benchmark cost, concurrency and stats notes](53-benchmark-cost-and-stats.md) | Documented |
 | 54 | [Route pilot: Spark-first never escalated](54-route-pilot.md) | Open |
+| 55 | [Moving volatile lines to a trailing message does not restore real Meta cache hits](55-volatile-move-breaks-real-cache.md) | Open |
