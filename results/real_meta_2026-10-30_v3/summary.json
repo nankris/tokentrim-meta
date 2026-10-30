@@ -1,0 +1,355 @@
+{
+  "modes": {
+    "baseline": {
+      "runs": 60,
+      "passes": 60,
+      "pass_rate": 1.0,
+      "wilson_run": [
+        0.9398281469657729,
+        1.0
+      ],
+      "task_level_pass": 1.0,
+      "wilson_task": [
+        0.8388748398148705,
+        1.0
+      ],
+      "mean_usd": 0.0080190897,
+      "mean_prompt_tokens": 78420.75,
+      "cached_share": 0.1233710465661193,
+      "calls_with_hit": 0.12266112266112267,
+      "mean_usd_nocache": 0.008967225
+    },
+    "baseline-ts": {
+      "runs": 60,
+      "passes": 60,
+      "pass_rate": 1.0,
+      "wilson_run": [
+        0.9398281469657729,
+        1.0
+      ],
+      "task_level_pass": 1.0,
+      "wilson_task": [
+        0.8388748398148705,
+        1.0
+      ],
+      "mean_usd": 0.009061326133333334,
+      "mean_prompt_tokens": 79618.81666666667,
+      "cached_share": 0.0036913384587269884,
+      "calls_with_hit": 0.004132231404958678,
+      "mean_usd_nocache": 0.009090128333333334
+    },
+    "baseline-tools": {
+      "runs": 60,
+      "passes": 60,
+      "pass_rate": 1.0,
+      "wilson_run": [
+        0.9398281469657729,
+        1.0
+      ],
+      "task_level_pass": 1.0,
+      "wilson_task": [
+        0.8388748398148705,
+        1.0
+      ],
+      "mean_usd": 0.008219208433333335,
+      "mean_prompt_tokens": 79118.06666666667,
+      "cached_share": 0.11834696837047753,
+      "calls_with_hit": 0.12190082644628099,
+      "mean_usd_nocache": 0.00913682
+    },
+    "tokentrim": {
+      "runs": 60,
+      "passes": 60,
+      "pass_rate": 1.0,
+      "wilson_run": [
+        0.9398281469657729,
+        1.0
+      ],
+      "task_level_pass": 1.0,
+      "wilson_task": [
+        0.8388748398148705,
+        1.0
+      ],
+      "mean_usd": 0.007659981800000001,
+      "mean_prompt_tokens": 68235.1,
+      "cached_share": 0.039704394561352344,
+      "calls_with_hit": 0.05405405405405406,
+      "mean_usd_nocache": 0.007925486666666667
+    }
+  },
+  "comparisons": {
+    "tokentrim vs baseline-ts": {
+      "usd_saving_pct": {
+        "mean": 15.465113082932705,
+        "ci95": [
+          14.043315036873,
+          17.002315700712366
+        ],
+        "n": 20
+      },
+      "prompt_saving_pct": {
+        "mean": 14.297771736957483,
+        "ci95": [
+          13.404278760517657,
+          15.238198553660498
+        ],
+        "n": 20
+      },
+      "nocache_saving_pct": {
+        "mean": 12.81215868422832,
+        "ci95": [
+          11.810843591273034,
+          13.850808619373769
+        ],
+        "n": 20
+      },
+      "pass_diff": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 20
+      },
+      "pass_diff_newcombe": [
+        -0.16112516018512946,
+        0.16112516018512946
+      ],
+      "noninferior_minus10pp": false
+    },
+    "tokentrim vs baseline-tools": {
+      "usd_saving_pct": {
+        "mean": 6.80389891398017,
+        "ci95": [
+          3.1913638510923508,
+          10.718942680002337
+        ],
+        "n": 20
+      },
+      "prompt_saving_pct": {
+        "mean": 13.755349599880677,
+        "ci95": [
+          12.591357025825692,
+          15.063270585476248
+        ],
+        "n": 20
+      },
+      "nocache_saving_pct": {
+        "mean": 13.257712566662509,
+        "ci95": [
+          11.976127980362966,
+          14.87678149591986
+        ],
+        "n": 20
+      },
+      "pass_diff": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 20
+      },
+      "pass_diff_newcombe": [
+        -0.16112516018512946,
+        0.16112516018512946
+      ],
+      "noninferior_minus10pp": false
+    },
+    "tokentrim vs baseline": {
+      "usd_saving_pct": {
+        "mean": 4.478162901706899,
+        "ci95": [
+          2.177061232448548,
+          6.649335969620595
+        ],
+        "n": 20
+      },
+      "prompt_saving_pct": {
+        "mean": 12.988462874940618,
+        "ci95": [
+          12.305326890056632,
+          13.691992434978786
+        ],
+        "n": 20
+      },
+      "nocache_saving_pct": {
+        "mean": 11.617176253894973,
+        "ci95": [
+          10.432538209637075,
+          12.682315974577566
+        ],
+        "n": 20
+      },
+      "pass_diff": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 20
+      },
+      "pass_diff_newcombe": [
+        -0.16112516018512946,
+        0.16112516018512946
+      ],
+      "noninferior_minus10pp": false
+    },
+    "baseline-ts vs baseline": {
+      "usd_saving_pct": {
+        "mean": -12.99694195132067,
+        "ci95": [
+          -15.413443840931999,
+          -10.710309616903835
+        ],
+        "n": 20
+      },
+      "prompt_saving_pct": {
+        "mean": -1.5277419135454147,
+        "ci95": [
+          -2.4949885280403934,
+          -0.7361154375300812
+        ],
+        "n": 20
+      },
+      "nocache_saving_pct": {
+        "mean": -1.3705838019379686,
+        "ci95": [
+          -2.4442604336663387,
+          -0.4165737505646793
+        ],
+        "n": 20
+      },
+      "pass_diff": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 20
+      },
+      "pass_diff_newcombe": [
+        -0.16112516018512946,
+        0.16112516018512946
+      ],
+      "noninferior_minus10pp": false
+    },
+    "baseline-tools vs baseline": {
+      "usd_saving_pct": {
+        "mean": -2.495529303448672,
+        "ci95": [
+          -6.539738270485455,
+          1.1985491585342014
+        ],
+        "n": 20
+      },
+      "prompt_saving_pct": {
+        "mean": -0.8891991809140638,
+        "ci95": [
+          -2.4467327171341697,
+          0.3991795199621475
+        ],
+        "n": 20
+      },
+      "nocache_saving_pct": {
+        "mean": -1.8912762866996178,
+        "ci95": [
+          -5.083732459361269,
+          0.15861727424617555
+        ],
+        "n": 20
+      },
+      "pass_diff": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 20
+      },
+      "pass_diff_newcombe": [
+        -0.16112516018512946,
+        0.16112516018512946
+      ],
+      "noninferior_minus10pp": false
+    }
+  },
+  "tasks": [
+    "t01_escaped_fields",
+    "t03_invoice_rounding",
+    "t05_cli_separator",
+    "t07_interval_union",
+    "t09_ttl_boundary",
+    "t11_csv_records",
+    "t13_nested_lookup",
+    "t15_dependency_order",
+    "t17_query_pairs",
+    "t19_slug_suffix",
+    "t21_json_merge_patch",
+    "t23_lru_capacity",
+    "t25_config_interpolation",
+    "t27_temperature_api",
+    "t29_export_dispatch",
+    "t31_job_transitions",
+    "t33_timeout_cli",
+    "t35_framed_stream",
+    "t37_run_length_codec",
+    "t39_prefix_suggestions"
+  ],
+  "excluded_tasks": [],
+  "pass_rate_guard_flags": [],
+  "route_pilot": {
+    "wonder_usd": 0.9537608,
+    "sparkfirst_usd": 0.28792065,
+    "rows": [
+      {
+        "task_id": "t07_interval_union",
+        "mode": "pilot-wonder",
+        "passed": true,
+        "usd": 0.2987904,
+        "cap_tripped": null,
+        "error": null
+      },
+      {
+        "task_id": "t07_interval_union",
+        "mode": "pilot-sparkfirst",
+        "passed": true,
+        "usd": 0.09520685,
+        "cap_tripped": null,
+        "error": null
+      },
+      {
+        "task_id": "t15_dependency_order",
+        "mode": "pilot-wonder",
+        "passed": true,
+        "usd": 0.2985576,
+        "cap_tripped": null,
+        "error": null
+      },
+      {
+        "task_id": "t15_dependency_order",
+        "mode": "pilot-sparkfirst",
+        "passed": true,
+        "usd": 0.09131544999999999,
+        "cap_tripped": null,
+        "error": null
+      },
+      {
+        "task_id": "t21_json_merge_patch",
+        "mode": "pilot-wonder",
+        "passed": true,
+        "usd": 0.3564128,
+        "cap_tripped": null,
+        "error": null
+      },
+      {
+        "task_id": "t21_json_merge_patch",
+        "mode": "pilot-sparkfirst",
+        "passed": true,
+        "usd": 0.10139835,
+        "cap_tripped": null,
+        "error": null
+      }
+    ]
+  }
+}

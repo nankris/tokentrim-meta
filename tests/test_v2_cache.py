@@ -102,6 +102,22 @@ class TrimAndPruneTests(unittest.TestCase):
         self.assertEqual(kept[0].text, items[0].text)
         self.assertEqual(report.truncated_ids, [])
 
+    def test_prune_is_eager_by_default_and_latched(self):
+        costs = CostModel(prices=PRICES)
+        client = MockProviderClient(min_cacheable_tokens=0, cache_block_tokens=1)
+        items = [ContextItem("s", "system", "rules"), ContextItem("f", "file", "y" * 4000, referenced=False),
+                 ContextItem("u", "message", "q" * 40000, turn=1)]
+        eager = TokenTrim(client, token_budget=10**6, strong_model="strong", cost_model=costs,
+                          savers={"prune"}, expected_remaining_steps=1)
+        self.assertFalse(eager.prune_checkpoints)
+        _, record = eager.complete(items, Step("read"))
+        self.assertIn("f", record.pruning.dropped_ids)
+        self.assertIsNone(record.prune_checkpoint)
+        # Latched: even if the item is referenced again it stays dropped (no prefix oscillation).
+        again = [items[0], ContextItem("f", "file", "y" * 4000, referenced=True), items[2]]
+        eager.complete(again, Step("read"))
+        self.assertNotIn("y" * 4000, [m["content"] for m in client._cache["strong"][0]])
+
     def test_prune_checkpoint_defers_commits_latches_and_forces(self):
         costs = CostModel(prices=PRICES)
         client = MockProviderClient(min_cacheable_tokens=0, cache_block_tokens=1)
@@ -109,19 +125,19 @@ class TrimAndPruneTests(unittest.TestCase):
         items = [ContextItem("s", "system", "rules"), ContextItem("f", "file", big, referenced=False),
                  ContextItem("u", "message", "q" * 40000, turn=1)]
         deferring = TokenTrim(client, token_budget=10**6, strong_model="strong", cost_model=costs,
-                              savers={"prune"}, expected_remaining_steps=1)
+                              savers={"prune"}, expected_remaining_steps=1, prune_checkpoints=True)
         _, record = deferring.complete(items, Step("read"))
         self.assertTrue(record.prune_checkpoint.startswith("deferred"))
         self.assertNotIn("f", record.pruning.dropped_ids)
         committing = TokenTrim(client, token_budget=10**6, strong_model="strong", cost_model=costs,
-                               savers={"prune"}, expected_remaining_steps=10**4)
+                               savers={"prune"}, expected_remaining_steps=10**4, prune_checkpoints=True)
         _, record = committing.complete(items, Step("read"))
         self.assertTrue(record.prune_checkpoint.startswith("committed"))
         _, again = committing.complete(items, Step("read"))
         self.assertIn("f", again.pruning.dropped_ids)
         self.assertIsNone(again.prune_checkpoint)
         forced = TokenTrim(client, token_budget=10_100, strong_model="strong", cost_model=costs,
-                           savers={"prune"}, expected_remaining_steps=1)
+                           savers={"prune"}, expected_remaining_steps=1, prune_checkpoints=True)
         self.assertEqual(forced.complete(items, Step("read"))[1].prune_checkpoint, "forced by token budget")
 
     def test_compactor_failure_fails_open(self):

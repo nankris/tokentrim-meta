@@ -11,9 +11,21 @@ _HEX = re.compile(r"\b(?:request[_ -]?id\s*[:=]\s*)?[0-9a-f]{16,}\b", re.I)
 _TMP = re.compile(r"/tmp/[A-Za-z0-9_.-]*\d[A-Za-z0-9_.-]*")
 
 
+def _sort_named_lists(value):
+    if isinstance(value, dict):
+        return {k: _sort_named_lists(v) for k, v in value.items()}
+    if isinstance(value, list):
+        items = [_sort_named_lists(v) for v in value]
+        if items and all(isinstance(v, dict) and isinstance(v.get("name"), str) for v in items):
+            # Tool lists built from sets/maps arrive in arbitrary order; sort by name.
+            items = sorted(items, key=lambda v: v["name"])
+        return items
+    return value
+
+
 def stable_json(value) -> str:
-    """Serialize JSON with byte-stable key ordering."""
-    return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    """Serialize JSON with byte-stable key ordering and name-sorted tool lists."""
+    return json.dumps(_sort_named_lists(value), sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
 
 def normalize_text(text: str) -> str:
@@ -35,6 +47,43 @@ def deterministic_segments(segments: list[PromptSegment]) -> list[PromptSegment]
         normalized.append(replace(segment, text=text))
     ordered = sorted(enumerate(normalized), key=lambda pair: (rank.get(pair[1].kind, 4), pair[0]))
     return [pair[1] for pair in ordered]
+
+
+_VOLATILE_LINE = (_DATE, _UUID, re.compile(r"\brequest[_ -]?id\s*[:=]", re.I), re.compile(r"current time", re.I))
+STABLE_KINDS = {"system", "tool_schema", "tool_schemas", "repo_map", "pinned_file"}
+VOLATILE_SEGMENT_ID = "tokentrim-volatile"
+
+
+def hoist_volatile_lines(segments: list[PromptSegment], drop: bool = False) -> tuple[list[PromptSegment], list[str]]:
+    """Move volatile lines (timestamps, UUIDs, request ids) out of stable segments.
+
+    Naive clients often put "Current time: ..." or a request id near the top of the system prompt,
+    which changes the first bytes of every request and defeats exact-prefix caching. The lines are
+    kept verbatim (no information is lost) in one trailing user message, so everything before the
+    newest turn stays byte-identical across calls. Returns (segments, ids of segments changed).
+
+    ``drop=True`` removes the lines instead (lossy). On the real Meta API a moved trailing message
+    means call N+1 no longer extends call N, and hits appeared to need that (results v3b); dropping keeps
+    the request append-only. Use it only when the model does not need the timestamp or request id.
+    """
+    moved, changed, out = [], [], []
+    for segment in segments:
+        if segment.kind not in STABLE_KINDS or segment.id == VOLATILE_SEGMENT_ID:
+            out.append(segment)
+            continue
+        keep, hits = [], []
+        for line in segment.text.splitlines():
+            (hits if any(p.search(line) for p in _VOLATILE_LINE) else keep).append(line)
+        if hits:
+            changed.append(segment.id)
+            moved.extend(hits)
+            segment = replace(segment, text="\n".join(keep))
+        out.append(segment)
+    if moved and not drop:
+        out.append(PromptSegment(VOLATILE_SEGMENT_ID,
+                                 "Request metadata (moved to the end by TokenTrim cache_layout; informational):\n"
+                                 + "\n".join(moved), "message", "user", False))
+    return out, changed
 
 
 def lint_stable_prefix(segments: list[PromptSegment]) -> list[str]:

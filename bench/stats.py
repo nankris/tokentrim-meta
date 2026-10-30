@@ -108,3 +108,24 @@ def summarize(rows: list[dict], *, seed: int = 42, samples: int = 2000,
             summary["paired"][metric] = {mode: paired_comparison(values[reference_mode], values[mode], seed=seed, samples=samples)
                                           for mode in modes if mode != reference_mode}
     return summary
+
+
+def wilson(successes: float, n: int, z: float = 1.959964) -> list[float]:
+    """Wilson score 95% interval for a proportion (successes may be fractional for clustered means)."""
+    if n <= 0:
+        raise ValueError("n must be positive")
+    p = successes / n
+    denom = 1 + z * z / n
+    centre = (p + z * z / (2 * n)) / denom
+    half = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / denom
+    return [max(0.0, centre - half), min(1.0, centre + half)]
+
+
+def newcombe_difference(s1: float, n1: int, s2: float, n2: int) -> list[float]:
+    """Newcombe (method 10) 95% interval for p2 - p1 from two Wilson intervals. Ignores pairing, so it
+    is conservative when outcomes are positively correlated (as matched tasks are)."""
+    p1, p2 = s1 / n1, s2 / n2
+    l1, u1 = wilson(s1, n1)
+    l2, u2 = wilson(s2, n2)
+    d = p2 - p1
+    return [d - math.sqrt((p2 - l2) ** 2 + (u1 - p1) ** 2), d + math.sqrt((u2 - p2) ** 2 + (p1 - l1) ** 2)]

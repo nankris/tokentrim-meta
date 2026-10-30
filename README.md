@@ -1,39 +1,131 @@
 # TokenTrim
 
-Open-source middleware that cuts what coding agents (Claude Code, Codex, Muse Code) spend. TokenTrim optimizes **billed dollars, not tokens**: cached input is a subset of input and is billed at its own (much lower) rate, so a trick that saves tokens but breaks the provider's prefix cache can cost more.
+Open-source middleware that cuts what coding agents spend on the Meta Model API. TokenTrim optimizes **billed dollars, not tokens**: cached input is a subset of input and is billed at its own, much lower rate (2% of input on Muse Spark Contributor, 12% on Spark Standard), so what matters is whether the provider's prefix cache can hit.
 
-> **Status: prototype with a first small REAL run.** `results/real_meta_2026-10-30/` holds real Meta Model API measurements (6 tasks, one pass, $0.32 total; see [below](#real-meta-run-2026-10-30)). Everything else under `results/` is **FAKE or SIMULATION data**, not real measurements.
+**TokenTrim = cache-aware layout + eager prune + a measurement harness.**
+
+- **cache_layout** keeps the request prefix byte-stable even when the client is sloppy: name-sorted, key-sorted tool JSON, stable segments first, and volatile lines (timestamps, UUIDs, request ids) taken out of the system prompt (`volatile_policy="move"` to a trailing message, or `"drop"`). See the real results below for what this recovers on Meta's cache.
+- **eager prune** drops stale and unreferenced reads as soon as they go stale, and latches each drop so the prefix never oscillates.
+- **measurement harness** runs a real paired benchmark on the live API with hard spend caps: billed $ from the API `usage` fields, real pass/fail from task tests, Wilson and paired-bootstrap intervals, record and replay.
+
+Optional, not in the headline: **trim** (log compaction; it compacted nothing on the benchmark's short real logs) and **route** (cheap-first with escalation; the 3-task pilot never escalated, see below).
+
+> **Status: prototype with real measurements.** `results/real_meta_2026-10-30_v3/` is the current REAL run (20 tasks × 4 modes × 3 repeats, a layout-only follow-up, and a 3-task route pilot). `results/real_meta_2026-10-30/` is the first, smaller real run, whose naive baseline is superseded. Everything else under `results/` is **FAKE or SIMULATION data**.
+
+## Real results (v3, 2026-10-30)
+
+Model `muse-spark-1.3-contributor` on `https://api.meta.ai/v1`. **Contributor tier: Meta may use request content for training.** The owner consented, and the tasks are synthetic. 20 tasks (every 2nd of the 40, `--tasks stride:2`) × 4 modes × 3 repeats = 240 runs, all complete, none skipped. Billed $1.98 under a shared, file-locked spend ledger with a hard $15 cap for the whole v3 effort. Dollars come from the API `usage` fields priced at list price. Full tables: [`summary.md`](results/real_meta_2026-10-30_v3/summary.md).
+
+**Realistic naive clients** (they replace v2's strawman that reshuffled tool JSON on every call):
+- `baseline`: a well-behaved client (name-sorted tools, no volatile text).
+- `baseline-ts`: a volatile `Current time` plus `request_id` line near the top of the system prompt.
+- `baseline-tools`: the tool list in set order with dict-order nondeterminism. The order is re-drawn only when the agent adds or removes a tool (turns 4 and 7).
+- `tokentrim`: the naive client (timestamp plus set-ordered tools) run through TokenTrim's defaults.
+
+| Mode | Runs | Pass, run-level [Wilson 95%] | Pass, task-level n=20 [Wilson 95%] | Mean $/run | Prompt tok/run | Calls with a cache hit |
+|---|---:|---:|---:|---:|---:|---:|
+| baseline | 60 | 100% [94.0, 100] | 100% [83.9, 100] | 0.00802 | 78,421 | 12% |
+| baseline-ts | 60 | 100% [94.0, 100] | 100% [83.9, 100] | 0.00906 | 79,619 | 0% |
+| baseline-tools | 60 | 100% [94.0, 100] | 100% [83.9, 100] | 0.00822 | 79,118 | 12% |
+| tokentrim | 60 | 100% [94.0, 100] | 100% [83.9, 100] | 0.00766 | 68,235 | 5% |
+
+Paired comparisons: repeats are averaged per task, then a paired bootstrap runs over the 20 tasks (2,000 resamples, seed 42). Saving is positive when the first mode is cheaper.
+
+| Comparison | Billed $ saving [95% CI] | Prompt-token saving [95% CI] | Pass diff, Newcombe [95% CI] |
+|---|---:|---:|---:|
+| tokentrim vs baseline-ts | **15.5%** [14.0, 17.0] | 14.3% [13.4, 15.2] | 0 pp [−16.1, +16.1] |
+| tokentrim vs baseline-tools | **6.8%** [3.2, 10.7] | 13.8% [12.6, 15.1] | 0 pp [−16.1, +16.1] |
+| tokentrim vs baseline (clean client) | **4.5%** [2.2, 6.6] | 13.0% [12.3, 13.7] | 0 pp [−16.1, +16.1] |
+| baseline-ts vs baseline (cost of a timestamp) | −13.0% [−15.4, −10.7] | −1.5% | 0 pp |
+| baseline-tools vs baseline (cost of set-ordered tools) | −2.5% [−6.5, +1.2] (not significant) | −0.9% | 0 pp |
+
+What this does and does not show:
+- **A volatile timestamp is the costly cache-buster.** It removed every cache hit and added 13% to the bill. Set-ordered tools cost little (−2.5%, and the interval includes 0), because the order only changes when the tool set changes, which breaks even a clean client's cache.
+- **Most of TokenTrim's saving here is eager prune.** It cut 13–14% of prompt tokens. TokenTrim's calls hit the cache *less* often (5%) than the clean baseline (12%). Hoisting volatile lines into a trailing message did not restore real Meta cache hits, although it does in the offline mock. Real hits seem to require the new prompt to extend the previous prompt, and a trailing metadata message breaks that. The follow-up layout-only run (v3b, below) tests this.
+- **Pass rate: 240/240 runs passed in every mode**, and the eager-prune pass-rate guard flagged no task. With 20 tasks the task-level difference interval is [−16.1, +16.1] pp. That is wider than the −10 pp margin, so **non-inferiority is not claimed**. The bootstrap pass interval is degenerate ([0, 0]) because every run passed. The tasks are too easy to discriminate.
+- 91% of completion tokens were hidden reasoning, and 835 of 1,930 calls ended with `length` at the harness's `max_tokens` (issue 47).
+
+**Layout-only follow-up (v3b):** running at the time of this commit; see the next commit.
+
+**Route pilot** (3 tasks, 1 pass each, $1.24, sub-cap $3): Wonder alone vs Spark-first (Standard `muse-spark-1.3` with all savers, sticky escalation to Wonder).
+
+| Task | Wonder only | Spark-first |
+|---|---:|---:|
+| t07_interval_union (easy) | $0.2988 ✓ | $0.0952 ✓ |
+| t15_dependency_order (hard) | $0.2986 ✓ | $0.0913 ✓ |
+| t21_json_merge_patch (medium) | $0.3564 ✓ | $0.1014 ✓ |
+| total | $0.954, 3/3 | $0.288, 3/3 (−70%) |
+
+Spark-first **never escalated**, so the escalation path is untested on the real API. The −70% mostly reflects the price gap between Spark and Wonder, mixed with prune and layout effects. With 3 tasks, routing stays **out of the headline** (issue 54). The $30 like-for-like route test was not run.
+
+**Trim** is optional and was checked offline on real logs ($0, [`trim_long_log_check.json`](results/real_meta_2026-10-30_v3/trim_long_log_check.json)). A 72-line passing unittest log went from 1,897 to 100 tokens. A 47-line failing log went from 675 to 517, with every error line kept. The benchmark's logs are short, so trim did no work in the runs above, and no end-to-end API saving is claimed.
+
+**Not measured:** other models or tiers for the main comparison; real third-party agents (the agent is scripted); a prune-only mode.
 
 ## What it does
 
 Each saver runs inside a fail-open wrapper. If any saver raises, the original request goes to the strong model unchanged (`SpendCapExceeded` is the one exception and always propagates).
 
-| Saver | Module | Cache-aware rule |
-|---|---|---|
-| **trim**: compact test/build logs (keep every error/traceback/FAILED line, collapse passing and repeated lines) | `tokentrim/compaction.py` | Compaction happens at ingest and is deterministic, so history stays byte-stable. The full output stays restorable by ID in `OutputStore`. Grep hits and source are left alone (`is_log_like`). |
-| **prune**: drop unreferenced files and stale reads | `tokentrim/pruner.py`, `middleware.py` | Drops are latched (no oscillation) and committed only when `CostModel.breakeven_compaction` says the dollar saving beats the cache break. Otherwise they are deferred. Budget-forced drops always apply. |
-| **cache_layout**: stable prefix first, sorted-key tool JSON, cache-buster lint (timestamps, UUIDs, request IDs, temp paths) | `tokentrim/layout.py`, `planner.py` | Only stable kinds move forward. Conversation order is never reshuffled. `AppendOnlyHistory` refuses rewrites without an approved `CompactionCheckpoint`. |
-| **route**: cheap model for routine steps, sticky escalation to the strong model on visible signals (test failure after a cheap edit, malformed output, no progress) | `tokentrim/router.py`, `routing.py` | Provider caches are per model. A downgrade must pass `cache_aware_switch`, which compares staying on the warm model with re-billing the non-warm context on the new one. Upgrades and escalations are never blocked. `CheapFirstRouter` avoids cold strong-model prefills. |
+| Saver | Module | Default | Cache-aware rule |
+|---|---|---|---|
+| **cache_layout** | `tokentrim/layout.py`, `planner.py` | on | Stable kinds (system, tool schemas, repo map, pinned files) first; tool JSON serialized with sorted keys and tool lists sorted by `name`; `hoist_volatile_lines` moves timestamp/UUID/request-id lines out of stable segments into one trailing message (content kept verbatim); cache-buster lint. Conversation order is never reshuffled. `AppendOnlyHistory` refuses rewrites without an approved `CompactionCheckpoint`. |
+| **prune** | `tokentrim/pruner.py`, `middleware.py` | on, **eager** | Unreferenced and stale items are dropped as soon as the pruner selects them; drops are latched. The dollar break-even gate is opt-in (`prune_checkpoints=True`): on the real API it deferred every drop because it assumes a reliable cache (issue 52). Benchmarks flag any task where TokenTrim passes less often than the baseline. |
+| **trim** (optional) | `tokentrim/compaction.py` | on | Compacts test/build logs over 40 lines at ingest (keeps every error/traceback/FAILED line), deterministically so history stays byte-stable; full output restorable by ID in `OutputStore`. |
+| **route** (optional) | `tokentrim/router.py`, `routing.py` | on when two models are configured | Cheap model for routine steps, sticky escalation to the strong model on visible signals. A downgrade must pass `cache_aware_switch`, because provider caches are per model. |
 
 Supporting pieces:
 - `tokentrim/cost.py` `CostModel`: per-model input, cached input, output and optional `cache_write` prices, with overrides, a price hash and break-even maths.
-- `tokentrim/guard.py` `SpendGuard`: per-task cap ($1), global cap ($120, persisted ledger) and a 15-step cap. It checks a worst-case projection before each call.
-- `tokentrim/proxy.py`: a loopback-only OpenAI-compatible `/v1/chat/completions` proxy that returns `usage.prompt_tokens_details.cached_tokens`. It never logs request bodies.
-- `tokentrim/clients/mock.py`:
-  - `MockProviderClient` simulates a per-model exact-prefix cache with 128-token blocks, a minimum cacheable size, a TTL and optional write charges.
-  - `RecordingClient` and `RecordedClient` provide secret-free JSONL record and replay.
-- `tokentrim/clients/meta.py`: opt-in Meta Model API client (OpenAI-compatible, `https://api.meta.ai/v1`), key from `META_API_KEY`/`MODEL_API_KEY`, 429/5xx back-off, parses `prompt_tokens`, `cached_tokens`, `completion_tokens` (incl. reasoning). Verified against the live API on 2026-10-30. Tests never call the network.
+- `tokentrim/guard.py` `SpendGuard` (per-task, global persisted ledger, step caps; worst-case projection before each call) and `bench/real_common.py` `SharedLedger` (thread- and process-safe ledger with reservations, used by the real benchmark).
+- `tokentrim/proxy.py`: a loopback-only OpenAI-compatible `/v1/chat/completions` proxy (see below).
+- `tokentrim/clients/meta.py`: OpenAI-compatible client for the Meta Model API (`https://api.meta.ai/v1` by default; base URL configurable). Key from `TOKENTRIM_UPSTREAM_API_KEY`, `META_API_KEY` or `MODEL_API_KEY`; never logged. Parses `prompt_tokens`, `cached_tokens`, `completion_tokens` (incl. reasoning). Tests never call the network.
+- `tokentrim/clients/mock.py`: `MockProviderClient` (offline per-model prefix-cache SIMULATION) and JSONL record/replay helpers.
+
+## Proxy (loopback, OpenAI-compatible)
+
+```sh
+set -a; . ~/.config/meta/env; set +a          # provides META_API_KEY; never printed
+python3 -m tokentrim.proxy --port 8787 --upstream-base-url https://api.meta.ai/v1 \
+    --default-model meta/muse-spark-1.3-contributor --ledger results/proxy_ledger.json --global-cap-usd 1
+# any OpenAI client:  OpenAI(base_url="http://127.0.0.1:8787/v1", api_key="unused")
+```
+
+A live smoke call on 2026-10-30 worked with curl and with the official `openai` Python client against the real Meta API ([`proxy_smoke.md`](results/real_meta_2026-10-30_v3/proxy_smoke.md)). **Scope:** plain-text chat completions only (`model`, `messages`, `max_tokens`/`max_completion_tokens`). `tools` and `stream: true` are rejected with HTTP 400, so it is **not yet a drop-in for tool-calling coding agents** (issue 51). The proxy uses its own upstream key; the client's `Authorization` header is ignored.
+
+## Works with other agents (planned)
+
+TokenTrim's savers are provider-agnostic; only the transport is OpenAI-chat-shaped today. The proxy's upstream is configurable (`--upstream-base-url` or `TOKENTRIM_UPSTREAM_BASE_URL`, HTTPS or loopback HTTP), so any OpenAI-compatible endpoint can sit behind it. Planned, not built:
+- an **Anthropic Messages** front-end (`/v1/messages`, with `cache_control` breakpoints) so Claude Code can point `ANTHROPIC_BASE_URL` at TokenTrim;
+- an **OpenAI Responses** front-end (`/v1/responses`) for Codex;
+- tool-call and streaming pass-through, which both need.
+
+## Replay mode (for demos)
+
+Every v3 call was recorded (`results/real_meta_2026-10-30_v3/recording_*.jsonl`: model, response text, billed usage; no keys, no request bodies). Replay re-runs the same harness offline with the **recorded** responses and usage, and re-checks the recorded edits with the real test checker:
+
+```sh
+python3 -m bench.real_meta --replay results/real_meta_2026-10-30_v3/recording_main.jsonl \
+    --tasks t07_interval_union --modes baseline-ts,tokentrim --repeats 1 --tag demo --out /tmp/tt_replay
+```
+
+A replay is **not a live run**: it makes no API calls, and its output is labelled `REPLAY of recorded REAL run`. Timestamps in the replayed prompts are regenerated and do not affect the replayed usage.
 
 ## Quickstart (offline, standard library only, Python 3.13)
 
 ```sh
 python3 -m unittest discover -s tests -v        # TOKENTRIM_SKIP_REFERENCE_TEST=1 skips the 80 slow reference checks
+python3 -m bench.real_meta --dry-run --workers 1 --tasks first:2 --out /tmp/tt_dry   # offline mock, no API calls
 python3 -m bench.simulate --tasks bench/tasks/tasks_40.jsonl --repeats 3 --seed 42 --out results/sim/ --sweep
-python3 -m bench.runner --client fake --out results/results.json   # older two-step FAKE harness + dashboard data
 python3 -m bench.runner --reference-self-test                      # reference solutions pass the real checker
 ```
 
-`bench.simulate` writes `results/sim/sim_results.json`, `sim_summary.md`, `sensitivity.json` and `sensitivity.md`.
+Real run (spends money; capped):
+
+```sh
+set -a; . ~/.config/meta/env; set +a
+python3 -m bench.real_meta --tasks stride:2 --modes baseline,baseline-ts,baseline-tools,tokentrim --repeats 3 \
+    --workers 8 --cap-usd 15 --run-cap-usd 11 --record results/real_meta_2026-10-30_v3/recording_main.jsonl
+python3 -m bench.real_report_v3
+```
 
 ## Simulation harness (`bench/simulate.py`) — SIMULATION, not measurements
 
@@ -50,7 +142,7 @@ The harness runs a scripted agent on each of the 40 tasks: list → read files �
   - Ablations: `prune-only`, `prune-eager` (no break-even gate), `trim-only`, `route-only`, `route-percall` (no switch check), `route-cheapfirst`, `cheap-only`.
   - Cache-busting comparisons (tool JSON re-serialized with random key order on every call): `baseline-naive`, `cache-only-naive`, `tokentrim-naive`.
 
-Latest run (2026-10-28, seed 42, 40 tasks × 3 repeats, `realistic`). Full table: [`results/sim/sim_summary.md`](results/sim/sim_summary.md).
+Latest run (2026-10-28, seed 42, 40 tasks × 3 repeats, `realistic`; prune pinned to the v2 *gated* default, see issue 52). Full table: [`results/sim/sim_summary.md`](results/sim/sim_summary.md).
 
 | SIMULATION mode | $/task | Saving vs reference [95% CI] | Pass-rate diff pp [95% CI] | Non-inferior |
 |---|---:|---:|---:|:-:|
@@ -68,9 +160,9 @@ How to read these numbers:
 - The cache-busting comparison shows what layout hygiene is worth when a client really does bust its cache. It is not a claim about any particular agent.
 - See [`RESEARCH_2026-10-28.md`](RESEARCH_2026-10-28.md) for the design rationale and [`issues-found/`](issues-found/README.md) for known gaps.
 
-## Real Meta run (2026-10-30)
+## First real run (v2, 2026-10-30 afternoon) — superseded
 
-`bench/real_meta.py` drives the same scripted agent against the live API with real JSON edits checked by the task tests; `bench/meta_cache_probe.py` probes the cache. Model `muse-spark-1.3-contributor`, 6 tasks (t01, t07, t13, t21, t28, t37), one pass each, $0.3166 total under a $0.50 SpendGuard cap. Full tables: [`results/real_meta_2026-10-30/summary.md`](results/real_meta_2026-10-30/summary.md).
+Kept for the record. Its `*-naive` rows used a **strawman** client that re-shuffled tool JSON on every call (issue 50); v3 above replaces it. `bench/real_meta.py` drives the same scripted agent against the live API with real JSON edits checked by the task tests; `bench/meta_cache_probe.py` probes the cache. Model `muse-spark-1.3-contributor`, 6 tasks (t01, t07, t13, t21, t28, t37), one pass each, $0.3166 total under a $0.50 SpendGuard cap. Full tables: [`results/real_meta_2026-10-30/summary.md`](results/real_meta_2026-10-30/summary.md).
 
 | REAL comparison (6 tasks, 1 pass) | Prompt tokens | Billed $ | $ if no cache hits | Pass |
 |---|---:|---:|---:|:-:|
@@ -137,7 +229,11 @@ Summaries report mean total tokens, estimated USD, and pass rate per task. Cache
 
 ## Roadmap
 
-1. Model Muse cache hits as probabilistic (~30% observed on 2026-10-30) in the simulator and in the prune break-even gate, then re-run the simulation.
-2. Run a real paired benchmark: a sandboxed editing-agent loop on Spark and Wonder, measured billed dollars, real pass rates and paired 95% intervals.
-3. Make cheap-first routing with sticky escalation the default if the real numbers confirm the simulated gap. Add a compact hand-off on escalation.
-4. Add coding-agent adapters (proxy base-URL mode), a live dashboard and real reference tracking.
+1. Tool-call and streaming pass-through in the proxy, then Anthropic Messages and OpenAI Responses front-ends (Claude Code, Codex).
+2. A prune-only real mode, and a harder task set where pass rates can actually differ, so a pass-rate margin can be tested.
+3. A harder task set where Spark fails visibly, to test escalation routing for real before it goes into the pitch.
+4. Model Muse cache hits as probabilistic in the simulator and in the (opt-in) prune break-even gate.
+
+## License
+
+Apache License 2.0 — see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). Copyright 2026 Nandigam Hari Krishna.

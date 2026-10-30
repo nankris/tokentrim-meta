@@ -162,6 +162,8 @@ def _run_task(task, repeat, mode, *, seed, costs, success, scenario, min_cacheab
                                 charges_cache_write=charges_write)
     global_guard.start_task(f"{task.id}:{repeat}")
     extra = dict(extra)
+    # The published SIMULATION tables used the v2 gated prune default; keep them reproducible.
+    extra.setdefault("prune_checkpoints", True)
     base = (CheapFirstRouter(CHEAP, STRONG) if extra.pop("router", None) == "cheap-first"
             else HeuristicRouter(CHEAP, STRONG, long_context_tokens=64000))
     escalating = EscalatingRouter(base, STRONG, sticky=True)

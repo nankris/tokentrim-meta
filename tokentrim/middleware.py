@@ -2,7 +2,13 @@
 
 Cache-aware rules (see RESEARCH_2026-10-28.md):
 * trim compacts tool outputs deterministically at ingest, so history stays byte-stable;
-* prune drops are latched and committed only when the dollar break-even approves them;
+* prune is EAGER by default (``prune_checkpoints=False``): unreferenced/stale items are dropped as soon
+  as the pruner selects them, and drops are latched so the prefix never oscillates. The dollar
+  break-even gate (``prune_checkpoints=True``) assumed a reliable provider cache; on the real Meta API
+  (hits on ~31% of calls) it deferred every drop, so it is now opt-in. Benchmarks guard eager pruning
+  with a pass-rate check against the baseline (see bench/real_report.py);
+* cache_layout sorts tool JSON (keys and tool lists by name) and hoists volatile lines (timestamps,
+  UUIDs, request ids) out of stable segments into one trailing metadata message;
 * route downgrades are checked against the cost of re-billing context on a cold model.
 """
 from dataclasses import asdict, dataclass, replace
@@ -11,7 +17,7 @@ from .clients.base import ModelClient, ModelResponse
 from .cost import CostModel
 from .compaction import OutputStore, compact_tool_output, is_log_like
 from .guard import SpendCapExceeded
-from .layout import deterministic_segments, lint_stable_prefix
+from .layout import deterministic_segments, hoist_volatile_lines, lint_stable_prefix
 from .planner import CacheAwarePlanner, from_context
 from .pruner import ContextItem, ContextPruner, PruneReport
 from .router import HeuristicRouter, Router, RoutingDecision, Step
@@ -52,8 +58,9 @@ class TokenTrim:
                  cost_model: CostModel | None = None, guard=None, escalating_router=None,
                  compactor=None, output_store: OutputStore | None = None, savers=None,
                  cache_aware_routing: bool = True, switch_horizon_steps: int = 4,
-                 prune_checkpoints: bool = True, expected_remaining_steps: int = 4,
-                 compaction_max_lines: int = 40, trim_only_logs: bool = True):
+                 prune_checkpoints: bool = False, expected_remaining_steps: int = 4,
+                 compaction_max_lines: int = 40, trim_only_logs: bool = True,
+                 hoist_volatile: bool = True, volatile_policy: str = "move"):
         self.client = client
         self.token_budget = token_budget
         self.router = router or HeuristicRouter(strong_model=strong_model)
@@ -73,6 +80,10 @@ class TokenTrim:
         self.expected_remaining_steps = expected_remaining_steps
         self.compaction_max_lines = compaction_max_lines
         self.trim_only_logs = trim_only_logs
+        self.hoist_volatile = hoist_volatile
+        if volatile_policy not in {"move", "drop"}:
+            raise ValueError("volatile_policy must be 'move' or 'drop'")
+        self.volatile_policy = volatile_policy
         # Routine tool-output truncation belongs to the trim saver, not the pruner.
         self.pruner = ContextPruner(estimator, old_tool_lines=None)
         self.planner = CacheAwarePlanner(estimator)
@@ -118,6 +129,10 @@ class TokenTrim:
     def _prune(self, items, model_hint):
         kept, report = self.pruner.prune(items, self.token_budget)
         if not self.prune_checkpoints:
+            # Eager: commit immediately and latch, so a dropped item never reappears.
+            kept_ids = {i.id for i in kept}
+            self._dropped.update(i.id for i in items if i.id not in kept_ids)
+            kept = [i for i in kept if i.id not in self._dropped]
             return kept, report, None
         kept_ids = {i.id for i in kept}
         new_drops = [i for i in items if i.id not in kept_ids and i.id not in self._dropped]
@@ -166,7 +181,12 @@ class TokenTrim:
             segments = [from_context(i) for i in kept]
             if "cache_layout" in enabled:
                 segments = deterministic_segments(segments)
-                lint = lint_stable_prefix(segments)
+                if self.hoist_volatile:
+                    segments, hoisted = hoist_volatile_lines(segments, drop=self.volatile_policy == "drop")
+                    verb = "dropped" if self.volatile_policy == "drop" else "hoisted"
+                    lint = [f"{verb} volatile line(s) from {sid}" for sid in hoisted] + lint_stable_prefix(segments)
+                else:
+                    lint = lint_stable_prefix(segments)
             plan = self.planner.plan(segments, reorder="cache_layout" in enabled)
             if "route" in enabled:
                 routed_step = replace(step, context_tokens=report.tokens_after)

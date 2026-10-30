@@ -15,6 +15,7 @@ import os
 import random
 import time
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from .base import ModelResponse, Usage
@@ -32,12 +33,18 @@ def api_model_id(model: str) -> str:
 
 
 class MetaModelClient:
+    """OpenAI-compatible chat-completions transport; the base URL is configurable, so any
+    OpenAI-compatible upstream works (Meta by default)."""
     def __init__(self, timeout: float = 180, max_retries: int = 5, base_url: str | None = None,
                  sleep=time.sleep):
-        self.base_url = (base_url or os.environ.get("META_API_BASE_URL") or DEFAULT_BASE_URL).rstrip("/")
-        if not self.base_url.startswith("https://"):
-            raise ValueError("META_API_BASE_URL must use HTTPS")
-        self._api_key = os.environ.get("META_API_KEY") or os.environ.get("MODEL_API_KEY") or ""
+        self.base_url = (base_url or os.environ.get("TOKENTRIM_UPSTREAM_BASE_URL") or
+                         os.environ.get("META_API_BASE_URL") or DEFAULT_BASE_URL).rstrip("/")
+        parsed = urlparse(self.base_url)
+        loopback = parsed.scheme == "http" and parsed.hostname in {"127.0.0.1", "localhost", "::1"}
+        if not (self.base_url.startswith("https://") or loopback):
+            raise ValueError("upstream base URL must use HTTPS (plain HTTP only for loopback)")
+        self._api_key = (os.environ.get("TOKENTRIM_UPSTREAM_API_KEY") or os.environ.get("META_API_KEY")
+                         or os.environ.get("MODEL_API_KEY") or "")
         if not self._api_key:
             raise ValueError("MetaModelClient requires META_API_KEY (or MODEL_API_KEY) in the environment")
         self.timeout = timeout
@@ -97,3 +104,6 @@ class MetaModelClient:
             "reasoning_tokens": int((usage.get("completion_tokens_details") or {}).get("reasoning_tokens") or 0),
             "served_model": data.get("model")})
         return self.parse(data)
+
+
+OpenAICompatibleClient = MetaModelClient  # generic alias: configurable upstream base URL

@@ -17,5 +17,10 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 45 | [Simulator cannot measure quality loss](45-sim-quality-model-weak.md) | Open by design; needs real runs |
 | 46 | [Meta cache hits are intermittent](46-meta-cache-hits-intermittent.md) | Open; REAL measurement 2026-10-30 |
 | 47 | [Reasoning tokens vs max_tokens and spend caps](47-reasoning-tokens-and-max-tokens.md) | Open; client records finish/reasoning |
-| 48 | [Trim and route barely engaged in the real run](48-trim-route-real-run-gaps.md) | Open |
+| 48 | [Trim and route barely engaged in the real run](48-trim-route-real-run-gaps.md) | Open; trim dropped from headline, route see 54 |
 | 49 | [Meta client stub did not match the real API](49-meta-client-stub.md) | Fixed |
+| 50 | [v2 naive baseline was a strawman](50-strawman-naive-baseline.md) | Fixed in v3 (realistic cache-busters) |
+| 51 | [Proxy scope: no tools or streaming yet](51-proxy-scope.md) | Smoke call passed; scope open |
+| 52 | [Prune default switched to eager](52-eager-prune-default.md) | Done; pass-rate guard in report |
+| 53 | [v3 benchmark cost, concurrency and stats notes](53-benchmark-cost-and-stats.md) | Documented |
+| 54 | [Route pilot: Spark-first never escalated](54-route-pilot.md) | Open |

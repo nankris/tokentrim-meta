@@ -1,0 +1,20 @@
+{
+ "data_kind": "REAL logs, offline compaction (no API call)",
+ "date": "2026-10-30",
+ "rows": {
+  "tokentrim own suite, unittest -v (66 tests, passing)": {
+   "lines": 72,
+   "tokens_before": 1897,
+   "tokens_after": 100,
+   "log_like": true,
+   "all_error_lines_kept": true
+  },
+  "t35 task tests on buggy repo, unittest -v (failing)": {
+   "lines": 47,
+   "tokens_before": 675,
+   "tokens_after": 517,
+   "log_like": true,
+   "all_error_lines_kept": true
+  }
+ }
+}

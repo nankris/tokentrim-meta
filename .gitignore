@@ -17,3 +17,8 @@ build/
 dist/
 # results scratch
 results/raw/
+# drafts (never committed)
+DRAFT_X_POST.md
+# offline dry-run/replay scratch
+results/**/_offline_ledger.json
+results/**/*.lock

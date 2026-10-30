@@ -1,0 +1,9 @@
+TokenTrim
+Copyright 2026 Nandigam Hari Krishna
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Benchmark results under results/real_meta_* were produced on the Meta Model API
+(https://api.meta.ai/v1). Runs that use the muse-spark-*-contributor models send request
+content that Meta may use for training; the copyright holder consented to this for the
+benchmark content (synthetic padding and the bundled toy task repositories only).
