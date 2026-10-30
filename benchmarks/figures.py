@@ -37,11 +37,11 @@ def ablation_table(sums):
                          f"${cps:.5f}" if cps else "-", f"{v['truncated_calls']}/{v['calls_total']}"])
     fig, ax = plt.subplots(figsize=(14, 0.42 * len(rows) + 0.8))
     ax.axis("off")
-    t = ax.table(cellText=rows[1:], colLabels=rows[0], loc="center", cellLoc="center")
+    t = ax.table(cellText=rows[1:], colLabels=rows[0], loc="center", cellLoc="center",
+                 colWidths=[0.1, 0.13, 0.05, 0.07, 0.1, 0.25, 0.11, 0.1])
     t.auto_set_font_size(False)
     t.set_fontsize(9.5)
     t.scale(1, 1.35)
-    t.auto_set_column_width(list(range(len(rows[0]))))
     for (r, c), cell in t.get_celld().items():
         if r == 0:
             cell.set_facecolor("#1f2328"); cell.set_text_props(color="white", weight="bold")
