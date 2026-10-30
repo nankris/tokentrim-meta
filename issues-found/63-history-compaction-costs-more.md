@@ -1,7 +1,7 @@
 # 63 — History compaction raised real cost on long conversations (REAL, 2026-10-30)
 
 - **Measured (longchat, 12 conversations x 25 calls, paired):** the `history` arm cost **+25.4% more** than baseline
-  (95% CI of the saving: -37.9% to -12.0%) at equal quality (11/12 vs 10/12 fully correct, score 0.979 vs 0.990).
+  (95% CI of the saving: -37.9% to -12.0%) at similar quality (10/12 fully correct vs 11/12 for baseline; mean field score 0.979 vs 0.990).
   Full (skill + cache prefix + history) was -5.7% [-28.3, +11.8], i.e. no measurable saving.
 - **Why:** Meta's cache hit well in this workload (63% of baseline calls had cached tokens, 55% of prompt tokens
   were cached at 2% of the input price). Compaction rewrites the early history, so cache hits fell to 36% of calls;

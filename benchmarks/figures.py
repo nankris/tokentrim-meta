@@ -27,7 +27,7 @@ def savefig(fig, name):
 
 
 def ablation_table(sums):
-    rows = [["workload", "arm", "n", "pass", "$ / task", "saving vs baseline [95% CI]", "$ / success", "truncated"]]
+    rows = [["workload", "arm", "n", "pass", "$ / task", "saving [95% CI]", "$ / success", "truncated"]]
     for s in sums:
         for a, v in s["arms"].items():
             sv = v.get("vs_baseline_usd")
@@ -35,12 +35,13 @@ def ablation_table(sums):
             cps = v["cost_per_success"]["mean"]
             rows.append([s["workload"], a, str(v["n"]), f"{v['pass_rate']:.0%}", f"${v['usd_mean']:.5f}", sav,
                          f"${cps:.5f}" if cps else "-", f"{v['truncated_calls']}/{v['calls_total']}"])
-    fig, ax = plt.subplots(figsize=(12, 0.42 * len(rows) + 0.8))
+    fig, ax = plt.subplots(figsize=(14, 0.42 * len(rows) + 0.8))
     ax.axis("off")
     t = ax.table(cellText=rows[1:], colLabels=rows[0], loc="center", cellLoc="center")
     t.auto_set_font_size(False)
     t.set_fontsize(9.5)
     t.scale(1, 1.35)
+    t.auto_set_column_width(list(range(len(rows[0]))))
     for (r, c), cell in t.get_celld().items():
         if r == 0:
             cell.set_facecolor("#1f2328"); cell.set_text_props(color="white", weight="bold")
