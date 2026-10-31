@@ -13,4 +13,18 @@
 - **Assessment:** one failure, so it is not attributable with confidence.
   - The table form could make it harder to find the release of the single ERROR row.
   - A safer option is to always lift rows that match error/exception/fail out of the table as a "flagged rows" header.
-- **Status:** Open (fix proposed, not applied in the frozen-code v5 round).
+- **Fix (v5.1):** `compress_json` is now structure-preserving.
+  - Column-table flattening is gone. Each record is one compact JSON object, with its own keys, on its own line,
+    prefixed by its JSON Pointer (`/spans/21 {...}`).
+  - A header lists the pointers of records that match an error or a task identifier.
+  - `mode="conservative"` is lossless.
+  - `mode="lossy"` keeps flagged records, their parent chain and the first/last rows, and announces every gap with
+    its pointer range.
+- **Regression:**
+  - `tests/test_json_structure.py`: 100 generated documents (`benchmarks/json_extraction.py`) with similar release
+    names, nested objects and misleading neighbours, plus the ah43 spans themselves.
+  - Structural check (error record id + status + release on one keyed line; parent record present):
+    - legacy table: 50/100
+    - structured: 100/100
+    - structured lossy: 100/100
+- **Status:** Fixed (v5.1).

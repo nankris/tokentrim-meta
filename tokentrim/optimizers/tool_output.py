@@ -140,57 +140,99 @@ def compress_log(text: str, protect=None) -> str:
 LEVEL = re.compile(r"\b(TRACE|DEBUG|INFO|NOTICE|WARN|WARNING|ERROR|FATAL|CRITICAL)\b", re.I)
 
 
-def _table(rows: list[dict]) -> str | None:
-    keys = list(rows[0])
-    if not all(isinstance(r, dict) and list(r) == keys for r in rows) or len(rows) < 4:
-        return None
-    if any(isinstance(v, (dict, list)) for r in rows for v in r.values()):
-        return None
-    body = [" | ".join(keys)] + [" | ".join(json.dumps(r[k], ensure_ascii=False) for k in keys) for r in rows]
-    return f"[table: {len(rows)} rows; columns: {', '.join(keys)}]\n" + "\n".join(body)
+def _compact(v) -> str:
+    return json.dumps(v, ensure_ascii=False, separators=(",", ":"))
 
 
-def compress_json(text: str, budget_tokens: int = 1500, protect=None) -> str:
+def _record_arrays(v, ptr=""):
+    """JSON Pointer paths of arrays of >= 4 objects (outermost only; nested ones stay inside their record)."""
+    if isinstance(v, list) and len(v) >= 4 and all(isinstance(x, dict) for x in v):
+        return [ptr]
+    out = []
+    if isinstance(v, dict):
+        for k, x in v.items():
+            out += _record_arrays(x, f"{ptr}/{str(k).replace('~', '~0').replace('/', '~1')}")
+    elif isinstance(v, list):
+        for i, x in enumerate(v):
+            out += _record_arrays(x, f"{ptr}/{i}")
+    return out
+
+
+def _get(v, ptr):
+    for part in [p.replace("~1", "/").replace("~0", "~") for p in ptr.split("/")[1:]]:
+        v = v[int(part)] if isinstance(v, list) else v[part]
+    return v
+
+
+def _ancestors(rows, keep):
+    """Also keep the parent chain of kept records (``parent``/``parent_id``-style keys pointing at an id key)."""
+    id_key = next((k for k in ("id", "span_id", "node_id", "uid", "key") if all(k in r for r in rows)), None)
+    par_key = next((k for k in rows[0] if "parent" in k.lower()), None) if rows else None
+    if not id_key or not par_key:
+        return keep
+    index = {r.get(id_key): i for i, r in enumerate(rows)}
+    out, todo = set(keep), list(keep)
+    while todo:
+        p = rows[todo.pop()].get(par_key)
+        j = index.get(p) if isinstance(p, (str, int)) else None
+        if j is not None and j not in out:
+            out.add(j)
+            todo.append(j)
+    return out
+
+
+def compress_json(text: str, budget_tokens: int = 1500, protect=None, mode: str = "conservative") -> str:
+    """Structure-preserving JSON view (v5.1, issue 69). Never flattens records into a column table: every
+    record is one compact JSON object on its own line, prefixed by its JSON Pointer, so each value stays next to
+    its own key and its siblings (ids, parent links, status, release). Records matching ``protect`` (errors,
+    task identifiers) are indexed in a header line.
+
+    ``mode="conservative"`` (default) is lossless: whitespace removal only. ``mode="lossy"`` may additionally
+    drop unflagged records over ``budget_tokens``; flagged records, their parent chain and the first/last rows
+    are always kept, and every gap is announced with its pointer range."""
     value = json.loads(text)
-
-    def walk(v):
-        if isinstance(v, list) and v and isinstance(v[0], dict):
-            table = _table(v)
-            if table is not None:
-                return {"__table__": table}
-            return [walk(x) for x in v]
-        if isinstance(v, dict):
-            return {k: walk(x) for k, x in v.items()}
-        return v
-    restructured = walk(value)
-    minified = json.dumps(restructured, ensure_ascii=False, separators=(",", ":"))
-    # tables are rendered as plain text blocks after the JSON skeleton
-    tables = []
-
-    def pull(v, path="$"):
-        if isinstance(v, dict) and "__table__" in v and len(v) == 1:
-            tables.append((path, v["__table__"]))
-            return f"<table {path}>"
-        if isinstance(v, dict):
-            return {k: pull(x, f"{path}.{k}") for k, x in v.items()}
-        if isinstance(v, list):
-            return [pull(x, f"{path}[{i}]") for i, x in enumerate(v)]
-        return v
-    skeleton = json.dumps(pull(restructured), ensure_ascii=False, separators=(",", ":"))
-    if skeleton == '"<table $>"' and len(tables) == 1:
-        skeleton, tables = "JSON array rendered as a table (lossless):", [("$", tables[0][1])]
-    out = skeleton + "".join(f"\n{p}:\n{t}" for p, t in tables)
-    if estimate_tokens(out) <= budget_tokens or not tables:
-        return out if len(out) < len(minified) else minified
-    # lossy step: long tables keep header, protected rows, first/last rows
-    final = [skeleton]
-    for p, t in tables:
-        rows = t.splitlines()
-        head, body = rows[:2], rows[2:]
-        keep = [k for k, r in enumerate(body) if (protect or PROTECT).search(r)] + list(range(10)) + \
-               list(range(max(0, len(body) - 3), len(body)))
-        final.append(f"\n{p}:\n" + "\n".join(head + _keep_with_context(body, sorted(set(k for k in keep if k < len(body))), 0)))
-    return "".join(final)
+    pat = protect or PROTECT
+    arrays = _record_arrays(value)
+    if not arrays:
+        return _compact(value)
+    skeleton = json.loads(_compact(value))
+    for ptr in arrays:
+        n = len(_get(value, ptr))
+        if ptr == "":
+            skeleton = f"<{n} records /0../{n - 1}, one per line below>"
+            break
+        parent, last = _get(skeleton, ptr.rsplit("/", 1)[0] or ""), ptr.rsplit("/", 1)[1].replace("~1", "/").replace("~0", "~")
+        parent[int(last) if isinstance(parent, list) else last] = f"<{n} records {ptr}/0..{ptr}/{n - 1}, one per line below>"
+    sections, flagged = [], []
+    for ptr in arrays:
+        rows = _get(value, ptr)
+        lines = [_compact(r) for r in rows]
+        hit = [i for i, l in enumerate(lines) if pat.search(l)]
+        flagged += [f"{ptr}/{i}" for i in hit]
+        sections.append((ptr, rows, lines, hit))
+    head = [_compact(skeleton)]
+    if flagged:
+        head.append("[records with errors/warnings or task identifiers: " + ", ".join(flagged[:40]) +
+                    (f" (+{len(flagged) - 40} more)" if len(flagged) > 40 else "") + "]")
+    full = head + [f"{ptr}/{i} {l}" for ptr, _, lines, _ in sections for i, l in enumerate(lines)]
+    out = "\n".join(full)
+    if mode != "lossy" or estimate_tokens(out) <= budget_tokens:
+        return out
+    body = list(head)
+    for ptr, rows, lines, hit in sections:
+        keep = _ancestors(rows, set(hit)) | set(range(min(3, len(lines)))) | set(range(max(0, len(lines) - 2), len(lines)))
+        gap = []
+        for i, l in enumerate(lines):
+            if i in keep:
+                if gap:
+                    body.append(f"[... {len(gap)} records {ptr}/{gap[0]}..{ptr}/{gap[-1]} omitted]")
+                    gap = []
+                body.append(f"{ptr}/{i} {l}")
+            else:
+                gap.append(i)
+        if gap:
+            body.append(f"[... {len(gap)} records {ptr}/{gap[0]}..{ptr}/{gap[-1]} omitted]")
+    return "\n".join(body)
 
 
 def compress_diff(text: str, protect=None) -> str:
@@ -220,9 +262,10 @@ class ToolOutputCompressor:
     DEFAULT_KINDS = ("test", "log", "json", "diff")
 
     def __init__(self, store: OriginalStore | None = None, min_tokens: int = 400, max_ratio: float = 0.8,
-                 kinds=DEFAULT_KINDS):
+                 kinds=DEFAULT_KINDS, json_mode: str = "lossy"):
         self.store = store or OriginalStore()
         self.min_tokens, self.max_ratio, self.kinds = min_tokens, max_ratio, tuple(kinds)
+        self.json_mode = json_mode  # "lossy" (flagged records + parent chain kept) or "conservative" (lossless)
 
     def compress(self, text: str, keep_terms=()) -> Compressed:
         """``keep_terms``: identifiers from the task (e.g. "r-417", "job ci-4000"); lines containing them are
@@ -238,7 +281,8 @@ class ToolOutputCompressor:
         if kind not in self.kinds:
             return Compressed(text, kind, None, before, before, "")
         try:
-            body = COMPRESSORS[kind](text, protect=protect)
+            body = (compress_json(text, protect=protect, mode=self.json_mode) if kind == "json"
+                    else COMPRESSORS[kind](text, protect=protect))
         except Exception:  # fail open
             return Compressed(text, kind, None, before, before, f"tool output ({kind}) left unchanged: compressor error")
         ref = self.store.put(text, "orig")

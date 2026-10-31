@@ -126,13 +126,14 @@ class ToolOutputTests(unittest.TestCase):
         self.assertIn(f'retrieve_original("{r.ref}")', r.text)
         self.assertEqual(ToolOutputCompressor(store).compress(log).text, r.text)  # deterministic
 
-    def test_json_table_is_lossless_for_small_rows(self):
+    def test_json_records_keep_keys_for_small_rows(self):
         rows = [{"id": i, "status": "open" if i % 7 else "error", "amount": i * 1.5} for i in range(60)]
         text = json.dumps({"items": rows, "page": 1}, indent=2)
         r = ToolOutputCompressor(min_tokens=100).compress(text)
         self.assertEqual(r.kind, "json")
-        for i in range(60):
-            self.assertIn(f"{i} | ", r.text)
+        for i, row in enumerate(rows):  # every record intact, keyed, with its JSON Pointer (issue 69)
+            self.assertIn(f"/items/{i} " + json.dumps(row, separators=(",", ":")), r.text)
+        self.assertNotIn(" | ", r.text)
         self.assertLess(r.tokens_after, r.tokens_before)
 
     def test_log_and_diff(self):
