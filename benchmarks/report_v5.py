@@ -22,12 +22,19 @@ def load(dirs):
     return rows, metas
 
 
-def analyze(dirs, margin=0.05):
+def analyze(dirs, margin=0.05, errors_as_failures=False):
+    """``errors_as_failures`` (v5.3 pre-registered primary): rows with a harness error count as failed tasks
+    instead of being excluded."""
     rows, metas = load(dirs)
+    if errors_as_failures:
+        for r in rows:
+            if r["error"]:
+                r.update(passed=False, score=0.0, error=None, harness_error=True)
     by = collections.defaultdict(dict)
     for r in rows:
         by[r["task_id"]][r["arm"]] = r
-    order = ["baseline", "skill", "tool_output", "schema_router", "full_no_router", "full_no_history", "full"]
+    order = ["baseline", "compression_only", "guarded_full", "skill", "tool_output", "schema_router", "full_no_router",
+             "full_no_history", "full"]
     arms = sorted({r["arm"] for r in rows}, key=lambda a: (order.index(a) if a in order else 99, a))
     out = {"workload": rows[0]["workload"] if rows else None, "runs": [m.get("run_id") for m in metas],
            "spend_usd": sum(m.get("spend_this_run_usd") or 0 for m in metas),
@@ -72,13 +79,18 @@ def table(s):
         pd = f"{100 * p['diff']:+.1f} pp [{100 * p['ci95'][0]:+.1f}, {100 * p['ci95'][1]:+.1f}]" if p else "-"
         ni = ("yes" if p["non_inferior"] else "not shown") if p else "-"
         cps = x["cost_per_success"]["mean"]
+        ci = x["cost_per_success"].get("ci95")
         lines.append(f"| {a} | {x['n']} | {x['passed']}/{x['n']} | ${x['usd_mean']:.5f} | {sav} | {pd} | {ni} | "
-                     f"{'$%.5f' % cps if cps else '-'} |")
+                     f"{'$%.5f' % cps if cps else '-'}{' [%.5f, %.5f]' % tuple(ci) if ci else ''} |")
     return "\n".join(lines)
 
 
 if __name__ == "__main__":
-    out = Path(sys.argv[1])
-    s = analyze(sys.argv[2:])
+    args = sys.argv[1:]
+    eaf = "--errors-as-failures" in args
+    args = [x for x in args if x != "--errors-as-failures"]
+    out = Path(args[0])
+    s = analyze(args[1:], errors_as_failures=eaf)
+    s["errors_as_failures"] = eaf
     out.write_text(json.dumps(s, indent=1) + "\n")
     print(table(s))
