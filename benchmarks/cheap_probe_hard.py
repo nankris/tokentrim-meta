@@ -29,8 +29,8 @@ EMPTY = Path(tempfile.mkdtemp(prefix="tt_probe_"))
 def ask(model, system, prompt):
     if model.startswith("claude"):
         out = subprocess.run(["claude", "-p", "--model", model, "--output-format", "json", "--tools", "",
-                              "--system-prompt", system, prompt], capture_output=True, text=True, timeout=600,
-                             cwd=EMPTY)
+                              "--system-prompt", system], input=prompt, capture_output=True, text=True, timeout=600,
+                             cwd=EMPTY)  # prompt via stdin: `--tools ""` can swallow a positional prompt
         d = json.loads(out.stdout)
         u = d.get("usage", {})
         return d.get("result", ""), u.get("input_tokens", 0) + u.get("cache_creation_input_tokens", 0) + \
@@ -56,7 +56,7 @@ def tool_listing(extra_retrieve):
 
 def episode(model, task, arm, max_turns=9):
     store = OriginalStore(Path(tempfile.mkdtemp(dir=EMPTY)))
-    comp = ToolOutputCompressor(store, min_tokens=400)
+    comp = ToolOutputCompressor(store, min_tokens=400, json_mode=os.environ.get("TT_PROBE_JSON_MODE", "auto"))
     terms = task_terms([task["prompt"]])
     system = task["system"] + PROTOCOL
     head = task["prompt"] + "\n\nAvailable tools:\n" + tool_listing(arm == "compressed")
@@ -93,7 +93,7 @@ def episode(model, task, arm, max_turns=9):
             trace.append((name, args))
             result = WH.run_hard_stub(task, name, args)
             if arm == "compressed":
-                r = comp.compress(result, keep_terms=terms)
+                r = comp.compress(result, keep_terms=terms, task_text=task["prompt"])
                 if r.ref and r.ref not in retrieved:
                     result = r.text
         transcript.append(f"> CALL {name} {json.dumps(args)}\nRESULT:\n{result}")
@@ -115,7 +115,8 @@ def main():
     out = Path(os.environ.get("TT_PROBE_OUT", f"results/v5_2026-10-31/cheap_probe_hard_{model}.jsonl"))
     out.parent.mkdir(parents=True, exist_ok=True)
     lock = threading.Lock()
-    jobs = [(WH.hard_task(i), arm) for i in range(n) for arm in ("raw", "compressed")]
+    offset = int(os.environ.get("TT_PROBE_OFFSET", "0"))  # v5.3 validation uses 500+ (disjoint from 300-443)
+    jobs = [(WH.hard_task(i), arm) for i in range(offset, offset + n) for arm in ("raw", "compressed")]
     if only:
         jobs = [j for j in jobs if f"{j[0]['id']}:{j[1]}" in only]
 
