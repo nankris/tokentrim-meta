@@ -1,0 +1,197 @@
+{
+ "workload": "longchat",
+ "runs": [
+  "v5-longchat-20261031-054320"
+ ],
+ "spend_usd": 0.5669888660000002,
+ "stopped_by_cap": false,
+ "harness_errors": 1,
+ "arms": {
+  "baseline": {
+   "n": 24,
+   "passed": 24,
+   "pass_rate": 1.0,
+   "mean_score": 1.0,
+   "usd_mean": 0.008558720583333334,
+   "usd_total": 0.20540929400000002,
+   "cost_per_success": {
+    "mean": 0.008558720583333334,
+    "ci95": [
+     0.008092863450000001,
+     0.009007573370833332
+    ],
+    "n": 24
+   },
+   "tokens_mean": {
+    "prompt_tokens": 62666.875,
+    "uncached_tokens": 28194.083333333332,
+    "cached_tokens": 34472.791666666664,
+    "output_tokens": 28351.833333333332,
+    "reasoning_tokens": 27733.708333333332
+   },
+   "usd_by_category": {
+    "usd_uncached": 0.0676658,
+    "usd_cached": 0.001654694,
+    "usd_output": 0.1360888
+   },
+   "calls_total": 600,
+   "truncated_calls": 0,
+   "cache_hit_call_rate": 0.645,
+   "cached_share_of_prompt": 0.5500959105854036,
+   "latency_s_median_per_task": 525.9,
+   "search_tools": 0,
+   "retrieve_grep": 0,
+   "retrieve_original": 0,
+   "failed_checks": {},
+   "failed_tasks": []
+  },
+  "skill": {
+   "n": 23,
+   "passed": 23,
+   "pass_rate": 1.0,
+   "mean_score": 1.0,
+   "usd_mean": 0.007536785304347827,
+   "usd_total": 0.17334606200000002,
+   "cost_per_success": {
+    "mean": 0.007536785304347827,
+    "ci95": [
+     0.007131085097826087,
+     0.0079564844
+    ],
+    "n": 23
+   },
+   "tokens_mean": {
+    "prompt_tokens": 74880.52173913043,
+    "uncached_tokens": 30998.739130434784,
+    "cached_tokens": 43881.782608695656,
+    "output_tokens": 21745.739130434784,
+    "reasoning_tokens": 21150.434782608696
+   },
+   "usd_by_category": {
+    "usd_uncached": 0.0712971,
+    "usd_cached": 0.0020185620000000002,
+    "usd_output": 0.1000304
+   },
+   "calls_total": 575,
+   "truncated_calls": 0,
+   "cache_hit_call_rate": 0.697391304347826,
+   "cached_share_of_prompt": 0.5860239964883188,
+   "latency_s_median_per_task": 454.21,
+   "search_tools": 0,
+   "retrieve_grep": 0,
+   "retrieve_original": 0,
+   "failed_checks": {},
+   "failed_tasks": [],
+   "vs_baseline_usd": {
+    "difference": {
+     "mean": -0.0009890066086956522,
+     "ci95": [
+      -0.0015818028760869564,
+      -0.0004617992
+     ],
+     "n": 23
+    },
+    "percent_saving": {
+     "mean": 11.600172966719791,
+     "ci95": [
+      5.6639976837090735,
+      17.871442741597342
+     ],
+     "n": 23
+    }
+   },
+   "vs_baseline_pass": {
+    "n": 23,
+    "both": 23,
+    "base_only": 0,
+    "other_only": 0,
+    "neither": 0,
+    "diff": 0.0,
+    "ci95": [
+     -0.14311662038507345,
+     0.14311662038507345
+    ],
+    "margin": 0.05,
+    "non_inferior": false
+   },
+   "baseline_on_same_tasks": {
+    "passed": 23,
+    "usd_mean": 0.008525791913043479
+   }
+  },
+  "full_no_history": {
+   "n": 24,
+   "passed": 24,
+   "pass_rate": 1.0,
+   "mean_score": 1.0,
+   "usd_mean": 0.007557316750000001,
+   "usd_total": 0.18137560200000002,
+   "cost_per_success": {
+    "mean": 0.007557316750000001,
+    "ci95": [
+     0.007122392741666667,
+     0.007967975872916666
+    ],
+    "n": 24
+   },
+   "tokens_mean": {
+    "prompt_tokens": 75338.75,
+    "uncached_tokens": 32678.291666666668,
+    "cached_tokens": 42660.458333333336,
+    "output_tokens": 21020.833333333332,
+    "reasoning_tokens": 20415.416666666668
+   },
+   "usd_by_category": {
+    "usd_uncached": 0.07842790000000001,
+    "usd_cached": 0.002047702,
+    "usd_output": 0.1009
+   },
+   "calls_total": 600,
+   "truncated_calls": 0,
+   "cache_hit_call_rate": 0.685,
+   "cached_share_of_prompt": 0.5662485551370753,
+   "latency_s_median_per_task": 475.46500000000003,
+   "search_tools": 0,
+   "retrieve_grep": 0,
+   "retrieve_original": 0,
+   "failed_checks": {},
+   "failed_tasks": [],
+   "vs_baseline_usd": {
+    "difference": {
+     "mean": -0.0010014038333333332,
+     "ci95": [
+      -0.0014072139770833336,
+      -0.0006364088270833338
+     ],
+     "n": 24
+    },
+    "percent_saving": {
+     "mean": 11.700391706716045,
+     "ci95": [
+      7.6114297123259345,
+      16.11713587173445
+     ],
+     "n": 24
+    }
+   },
+   "vs_baseline_pass": {
+    "n": 24,
+    "both": 24,
+    "base_only": 0,
+    "other_only": 0,
+    "neither": 0,
+    "diff": 0.0,
+    "ci95": [
+     -0.13797620655132803,
+     0.13797620655132803
+    ],
+    "margin": 0.05,
+    "non_inferior": false
+   },
+   "baseline_on_same_tasks": {
+    "passed": 24,
+    "usd_mean": 0.008558720583333334
+   }
+  }
+ }
+}

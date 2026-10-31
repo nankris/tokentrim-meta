@@ -28,7 +28,7 @@ input on Muse Spark Contributor), not the minimum token count.
 python3 -m tokentrim.hooks.install --project .          # copy the skill into ./.agents/skills and ./.claude/skills
 python3 -m tokentrim.hooks.install --project . --with-hooks   # + Claude Code loop-guard hook (settings.json backed up)
 set -a; . ~/.config/meta/env; set +a                    # META_API_KEY, never printed
-python3 -m tokentrim.server --port 8787 --tool-output --schema-router --run-cap-usd 1
+python3 -m tokentrim.server --port 8787 --tool-output --run-cap-usd 1   # add --schema-router only if it selects well (v5)
 #   OpenAI clients:    base_url=http://127.0.0.1:8787/v1
 #   Claude Code etc.:  ANTHROPIC_BASE_URL=http://127.0.0.1:8787   (/v1/messages; model ids map to the Meta model)
 ```
@@ -112,7 +112,33 @@ What v5 shows:
 - **Truncation:** 0 calls ended with `finish_reason=length` in v5 (`max_tokens` 16,000).
 - **Not shown:** that any arm is equal to baseline within 5 pp. That needs more failures observed, or more tasks.
 
-LONGCHAT_V5_PLACEHOLDER
+**Long conversation, 24 user turns with graded recall, 24 tasks** (`results/v5_2026-10-31/summary_longchat.json`):
+
+| arm | pass | $/task | saving vs baseline [95% CI] | success diff [95% CI] |
+|---|---|---|---|---|
+| baseline | 24/24 | $0.00856 | - | - |
+| skill only | 23/23* | $0.00754 | +11.6% [+5.7, +17.9] | 0 [-14.3, +14.3] |
+| full without history compaction (skill + cache prefix) | 24/24 | $0.00756 | +11.7% [+7.6, +16.1] | 0 [-13.8, +13.8] |
+
+\* lc08 / skill hit a harness error (`RemoteDisconnected`) and is excluded from the pairing. Its spend is still
+counted in the ledger.
+
+- **v4 "skill 10/12 vs baseline 11/12" is resolved.** Every v4 failure was the trailing-period grader artifact
+  (issue 66). With the fixed grader, v5 has no long-chat failure in any arm, so there is no skill quality effect to
+  explain.
+- **The saving is real and comes from output.** With the skill, reasoning and output tokens fall about 23-26%
+  (28.4k -> 21.7k / 21.0k per conversation). The skill adds ~12k prompt tokens per conversation, which are mostly
+  cached: 55-59% of prompt tokens hit the cache in every arm.
+- **Without compaction, the v4 cost penalty is gone:** -25% for compaction in v4, +11.7% for Full without it in
+  v5. History compaction stays off by default.
+- **Quality:** 24 tasks bound a possible loss only at about 14 pp, so non-inferiority is not claimed here.
+
+![v5 long chat cost](docs/images/v5_cost_longchat.png)
+
+**v5 spend.** Every call was reserved and recorded in the shared ledger
+(`/workspace/tokentrim-work/spend_ledger.json`; 0 open reservations at the end).
+- Pilot $0.178, run A $2.173, run B $0.673, long chat $0.567. The **v5 total is $3.59** against the $5 round cap.
+- The ledger total for all work is **$4.94** of the $6.35 job cap.
 
 ## TokenTrim system evaluation, v4 (2026-10-30)
 
@@ -174,8 +200,10 @@ What this does and does not show:
 ![truncation](docs/images/truncation_before_after.png)
 ![tool output compression](docs/images/tool_output_before_after.png)
 
-**Recommended defaults from these data:** skill on; gateway cache prefix on; tool-output compression and schema
-router on for tool-heavy agents; history compaction off; lean-skill injection off (the skill covers it).
+**Recommended defaults from these data (v4, revised after v5):**
+- On: the skill, the gateway cache prefix, and tool-output compression for tool-heavy agents.
+- Off by default: the schema router. Turn it on only where it selects well; in v5, router misses cost +70%.
+- Off: history compaction, and lean-skill injection (the skill covers it).
 
 Cheap-model checks before any Meta spend (`benchmarks/cheap_probe.py`, `claude-haiku-5-5` via the Claude Code CLI on
 the owner's subscription, no API key): the first compressor scored 5/6 vs 6/6 raw, which led to query-aware

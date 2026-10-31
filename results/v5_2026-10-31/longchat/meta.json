@@ -1,0 +1,24 @@
+{
+ "run_id": "v5-longchat-20261031-054320",
+ "workload": "longchat",
+ "arms": [
+  "baseline",
+  "skill",
+  "full_no_history"
+ ],
+ "tasks": 24,
+ "offset": 0,
+ "model": "muse-spark-1.3-contributor",
+ "max_tokens": 16000,
+ "workers": 6,
+ "seed": 7,
+ "rows": 72,
+ "jobs": 72,
+ "stopped_by_cap": false,
+ "spend_this_run_usd": 0.5669888660000002,
+ "ledger_total_usd": 4.937308083999999,
+ "job_cap_usd": 6.35,
+ "run_cap_usd": 5.0,
+ "data_kind": "REAL",
+ "contributor_mode": "Meta may use request content for training (owner consented; synthetic tasks)"
+}
