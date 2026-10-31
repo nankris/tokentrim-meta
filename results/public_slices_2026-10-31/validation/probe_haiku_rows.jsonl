@@ -1,0 +1,96 @@
+{"id": "live_multiple_72-32-0", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 30705}
+{"id": "live_multiple_72-32-0", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17118}
+{"id": "live_multiple_189-83-0", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 30576}
+{"id": "live_multiple_189-83-0", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17157}
+{"id": "live_multiple_1041-268-0", "arm": "full", "passed": false, "why": "wrong_func_name", "tools": 40, "cli_tokens": 29834}
+{"id": "live_multiple_1041-268-0", "arm": "routed", "passed": false, "why": "wrong_func_name", "tools": 6, "cli_tokens": 18397}
+{"id": "live_multiple_574-156-0", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 27951}
+{"id": "live_multiple_574-156-0", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17436}
+{"id": "live_multiple_76-35-0", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 28029}
+{"id": "live_multiple_76-35-0", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17274}
+{"id": "live_multiple_382-137-0", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 25234}
+{"id": "live_multiple_382-137-0", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 16874}
+{"id": "live_multiple_290-129-5", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 28589}
+{"id": "live_multiple_290-129-5", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17291}
+{"id": "live_multiple_980-215-4", "arm": "full", "passed": false, "why": "missing_optional", "tools": 40, "cli_tokens": 29203}
+{"id": "live_multiple_980-215-4", "arm": "routed", "passed": false, "why": "value_error:other", "tools": 6, "cli_tokens": 18225}
+{"id": "live_multiple_243-107-4", "arm": "full", "passed": false, "why": "value_error:string", "tools": 40, "cli_tokens": 27749}
+{"id": "live_multiple_243-107-4", "arm": "routed", "passed": false, "why": "value_error:string", "tools": 6, "cli_tokens": 17064}
+{"id": "live_multiple_940-194-2", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 28750}
+{"id": "live_multiple_940-194-2", "arm": "routed", "passed": false, "why": "value_error:string", "tools": 4, "cli_tokens": 16574}
+{"id": "live_multiple_967-209-0", "arm": "full", "passed": false, "why": "value_error:string", "tools": 40, "cli_tokens": 28051}
+{"id": "live_multiple_967-209-0", "arm": "routed", "passed": false, "why": "value_error:string", "tools": 6, "cli_tokens": 17065}
+{"id": "live_multiple_54-22-1", "arm": "full", "passed": false, "why": "value_error:string", "tools": 40, "cli_tokens": 26665}
+{"id": "live_multiple_54-22-1", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 16570}
+{"id": "live_multiple_936-192-1", "arm": "full", "passed": false, "why": "wrong_func_name", "tools": 40, "cli_tokens": 27114}
+{"id": "live_multiple_936-192-1", "arm": "routed", "passed": false, "why": "value_error:string", "tools": 6, "cli_tokens": 6324}
+{"id": "live_multiple_183-78-0", "arm": "full", "passed": false, "why": "wrong_func_name", "tools": 40, "cli_tokens": 27715}
+{"id": "live_multiple_183-78-0", "arm": "routed", "passed": false, "why": "wrong_func_name", "tools": 6, "cli_tokens": 16893}
+{"id": "live_multiple_676-163-1", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 28056}
+{"id": "live_multiple_676-163-1", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17109}
+{"id": "live_multiple_474-145-25", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 26434}
+{"id": "live_multiple_474-145-25", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17046}
+{"id": "live_multiple_548-152-10", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 18402}
+{"id": "live_multiple_548-152-10", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17593}
+{"id": "live_multiple_792-174-6", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 27963}
+{"id": "live_multiple_792-174-6", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17607}
+{"id": "live_multiple_535-151-11", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 26946}
+{"id": "live_multiple_535-151-11", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17680}
+{"id": "live_multiple_730-167-1", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 29996}
+{"id": "live_multiple_730-167-1", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 17434}
+{"id": "live_multiple_1031-259-0", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 27970}
+{"id": "live_multiple_1031-259-0", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 16599}
+{"id": "live_multiple_617-159-10", "arm": "full", "passed": false, "why": "value_error:string", "tools": 40, "cli_tokens": 28514}
+{"id": "live_multiple_617-159-10", "arm": "routed", "passed": false, "why": "value_error:string", "tools": 6, "cli_tokens": 17120}
+{"id": "live_multiple_833-178-8", "arm": "full", "passed": false, "why": "wrong_func_name", "tools": 40, "cli_tokens": 29881}
+{"id": "live_multiple_833-178-8", "arm": "routed", "passed": false, "why": "wrong_func_name", "tools": 6, "cli_tokens": 17487}
+{"id": "live_multiple_1006-235-0", "arm": "full", "passed": true, "why": "", "tools": 40, "cli_tokens": 26776}
+{"id": "live_multiple_1006-235-0", "arm": "routed", "passed": true, "why": "", "tools": 6, "cli_tokens": 16907}
+{"id": "564869043", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 27672}
+{"id": "564869043", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 6172}
+{"id": "57281902", "arm": "raw", "passed": true, "recall": 0.636, "cli_tokens": 49581}
+{"id": "57281902", "arm": "ci", "passed": true, "recall": 0.545, "cli_tokens": 22236}
+{"id": "538275604", "arm": "raw", "passed": true, "recall": 0.75, "cli_tokens": 47199}
+{"id": "538275604", "arm": "ci", "passed": true, "recall": 0.625, "cli_tokens": 18387}
+{"id": "536510159", "arm": "raw", "passed": false, "recall": 0.2, "cli_tokens": 41393}
+{"id": "536510159", "arm": "ci", "passed": true, "recall": 0.8, "cli_tokens": 20719}
+{"id": "524433448", "arm": "raw", "passed": true, "recall": 0.5, "cli_tokens": 53805}
+{"id": "524433448", "arm": "ci", "passed": true, "recall": 0.5, "cli_tokens": 20070}
+{"id": "559652409", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 33613}
+{"id": "559652409", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 17691}
+{"id": "529154891", "arm": "raw", "passed": true, "recall": 0.667, "cli_tokens": 32124}
+{"id": "529154891", "arm": "ci", "passed": false, "recall": 0.0, "cli_tokens": 17091}
+{"id": "93320805", "arm": "raw", "passed": false, "recall": 0.333, "cli_tokens": 26454}
+{"id": "93320805", "arm": "ci", "passed": false, "recall": 0.333, "cli_tokens": 16835}
+{"id": "557196001", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 26495}
+{"id": "557196001", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 18343}
+{"id": "565348117", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 25114}
+{"id": "565348117", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 14511}
+{"id": "92809205", "arm": "raw", "passed": false, "recall": 0.333, "cli_tokens": 25922}
+{"id": "92809205", "arm": "ci", "passed": false, "recall": 0.333, "cli_tokens": 16812}
+{"id": "517286749", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 79540}
+{"id": "517286749", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 29606}
+{"id": "557187564", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 26397}
+{"id": "557187564", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 18309}
+{"id": "125721156", "arm": "raw", "passed": true, "recall": 0.833, "cli_tokens": 39711}
+{"id": "125721156", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 18549}
+{"id": "126421712", "arm": "raw", "passed": false, "recall": 0.449, "cli_tokens": 40891}
+{"id": "126421712", "arm": "ci", "passed": false, "recall": 0.469, "cli_tokens": 18524}
+{"id": "572202401", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 32778}
+{"id": "572202401", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 18168}
+{"id": "243103322", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 23515}
+{"id": "243103322", "arm": "ci", "passed": false, "recall": 0.333, "cli_tokens": 16927}
+{"id": "364918572", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 57851}
+{"id": "364918572", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 17773}
+{"id": "567119813", "arm": "raw", "passed": true, "recall": 0.833, "cli_tokens": 53717}
+{"id": "567119813", "arm": "ci", "passed": true, "recall": 0.833, "cli_tokens": 26281}
+{"id": "574387148", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 32854}
+{"id": "574387148", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 18432}
+{"id": "524435666", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 82840}
+{"id": "524435666", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 39300}
+{"id": "551282890", "arm": "raw", "passed": false, "recall": 0.375, "cli_tokens": 26306}
+{"id": "551282890", "arm": "ci", "passed": false, "recall": 0.375, "cli_tokens": 26306}
+{"id": "564870496", "arm": "raw", "passed": true, "recall": 1.0, "cli_tokens": 27912}
+{"id": "564870496", "arm": "ci", "passed": true, "recall": 1.0, "cli_tokens": 16763}
+{"id": "374222868", "arm": "raw", "passed": false, "recall": 0.111, "cli_tokens": 33049}
+{"id": "374222868", "arm": "ci", "passed": false, "recall": 0.222, "cli_tokens": 20876}

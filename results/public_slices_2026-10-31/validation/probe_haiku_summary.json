@@ -1,0 +1,22 @@
+{
+ "full": {
+  "n": 24,
+  "passed": 15,
+  "cli_tokens": 667103
+ },
+ "routed": {
+  "n": 24,
+  "passed": 15,
+  "cli_tokens": 402844
+ },
+ "raw": {
+  "n": 24,
+  "passed": 18,
+  "cli_tokens": 946733
+ },
+ "ci": {
+  "n": 24,
+  "passed": 17,
+  "cli_tokens": 474681
+ }
+}

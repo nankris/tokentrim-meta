@@ -66,7 +66,23 @@ def recall(chunk: str, text: str) -> float:
     return sum(line_found(l, hay) for l in lines) / len(lines)
 
 
+def answer_text(answer: str) -> str:
+    """The quoted lines: ``failure_lines`` of the first JSON object in the answer (so JSON escaping of quotes and
+    backslashes does not matter), else the raw answer text."""
+    import json
+    start = answer.find("{")
+    while start != -1:
+        try:
+            obj, _ = json.JSONDecoder().raw_decode(answer[start:])
+            if isinstance(obj, dict) and isinstance(obj.get("failure_lines"), list):
+                return "\n".join(str(x) for x in obj["failure_lines"])
+        except ValueError:
+            pass
+        start = answer.find("{", start + 1)
+    return answer
+
+
 def grade(answer: str, ex, threshold: float = 0.5):
     """Pre-registered metric: pass iff >= 50% of the chunk's significant lines appear in the answer."""
-    r = recall(ex["chunk"], answer)
+    r = recall(ex["chunk"], answer_text(answer or ""))
     return r >= threshold, r

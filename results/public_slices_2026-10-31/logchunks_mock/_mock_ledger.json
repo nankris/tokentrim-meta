@@ -1,0 +1,8 @@
+{
+ "global_usd": 0.5420162240000004,
+ "job_cap_usd": 1000000.0,
+ "reservations": {},
+ "runs": {
+  "pub-logchunks-20261031-202216-mock": 0.5420162240000004
+ }
+}
