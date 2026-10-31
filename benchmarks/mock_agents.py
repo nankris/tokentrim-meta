@@ -94,3 +94,33 @@ def hard_policy(mode="oracle"):
         ans["setting"] = f"{setting}={vm[1]}" if vm else ""
         return _final(ans)
     return respond
+
+
+FLAIL_QUERIES = ["log", "accepted requests gateway", "http requests gateway", "get", "release version", "log"]
+
+
+def flail_policy():
+    """Replays the v5 ah50 failure (issue 68): after finding inspect_spans, the agent passes the REQUEST id
+    instead of the trace ref, gets "no spans recorded", then keeps calling search_tools with queries that find
+    nothing new. It recovers (behaves like the oracle) only once the gateway tells it the full catalogue is loaded
+    and to reuse identifiers exactly."""
+    oracle = hard_policy("oracle")
+
+    def respond(payload):
+        msgs = payload["messages"]
+        n = len(msgs)
+        texts = [m.get("content") or "" for m in msgs if m.get("role") == "tool"]
+        calls = [(c.get("function") or {}) for m in msgs for c in m.get("tool_calls") or []]
+        if any("router is now OFF" in t or "Tool search is off" in t for t in texts):
+            return oracle(payload)
+        wrong = [c for c in calls if c.get("name") == "inspect_spans" and '"q-' in (c.get("arguments") or "")]
+        if wrong and any("no spans recorded" in t for t in texts):
+            k = sum(c.get("name") == "search_tools" for c in calls)
+            return _call(n, "search_tools", {"query": FLAIL_QUERIES[k % len(FLAIL_QUERIES)]})
+        nxt = oracle(payload)
+        tc = (nxt.get("tool_calls") or [{}])[0].get("function") or {}
+        if tc.get("name") == "inspect_spans" and not wrong:
+            rid = re.search(r"ERROR req=(q-\d+)", "\n".join(texts))
+            return _call(n, "inspect_spans", {"span_root": rid[1] if rid else "q-0"})
+        return nxt
+    return respond

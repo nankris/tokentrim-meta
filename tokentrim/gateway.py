@@ -27,6 +27,8 @@ class GatewayConfig:
     lean_skill: bool = False           # prepend the opt-in Lean Execution Skill text
     cost_guard: bool = True            # skip transforms with non-positive estimated net saving
     max_internal_rounds: int = 4
+    search_loop_threshold: int = 2     # unproductive search_tools calls before the router is disabled
+    search_max_without_evidence: int = 3  # search_tools calls with no client tool result in between
     schema_keep: int = 6
     essential_tools: tuple = ()
     min_tool_output_tokens: int = 400

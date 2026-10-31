@@ -22,3 +22,35 @@
     already available: <names>; do not search again".
   - Count internal rounds toward the loop guard.
 - **Status:** Open (fix proposed).
+
+## Fix (v5.1, offline, zero spend)
+
+`tokentrim/transforms.py::_search_tools` now has a per-conversation loop guard:
+
+* A search is *unproductive* when it restores no new tool or repeats an earlier (normalised) query.
+* The guard trips after `search_loop_threshold=2` unproductive searches in a row, **or** after
+  `search_max_without_evidence=3` searches with no client tool result between them. The second rule matters because
+  in ah50 several searches "restored" irrelevant tools (hr_time_off, get_weather), so they never counted as empty.
+* When it trips, the full catalogue is restored in the same round, the router is disabled for the rest of the
+  conversation (`router_disabled`; later requests send every client tool), and the model gets an actionable note.
+  The note lists every tool, says not to search again, and suggests the earlier failure was an argument problem
+  ("reuse identifiers exactly as they appear in earlier tool results"). Any later search_tools call is refused
+  cheaply, without searching.
+* Legitimate retries still work. A new client tool result resets both counters, so the same query after a state
+  change, or a search after using a restored tool, goes through normally.
+
+Regression: `tests/test_search_loop_guard.py` (5 tests). The mock `flail_policy` replays ah50: it passes the
+request id to inspect_spans, gets "no spans recorded", then cycles the v5 queries.
+
+| | search_tools calls | score |
+|---|---|---|
+| guard on (defaults) | 3 | 1.0 |
+| guard off | 49 | 0.2 |
+
+These are mock-upstream results, not model results.
+
+Residual (noted, not fixed): when `max_internal_rounds` is exhausted, an internal tool call can pass through to the
+client harness ("search_tools has no data for this incident"). With the guard, at most 3 searches run before
+recovery, so this path is now hard to reach.
+
+Status: **Fixed (v5.1)**; to be confirmed on the fresh v5.3 benchmark.

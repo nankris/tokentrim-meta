@@ -161,6 +161,10 @@ def optimize(gw, payload: dict, conversation_id, report):
         def route():
             router = SchemaRouter(cfg.schema_keep, cfg.essential_tools)
             tools = payload["tools"]
+            if conv.get("router_disabled"):  # loop guard tripped: full catalogue, search_tools kept (answers "off")
+                conv["all_tools"] = tools
+                payload["tools"] = list(tools) + [SEARCH_TOOL]
+                return
             frozen = conv.get("tool_selection")
             selected, first = router.select(tools, payload["messages"], payload.get("tool_choice"), frozen)
             removed = [t for t in tools if tool_name(t) not in selected]
@@ -216,6 +220,11 @@ def run_internal_tool(gw, call, conversation_id, sent):
     except ValueError:
         args = {}
     name = fn.get("name")
+    try:  # remember which tool results the gateway produced (not client evidence; used by the search loop guard)
+        gw.conversations.setdefault(conversation_key(sent, conversation_id), {}).setdefault(
+            "internal_call_ids", set()).add(call.get("id"))
+    except Exception:
+        pass
     if name == "retrieve_original":
         ref = str(args.get("reference_id") or args.get("id") or "")
         pattern = args.get("pattern")
@@ -234,17 +243,69 @@ def run_internal_tool(gw, call, conversation_id, sent):
         except KeyError:
             return f"No original stored under {ref!r}.", f"retrieve_original: unknown reference {ref!r}"
     if name == "search_tools":
-        conv = gw.conversations.setdefault(conversation_key(sent, conversation_id), {})
-        all_tools = conv.get("all_tools") or []
-        found = SchemaRouter().search(str(args.get("query", "")), all_tools)
-        have = {tool_name(t) for t in sent.get("tools") or []}
-        new = [t for t in found if tool_name(t) not in have]
-        if new:
-            conv.setdefault("tool_selection", set()).update(tool_name(t) for t in new)
-            sent["tools"] = sorted(list(sent.get("tools") or []) + new, key=tool_name)
-        listing = [{"name": tool_name(t), "description": (t.get("function") or t).get("description", "")[:200]}
-                   for t in found]
-        return (json.dumps({"tools": listing, "note": "These tools are now callable."}),
-                f"search_tools({args.get('query', '')!r}) restored {len(new)} tool(s): "
-                f"{', '.join(tool_name(t) for t in new) or 'none new'}")
+        return _search_tools(gw, args, conversation_id, sent, call)
     return "unknown internal tool", None
+
+
+def _client_evidence(sent, conv) -> int:
+    """Number of tool results in the conversation that came from the client (not from internal tools)."""
+    internal = conv.get("internal_call_ids") or set()
+    return sum(1 for m in sent.get("messages") or [] if m.get("role") == "tool" and m.get("tool_call_id") not in internal)
+
+
+def _search_tools(gw, args, conversation_id, sent, call):
+    """search_tools with a loop guard (issue 68). A search is unproductive when it restores no new tool or repeats
+    an earlier query with no new client evidence since. After ``search_loop_threshold`` unproductive searches in a
+    row, or ``search_max_without_evidence`` searches with no client tool result in between, the router is disabled
+    for the conversation and the FULL catalogue is restored, with an actionable note.
+    New client evidence (a new tool result) or a productive search resets the streak, so legitimate retries
+    after a state change still work."""
+    conv = gw.conversations.setdefault(conversation_key(sent, conversation_id), {})
+    conv.setdefault("internal_call_ids", set()).add(call.get("id"))
+    all_tools = conv.get("all_tools") or []
+    query = str(args.get("query", ""))
+    norm = " ".join(sorted(set(re.findall(r"[a-z0-9]+", query.lower()))))
+    evidence = _client_evidence(sent, conv)
+    guard = conv.setdefault("search_guard", {"streak": 0, "since": 0, "seen": set(), "evidence": evidence})
+    if guard["evidence"] != evidence:  # state changed: allow fresh searches, including repeats
+        guard.update(streak=0, since=0, seen=set(), evidence=evidence)
+    threshold = getattr(gw.config, "search_loop_threshold", 2)
+    max_blind = getattr(gw.config, "search_max_without_evidence", 3)
+    guard["since"] += 1
+    have = {tool_name(t) for t in sent.get("tools") or []}
+    if conv.get("router_disabled"):
+        names = sorted(have - {"search_tools"})
+        return (json.dumps({"tools": [], "note": "Tool search is off: every available tool is already callable ("
+                            + ", ".join(names) + "). Do not search; call one of these tools or give your answer."}),
+                f"search_tools({query!r}) refused: router disabled, full catalogue already loaded")
+    found = SchemaRouter().search(query, all_tools)
+    new = [t for t in found if tool_name(t) not in have]
+    repeat = norm in guard["seen"]
+    guard["seen"].add(norm)
+    if new and not repeat:
+        guard["streak"] = 0
+        conv.setdefault("tool_selection", set()).update(tool_name(t) for t in new)
+        sent["tools"] = sorted(list(sent.get("tools") or []) + new, key=tool_name)
+    else:
+        guard["streak"] += 1
+    if (guard["streak"] >= threshold or guard["since"] >= max_blind) and all_tools:
+        conv["router_disabled"] = True
+        missing = [t for t in all_tools if tool_name(t) not in have]
+        sent["tools"] = sorted(list(sent.get("tools") or []) + missing, key=tool_name)
+        names = sorted(tool_name(t) for t in all_tools)
+        note = (f"Tool search stopped after {guard['since']} searches without progress (no new tool, or no tool used "
+                f"in between). The tool router is now "
+                f"OFF for this conversation and the FULL catalogue ({len(names)} tools) is callable: "
+                + ", ".join(names) + ". Do not search again. If a tool call failed, the cause is more likely its "
+                "arguments: reuse identifiers exactly as they appear in earlier tool results.")
+        return (json.dumps({"tools": [], "note": note}),
+                f"search_tools loop guard: {guard['since']} searches without new evidence "
+                f"({guard['streak']} found nothing new) -> router disabled, "
+                f"full catalogue restored (+{len(missing)} tools)")
+    listing = [{"name": tool_name(t), "description": (t.get("function") or t).get("description", "")[:200]}
+               for t in found]
+    note = "These tools are now callable." if new and not repeat else \
+        "No new tools: the matching tools are already callable. Use them, or search for a different capability."
+    return (json.dumps({"tools": listing, "note": note}),
+            f"search_tools({query!r}) restored {len(new) if not repeat else 0} tool(s): "
+            f"{', '.join(tool_name(t) for t in new) if new and not repeat else 'none new'}")
