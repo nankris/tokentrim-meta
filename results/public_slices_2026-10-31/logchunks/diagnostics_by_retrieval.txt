@@ -1,0 +1,4 @@
+no_retrieval 17 base tok 19085 ci tok 4022 base pass 10 ci pass 12 ci calls 2.0
+grep_only 61 base tok 24837 ci tok 18843 base pass 39 ci pass 45 ci calls 4.23
+full_retrieve 36 base tok 22564 ci tok 38903 base pass 29 ci pass 33 ci calls 4.11
+not_compressed 6 base tok 43098 ci tok 43342 base pass 6 ci pass 6 ci calls 2.0

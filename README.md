@@ -104,6 +104,51 @@ run before) with REAL calls to `muse-spark-1.3-contributor`.
   catalogue, and dependency-chain tools are kept. JSON mode `auto` is conservative (lossless) for
   exact-extraction tasks over linked records.
 
+## Public benchmark slices (TokenTrim system evaluations, small slice, not leaderboard results), 2026-10-31
+
+These are small, pre-registered slices of **public** datasets, run through the local TokenTrim gateway with REAL
+calls to `muse-spark-1.3-contributor` (Contributor mode: Meta may use request content for training; the owner
+consented; public data only). They are **not** BFCL or LogChunks leaderboard results, and they say nothing about
+any model's ranking.
+* Pre-registration: [`benchmarks/PREREGISTRATION_public_slices.md`](benchmarks/PREREGISTRATION_public_slices.md).
+* Data, licenses and versions: [`benchmarks/public/DATA_SOURCES.md`](benchmarks/public/DATA_SOURCES.md).
+* Results: [`results/public_slices_2026-10-31/`](results/public_slices_2026-10-31/).
+
+Graders were validated first at $0: the BFCL AST checker reimplementation agrees with the official one on
+11,268/11,268 cases; oracle/mock runs pass 100%; and a disjoint-item haiku probe was run.
+
+**BFCL v3 `live_multiple`, n=100, each catalogue augmented to 40 tools** (natural BFCL catalogues have 16 tools or
+fewer, so the shipped router gate never routes there; see issue 72). Metric: AST accuracy.
+
+| arm | pass (95%) | diff vs baseline (paired Newcombe 95%) | NI at -5 pp | prompt tokens/item | $ saving (95% CI) |
+|---|---|---|---|---|---|
+| baseline | 76% [67, 83] | - | - | 10,011 | - |
+| compression_only | 76% [67, 83] | +0.0 [-4.7, +4.7] | yes | 10,133 | -0.6% [-1.4, 0.4] |
+| router_gated | 74% [65, 82] | -2.0 [-6.7, +2.6] | **not shown** | 9,438 | 5.4% [1.9, 9.2] |
+| router_forced | 72% [63, 80] | -4.0 [-9.4, +1.3] | **not shown** | 2,532 (-74.7%) | 69.2% [64.2, 73.2] |
+
+Forcing the router cuts cost by about 70%. With n=100, we cannot rule out an accuracy loss of up to 9 pp. About
+4/100 items flip between identical requests. All 4 items where the gold tool was outside the router's top 6 were
+recovered with `search_tools`.
+
+**Real CI logs (LogChunks, n=120 failed Travis builds)** stand in for SWE-bench Lite and Terminal-Bench. There is no
+Docker on the test machine, and source files are not compressed by design. The model reads the log via a tool and
+quotes the failure lines. Metric: labelled-chunk line recall ≥ 0.5.
+
+| arm | pass (95%) | diff vs baseline | NI at -5 pp | prompt tokens/item | $ saving (95% CI) |
+|---|---|---|---|---|---|
+| baseline | 70% [61, 77] | - | - | 24,253 | - |
+| compression_only (shipped default) | 72% [64, 80] | +2.5 [-2.7, +7.8] | yes | 24,498 | -0.2% [-0.9, 0.5] |
+| ci_logs (opt-in `text_logs=True`) | 80% [72, 86] | **+10.0 [+3.5, +16.6]** | yes | 23,986 | 1.7% [-9.5, 12.9] |
+
+Honest reading:
+* The shipped compressor compressed 0 real CI logs (issue 71).
+* The new opt-in CI-log mode (`GatewayConfig(text_logs=True)`, OFF by default) raised accuracy. It did **not** save
+  tokens, because the model retrieved or grepped the original on 97 of the 114 compressed logs (issue 74).
+* The grader is lenient: chunks from the same repo pass 258/797.
+
+Spend for the round: $1.3647. The ledger went from $6.5166 to $7.8813, under a $9.01 job cap.
+
 ## TokenTrim system evaluation, v5 (2026-10-31, pre-registered, harder tasks)
 
 The task set, the 5 percentage-point non-inferiority margin and the analysis plan were fixed in

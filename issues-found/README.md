@@ -43,3 +43,4 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 71 | [Shipped compression did nothing on real CI logs (0/797)](71-ci-log-compression-noop.md) | Mitigated (opt-in text_logs) |
 | 72 | [Router gate never routes on natural BFCL catalogues](72-router-gate-never-routes-bfcl.md) | Documented |
 | 73 | [Validation probe silently used the wrong CLI (0/96)](73-haiku-probe-wrong-cli-path.md) | Fixed |
+| 74 | [CI-log compression: +10 pp accuracy, but retrieval cancelled the token saving](74-ci-logs-retrieval-cancels-savings.md) | Open |

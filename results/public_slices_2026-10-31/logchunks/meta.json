@@ -1,0 +1,24 @@
+{
+ "run_id": "pub-logchunks-20261031-203612",
+ "workload": "logchunks",
+ "arms": [
+  "baseline",
+  "compression_only",
+  "ci_logs"
+ ],
+ "items": 120,
+ "offset": 0,
+ "model": "muse-spark-1.3-contributor",
+ "max_tokens": 8000,
+ "workers": 6,
+ "seed": 7,
+ "rows": 360,
+ "jobs": 360,
+ "stopped_by_cap": false,
+ "spend_this_run_usd": 1.001604066,
+ "ledger_total_usd": 7.881321126000003,
+ "job_cap_usd": 9.01,
+ "run_cap_usd": 1.5,
+ "data_kind": "REAL",
+ "contributor_mode": "Meta may use request content for training (owner consented; public datasets)"
+}
