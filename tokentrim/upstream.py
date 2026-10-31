@@ -20,6 +20,7 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from .cost import CostModel
+from .guard import LedgerUnavailable
 from .clients.base import Usage
 
 DEFAULT_BASE_URL = "https://api.meta.ai/v1"
@@ -100,6 +101,7 @@ class RateLimiter:
 
 class _Base:
     data_kind = "REAL"
+    metered = True  # every non-mock upstream must have a ledger (fail closed)
 
     def __init__(self, ledger=None, cost_model: CostModel | None = None, default_max_tokens: int = 16000,
                  max_tokens_ceiling: int = 32000):
@@ -131,6 +133,8 @@ class _Base:
 
     def create(self, payload: dict, note: str = "") -> tuple[dict, CallUsage]:
         payload, model, worst = self._prepare(payload)
+        if self.ledger is None and self.metered:  # fail closed: never send an unreserved metered call
+            raise LedgerUnavailable("no spend ledger configured for a metered upstream; refusing to send")
         # Reservation is held across all retries of this call; worst case = one billed attempt.
         token = self.ledger.reserve(worst) if self.ledger else None
         t0 = time.monotonic()
@@ -199,6 +203,7 @@ class MockChatUpstream(_Base):
     ``responder(payload) -> message dict`` (default: echo a short text). Usage is estimated at
     4 chars/token. Records every payload in ``self.calls`` for assertions."""
     data_kind = "MOCK"
+    metered = False
 
     def __init__(self, responder=None, ledger=None, block=128, min_cacheable=1024, **kw):
         super().__init__(ledger=ledger, **kw)

@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 import copy
 import json
 
+from .guard import SpendCapExceeded
 from .store import OriginalStore
 
 INTERNAL_TOOLS = {"retrieve_original", "search_tools"}
@@ -66,6 +67,8 @@ class Gateway:
         report = report if report is not None else GatewayReport()
         try:
             return transforms.optimize(self, copy.deepcopy(payload), conversation_id, report)
+        except SpendCapExceeded:  # budget/ledger errors are never swallowed by fail-open
+            raise
         except Exception as exc:
             return copy.deepcopy(payload), [], [f"all transforms skipped ({type(exc).__name__})"]
 

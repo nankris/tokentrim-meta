@@ -9,6 +9,11 @@ class SpendCapExceeded(RuntimeError):
     pass
 
 
+class LedgerUnavailable(SpendCapExceeded):
+    """The spend ledger could not be read, locked or written. Fail CLOSED: no metered call may be sent.
+    Subclasses SpendCapExceeded so every existing stop-and-report path (server 402, benchmark stop) applies."""
+
+
 class SpendGuard:
     def __init__(self, per_task_usd=1.0, global_usd=120.0, ledger_path=None, max_steps=15):
         self.per_task_usd = per_task_usd

@@ -39,3 +39,4 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 67 | [Luna probe stopped early more on compressed inputs (n.s.)](67-luna-probe-early-stop.md) | Open (watch) |
 | 68 | [Full looped on search_tools after a wrong argument (ah50)](68-search-tools-loop.md) | Fixed (v5.1, loop guard) |
 | 69 | [Full read a wrong release from tabularized span JSON (ah43)](69-wrong-release-from-table.md) | Fixed (v5.1) |
+| 70 | [Ledger failure modes made explicitly fail-closed](70-ledger-fail-closed.md) | Fixed (v5.1) |

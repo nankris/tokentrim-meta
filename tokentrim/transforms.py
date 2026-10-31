@@ -6,6 +6,7 @@ import re
 from .optimizers import cache_prefix, history
 from .optimizers.schema_router import SEARCH_TOOL, SchemaRouter, schema_tokens, tool_name
 from .optimizers.tool_output import ToolOutputCompressor, task_terms
+from .guard import SpendCapExceeded
 from .policy import net_saving
 from .tokens import estimate_tokens
 from .upstream import price_name
@@ -56,6 +57,8 @@ def optimize(gw, payload: dict, conversation_id, report):
     def guarded(name, fn):
         try:
             fn()
+        except SpendCapExceeded:
+            raise
         except Exception as exc:  # fail open: this transform is skipped, the request still goes out
             fails.append(f"{name} skipped ({type(exc).__name__})")
 
