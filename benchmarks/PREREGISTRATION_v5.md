@@ -48,3 +48,8 @@ synthetic and contains no real or personal data).
 - Spend: reserving ledger, per-run cap $5, job cap = $1.3456 already spent + $5 round cap = **$6.35**. A run
   that hits a cap stops; partial results are reported as partial.
 - Every number reported comes from recorded API usage; nothing is projected.
+
+## AMENDMENT 1 (2026-10-31 ~05:40 IST, before any v5 Meta call)
+The v4 long-chat failures were all `"Blue Plate Co."` vs `"Blue Plate Co"` (issue 66). The string grader now
+ignores a trailing period. This applies to every v5 run; the v4 published numbers are left as measured, and a
+post-hoc re-grade is reported separately and labelled as such.

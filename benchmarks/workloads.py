@@ -177,8 +177,8 @@ def run_stub(task, name, args):
 
 
 def _norm(v):
-    if isinstance(v, str):
-        return v.strip().replace(" ", "").lower()
+    if isinstance(v, str):  # trailing sentence period ignored ("Blue Plate Co." vs "Blue Plate Co", issue 66)
+        return v.strip().rstrip(".").replace(" ", "").lower()
     if isinstance(v, list):
         return sorted(_norm(x) for x in v)
     return v

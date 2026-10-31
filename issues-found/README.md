@@ -35,3 +35,4 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 63 | [History compaction raised real cost (+25%)](63-history-compaction-costs-more.md) | Disabled by default |
 | 64 | [Plain chat: cache barely hit; skill cut output 30%](64-chat-cache-and-skill.md) | Documented |
 | 65 | [Internal tool rounds forgotten on the next turn](65-internal-rounds-not-replayed.md) | Fixed |
+| 66 | [Long-chat failures were a trailing-period grader artifact](66-longchat-grader-trailing-period.md) | Fixed before v5 |
