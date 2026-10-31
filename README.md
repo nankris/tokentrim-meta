@@ -37,10 +37,82 @@ Every optimization the gateway applies prints an explanation line (real call, 20
 
 ![proxy explanation lines](docs/images/proxy_explanations_terminal.png)
 
-## v5 validation round (pre-registered)
+## TokenTrim system evaluation, v5 (2026-10-31, pre-registered, harder tasks)
 
-The hard-task validation round, its 5 percentage-point non-inferiority margin and its analysis plan were fixed in
-[`benchmarks/PREREGISTRATION_v5.md`](benchmarks/PREREGISTRATION_v5.md) before any v5 API call.
+The task set, the 5 percentage-point non-inferiority margin and the analysis plan were fixed in
+[`benchmarks/PREREGISTRATION_v5.md`](benchmarks/PREREGISTRATION_v5.md) before any v5 API call. One amendment was made
+before the runs: the grader ignores a trailing period (issue 66). Code was frozen for the round.
+
+**Task set.** `benchmarks/workloads_hard.py` has 96 synthetic incident tasks (ah00-ah95), 32 tool schemas, and a
+~15k-token CI log per task.
+- The real exception sits at 70-90% of the log, behind two decoy tracebacks.
+- The answer needs three dependent tool calls: log -> `inspect_spans(trace_ref)` -> `open_artifact_manifest(release)`.
+- The prompt is written so that the BM25 router deliberately **misses** both chain tools, so the model has to call
+  `search_tools`.
+- The compressed log hides the trace ref in 94 of 96 tasks, so the model has to call `retrieve_original`.
+- **Grading:** a task passes only if all 10 checks pass: 6 exact facts, the 3 dependent calls with the right
+  arguments, and no side-effect tools.
+- **Statistics:** paired Newcombe 95% CI on success; paired bootstrap on $.
+
+**Checks before any Meta spend.**
+- The deterministic mock upstream: the oracle policy passes every arm, and the lazy and guess policies fail.
+- The cheap CLI probes, which are not gateway runs
+  ([summary](results/v5_2026-10-31/cheap_probe_hard_summary.md)):
+
+| CLI model | raw | compressed |
+|---|---|---|
+| claude-haiku-5-5 | 23/24 | 24/24 |
+| gpt-6-luna | 23/24 | 20/24 |
+
+The 4 failed luna episodes passed 4/4 when re-run (issue 67). Neither difference is significant.
+
+**Primary, H1: Full vs Baseline, 96 paired tasks** (`results/v5_2026-10-31/summary_agentic_hard_primary.json`):
+
+| arm | pass | $/task | saving vs baseline [95% CI] | success diff [95% CI] |
+|---|---|---|---|---|
+| baseline | 96/96 | $0.00862 | - | - |
+| full (skill + cache prefix + compression + router) | 94/96 | $0.00554 | +35.8% [+20.7, +47.7] | -2.1 pp [-7.3, +2.0] |
+
+**Non-inferiority is NOT shown.** The lower bound of -7.3 pp does not clear the pre-registered -5 pp margin. The
+interval does not show Full is worse either, because it includes 0. Both Full failures are documented:
+- ah50 (issue 68): the model passed the request id to `inspect_spans`. It then looped through 37 `search_tools`
+  calls that each returned "none new", and ran out of turns. That run alone cost $0.043.
+- ah43 (issue 69): the model read the wrong release from the tabularized span JSON. The right value was present.
+
+![v5 primary](docs/images/v5_success_agentic_hard_primary.png)
+
+**Ablations, tasks 0-47, 48 paired tasks** (`summary_agentic_hard_ablation.json`):
+
+| arm | pass | $/task | saving vs baseline [95% CI] | success diff [95% CI] |
+|---|---|---|---|---|
+| baseline | 48/48 | $0.00868 | - | - |
+| skill only | 48/48 | $0.00846 | +2.5% [-4.9, +9.6] (n.s.) | 0 [-7.4, +7.4] |
+| tool-output compression only | 48/48 | $0.00360 | **+58.6% [+51.2, +63.2]** | 0 [-7.4, +7.4] |
+| schema router only | 48/48 | $0.01475 | **-70.0% [-80.1, -61.6] (costs more)** | 0 [-7.4, +7.4] |
+| full without router (skill + cache prefix + compression) | 48/48 | $0.00417 | +52.0% [+41.0, +60.7] | 0 [-7.4, +7.4] |
+| full | 47/48 | $0.00561 | +35.4% [+16.9, +50.7] | -2.1 pp [-10.9, +5.5] |
+
+![v5 ablation success](docs/images/v5_success_agentic_hard_ablation.png)
+![v5 ablation cost](docs/images/v5_cost_agentic_hard_ablation.png)
+
+What v5 shows:
+- **Tool-output compression carries the savings.** It cut prompt tokens from 96.9k to 41.0k per task.
+  - The recovery path was used on every compression task: 48 greps and 1 full retrieve in 48 tasks.
+  - It had no failures in 48 tasks, but 48/48 vs 48/48 only bounds the loss at 7.4 pp.
+- **Negative finding: the schema router costs money when it misses.** This set is built so that it always misses.
+  - Router-only made 123 `search_tools` calls and 314 vs 192 model calls, and only 3% of calls hit the cache.
+    The cause is that the tool list changes mid-conversation and breaks the prefix.
+  - Adding the router to compression made Full more expensive than Full without router: $0.00561 vs $0.00417 on
+    the same 48 tasks. Both Full failures happened in router-enabled runs.
+  - The v4 agentic set, where the router selects well, showed +13% for the router alone. Whether the router pays
+    off depends on how well it selects.
+  - Recommendation from these data: turn the router on only when its recall on the agent's real prompts is high.
+    Its cost on a miss is now measured.
+- **Skill only:** no significant dollar effect where uncached input dominates. This is the same as in v4.
+- **Truncation:** 0 calls ended with `finish_reason=length` in v5 (`max_tokens` 16,000).
+- **Not shown:** that any arm is equal to baseline within 5 pp. That needs more failures observed, or more tasks.
+
+LONGCHAT_V5_PLACEHOLDER
 
 ## TokenTrim system evaluation, v4 (2026-10-30)
 

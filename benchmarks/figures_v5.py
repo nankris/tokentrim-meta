@@ -16,7 +16,7 @@ C = {"baseline": "#8a8f98", "skill": "#6aa9ff", "tool_output": "#f5a623", "schem
 
 
 def save(fig, name):
-    fig.text(0.01, -0.02, NOTE, fontsize=7, color="#555")
+    fig.supxlabel(NOTE, fontsize=7, color="#555", x=0.01, ha="left", y=-0.06)
     fig.savefig(OUT / name, dpi=160, bbox_inches="tight", facecolor="white")
     plt.close(fig)
     print(OUT / name)
@@ -24,7 +24,7 @@ def save(fig, name):
 
 def forest(s, name, title):
     arms = [a for a in s["arms"] if a != "baseline"]
-    fig, ax = plt.subplots(figsize=(7.5, 0.6 * len(arms) + 1.6))
+    fig, ax = plt.subplots(figsize=(7.5, 0.6 * len(arms) + 1.8))
     for i, a in enumerate(arms):
         p = s["arms"][a]["vs_baseline_pass"]
         lo, hi, d = 100 * p["ci95"][0], 100 * p["ci95"][1], 100 * p["diff"]
@@ -33,12 +33,13 @@ def forest(s, name, title):
         ax.text(hi + 0.8, i, f"{s['arms'][a]['passed']}/{p['n']} vs {s['arms'][a]['baseline_on_same_tasks']['passed']}/{p['n']}"
                 f"  [{lo:+.1f}, {hi:+.1f}]", va="center", fontsize=8)
     ax.axvline(-5, color="#d1242f", ls="--", lw=1)
-    ax.text(-5, -0.45, " -5 pp margin", color="#d1242f", fontsize=8)
+    ax.text(-5, 1.01, "-5 pp margin", color="#d1242f", fontsize=8, ha="center", transform=ax.get_xaxis_transform())
     ax.axvline(0, color="#999", lw=0.8)
     ax.set_yticks(range(len(arms)), arms)
     ax.set_xlabel("task success, arm minus baseline (pp), paired Newcombe 95% CI")
     ax.set_xlim(-30, 40)
-    ax.set_title(title, fontsize=10)
+    ax.set_title(title, fontsize=10, pad=14)
+    ax.set_ylim(-0.7, len(arms) - 0.3)
     save(fig, name)
 
 
@@ -70,5 +71,7 @@ if __name__ == "__main__":
         if not p.exists():
             continue
         s = json.loads(p.read_text())
+        if w == "agentic_hard_primary":  # pre-registered H1 only: Full vs Baseline over all 96 paired tasks
+            s["arms"] = {a: s["arms"][a] for a in ("baseline", "full")}
         forest(s, f"v5_success_{w}.png", f"v5 {w}: success difference vs baseline (n={s['arms']['baseline']['n']})")
         cost(s, f"v5_cost_{w}.png", f"v5 {w}: billed $ per task")
