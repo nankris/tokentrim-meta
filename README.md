@@ -28,7 +28,8 @@ input on Muse Spark Contributor), not the minimum token count.
 python3 -m tokentrim.hooks.install --project .          # copy the skill into ./.agents/skills and ./.claude/skills
 python3 -m tokentrim.hooks.install --project . --with-hooks   # + Claude Code loop-guard hook (settings.json backed up)
 set -a; . ~/.config/meta/env; set +a                    # META_API_KEY, never printed
-python3 -m tokentrim.server --port 8787 --tool-output --run-cap-usd 1   # add --schema-router only if it selects well (v5)
+python3 -m tokentrim.server --port 8787 --run-cap-usd 1   # default --preset compression-only (router off, history off)
+# python3 -m tokentrim.server --preset guarded-full ...    # + lean skill, cache prefix, gated schema router (separate arm)
 #   OpenAI clients:    base_url=http://127.0.0.1:8787/v1
 #   Claude Code etc.:  ANTHROPIC_BASE_URL=http://127.0.0.1:8787   (/v1/messages; model ids map to the Meta model)
 ```
@@ -36,6 +37,72 @@ python3 -m tokentrim.server --port 8787 --tool-output --run-cap-usd 1   # add --
 Every optimization the gateway applies prints an explanation line (real call, 2026-10-30):
 
 ![proxy explanation lines](docs/images/proxy_explanations_terminal.png)
+
+## Headline: compression-only, v5.3 confirmatory TokenTrim system evaluation (2026-10-31)
+
+**Compression-only** is the default demo configuration and the headline result. It is risk-aware,
+structure-preserving tool-output compression with `retrieve_original` recovery, with the router off and history
+compaction off. The test was pre-registered ([`benchmarks/PREREGISTRATION_v5_3.md`](benchmarks/PREREGISTRATION_v5_3.md),
+committed in `82ef78c` before any v5.3 Meta call) on **96 fresh held-out hard agentic tasks** (ah300–ah395, never
+run before) with REAL calls to `muse-spark-1.3-contributor`.
+
+| arm | pass | success diff vs baseline [paired Newcombe 95% CI] | NI (−5 pp) | $/task | saving vs baseline [95% CI] | $/success [95% CI] |
+|---|---|---|---|---|---|---|
+| baseline | 96/96 | – | – | $0.00856 | – | $0.00856 [0.00825, 0.00886] |
+| **compression_only** | **96/96** | +0.0 pp [−3.8, +3.8] | **shown** | **$0.00362** | **+57.7% [+55.0, +60.1]** | $0.00362 [0.00345, 0.00380] |
+| guarded_full | 96/96 | +0.0 pp [−3.8, +3.8] | shown | $0.00428 | +50.0% [+43.6, +55.2] | $0.00428 [0.00384, 0.00480] |
+
+![v5.3 success](docs/images/v53_success.png)
+![v5.3 cost](docs/images/v53_cost.png)
+
+* **Tokens per task (mean prompt / cached / output / reasoning):**
+  * baseline: 96.9k / 15.4k / 1.9k / 1.6k;
+  * compression_only: 41.0k / 8.5k / 1.7k / 1.3k;
+  * guarded_full: 48.5k / 9.0k / 1.5k / 1.1k.
+* **Where the cost goes:** almost all of it is uncached input. Truncated calls: 0 in every arm. Harness errors: 0.
+  Per the pre-registration, errors would have counted as failures.
+* **Recovery is used:** compression_only made 103 grep and 1 full `retrieve_original` calls; guarded_full made 89
+  and 5. The compressed arms make 488 calls against baseline's 384, and are still 58% / 50% cheaper.
+* **Spend:** this run cost $1.5793 in the ledger (round cap $3, job cap $7.94). The ledger total is now $6.5166.
+
+**Negatives and limits (read these):**
+* **The router was never used.** On all 96 tasks, guarded_full's deterministic gate judged the BM25 tool selection
+  "low confidence" and kept all 32 tools. guarded_full is therefore effectively skill + cache prefix +
+  compression. Its extra skill text makes it **about 18% more expensive than compression-only**. The router itself
+  is **not validated** by v5.3. In v5 it was the arm that cost the most (−70%, see below).
+* **The loop guard was never triggered** (0 `search_tools` calls, because the router was gated off). It is
+  covered only by the offline ah50 replay test (issue 68).
+* **Lossless JSON saves little here.** The risk-aware mode chose the lossless view for the span JSON on every task
+  (exact-extraction task with linked records), saving about 17% on that output. Nearly all of the saving comes
+  from log compression with grep recovery.
+* **Same task family.** The tasks are fresh instances of the same generator as v5, not a new task family. They are
+  synthetic tasks, and one model.
+* **Batch B was not run.** The pre-registered spend rule permitted batch B (48 more tasks, ah396–ah443). It was
+  not run in this round, so **n = 96**, the pre-registered minimum. This is a deviation from the plan: B was
+  allowed but not executed.
+* At n=96 with baseline at 96/96, one net failure would already have meant "NI not shown" (power note in the
+  pre-registration).
+
+### v5.1 / v5.2 reliability changes behind this result (offline, $0)
+* **Structure-preserving JSON compression** (issue 69, ah43).
+  * Each record is one compact JSON line with its JSON Pointer. Nothing is flattened into tables. There is a
+    lossless conservative mode and a lossy mode that keeps flagged records plus their parent chain.
+  * Structural check on 100 generated documents: legacy table 50/100 sound, new views 100/100.
+  * The haiku probe could not tell the views apart on accuracy: every view scored 99–100/100
+    ([results/v5_1/json_extraction_summary.md](results/v5_1/json_extraction_summary.md)).
+* **search_tools loop guard** (issue 68, ah50).
+  * It trips after 2 unproductive searches in a row, or after 3 searches with no new client evidence.
+  * It then restores the full catalogue, disables the router for the conversation, and sends an actionable note.
+  * New evidence resets it.
+  * In the replay: 3 searches and a pass, against 49 searches and a fail without the guard.
+* **Fail-closed ledger** (issue 70).
+  * Ledger, budget and auth errors never forward a call: corrupt or malformed file, lock timeout, disk error,
+    an unrecorded commit (which poisons the ledger until reconciled), a missing ledger.
+  * Optimizer errors still fail open.
+  * Thread and process concurrency tests never overshoot the cap.
+* **Adaptive gating:** the router is off by default. The few-tools and low-confidence gates keep the full
+  catalogue, and dependency-chain tools are kept. JSON mode `auto` is conservative (lossless) for
+  exact-extraction tasks over linked records.
 
 ## TokenTrim system evaluation, v5 (2026-10-31, pre-registered, harder tasks)
 

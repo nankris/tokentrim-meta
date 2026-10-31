@@ -12,6 +12,13 @@ if __name__ == "__main__":
               "fresh held-out synthetic tasks, 2026-10-31")
     F.C.update({"compression_only": "#f5a623", "guarded_full": "#1f6feb"})
     n = s["arms"]["baseline"]["n"]
+
+    def save(fig, name):  # footer lower than v5 so it does not overlap the x label
+        fig.supxlabel(F.NOTE, fontsize=7, color="#555", x=0.01, ha="left", y=-0.22)
+        fig.savefig(F.OUT / name, dpi=160, bbox_inches="tight", facecolor="white")
+        F.plt.close(fig)
+        print(F.OUT / name)
+    F.save = save
     for out in outs:
         out.mkdir(parents=True, exist_ok=True)
         F.OUT = out
