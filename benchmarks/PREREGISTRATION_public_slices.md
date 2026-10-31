@@ -58,6 +58,7 @@ Data sources, licenses and pinned versions are in `benchmarks/public/DATA_SOURCE
 * Ledger at start: $6.5166 (job cap $7.94). The job cap passed to the runs is $9.01. That is ledger + $2.5 for this
   round at most, enforced by the fail-closed reserving ledger. Per-run caps: BFCL $0.80, LogChunks $1.50, and a
   2-item smoke test $0.05.
-* Smoke test first: BFCL and LogChunks at `--n 2 --offset 300`, which is disjoint from the slices and excluded from
-  analysis. It is written to `results/public_slices_2026-10-31/smoke/`.
+* Smoke test first: BFCL `--n 2 --offset 300` and LogChunks `--n 2 --offset 200`. Both are disjoint from the slices
+  and the probe, and both are excluded from analysis. (Amended before any Meta call: the LogChunks pool has only
+  214 logs, so offset 300 would be empty.) It is written to `results/public_slices_2026-10-31/smoke/`.
 * On a cap stop or another blocker: stop, report the partial result, and do not raise the cap further.
