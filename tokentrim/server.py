@@ -123,10 +123,17 @@ def main(argv=None):
     parser.add_argument("--mock", action="store_true")
     for flag in ("tool-output", "schema-router", "history", "lean-skill", "no-cache-prefix"):
         parser.add_argument("--" + flag, action="store_true")
+    parser.add_argument("--preset", choices=("compression-only", "guarded-full", "none"), default="compression-only",
+                        help="compression-only (default): risk-aware tool-output compression, router off; "
+                             "guarded-full: + lean skill + gated schema router; none: only the flags given")
+    parser.add_argument("--compression-mode", choices=("auto", "conservative", "lossy"), default="auto")
     args = parser.parse_args(argv)
-    config = GatewayConfig(tool_output=args.tool_output, schema_router=args.schema_router,
-                           history=args.history, lean_skill=args.lean_skill,
-                           cache_prefix=not args.no_cache_prefix)
+    preset_tool_output = args.preset in ("compression-only", "guarded-full")
+    guarded = args.preset == "guarded-full"
+    config = GatewayConfig(tool_output=args.tool_output or preset_tool_output,
+                           schema_router=args.schema_router or guarded,
+                           history=args.history, lean_skill=args.lean_skill or guarded,
+                           cache_prefix=not args.no_cache_prefix, compression_mode=args.compression_mode)
     if args.mock:
         upstream = MockChatUpstream()
     else:

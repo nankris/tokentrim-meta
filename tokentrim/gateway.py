@@ -23,7 +23,12 @@ class GatewayConfig:
     keep_date: bool = False            # keep a day-level date line instead of dropping timestamps entirely
     pad_prefix_to: int = 0             # optional: pad stable system prefix to a multiple of N tokens (e.g. 128)
     tool_output: bool = False          # ToolOutputCompressor on role=tool messages
-    schema_router: bool = False        # Tool Schema Router (keep essentials + relevant, search_tools)
+    compression_mode: str = "auto"     # JSON: "auto" (risk-aware), "conservative" (lossless) or "lossy"
+    schema_router: bool = False        # Tool Schema Router (keep essentials + relevant, search_tools); OFF by default
+    router_gating: bool = True         # v5.2 deterministic gating (False = v5 behaviour, router always applied)
+    router_min_tools: int = 16         # gating: with this many client tools or fewer, keep them all
+    router_margin: float = 0.8         # gating: keep all if the first excluded tool scores >= margin x last kept
+    router_chain: bool = True          # gating: keep tools whose parameters name entities from the task/results
     history: bool = False              # structured history compaction
     lean_skill: bool = False           # prepend the opt-in Lean Execution Skill text
     cost_guard: bool = True            # skip transforms with non-positive estimated net saving

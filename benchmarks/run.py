@@ -33,21 +33,28 @@ def skill_text() -> str:
     return text.split("---", 2)[2].strip() if text.startswith("---") else text
 
 
+# v5 arms keep v5 settings (router always applied, lossy JSON). Not byte-identical to v5: the JSON view is now
+# structure-preserving (issue 69) and the search_tools loop guard is always on (issue 68).
+V5 = dict(router_gating=False, compression_mode="lossy")
 ARMS = {
     "agentic": {
         "baseline": dict(skill=False, cfg=dict(cache_prefix=False)),
         "skill": dict(skill=True, cfg=dict(cache_prefix=False)),
         "tool_output": dict(skill=False, cfg=dict(cache_prefix=False, tool_output=True)),
-        "schema_router": dict(skill=False, cfg=dict(cache_prefix=False, schema_router=True)),
-        "full": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True, schema_router=True)),
+        "schema_router": dict(skill=False, cfg=dict(cache_prefix=False, schema_router=True, **V5)),
+        "full": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True, schema_router=True, **V5)),
     },
     "agentic_hard": {
         "baseline": dict(skill=False, cfg=dict(cache_prefix=False)),
         "skill": dict(skill=True, cfg=dict(cache_prefix=False)),
-        "tool_output": dict(skill=False, cfg=dict(cache_prefix=False, tool_output=True)),
-        "schema_router": dict(skill=False, cfg=dict(cache_prefix=False, schema_router=True)),
-        "full_no_router": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True)),
-        "full": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True, schema_router=True)),
+        "tool_output": dict(skill=False, cfg=dict(cache_prefix=False, tool_output=True, compression_mode="lossy")),
+        "schema_router": dict(skill=False, cfg=dict(cache_prefix=False, schema_router=True, **V5)),
+        "full_no_router": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True, compression_mode="lossy")),
+        "full": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True, schema_router=True, **V5)),
+        # v5.2 arms (pre-registered for v5.3): compression-only is the headline/default configuration
+        "compression_only": dict(skill=False, cfg=dict(cache_prefix=False, tool_output=True, compression_mode="auto")),
+        "guarded_full": dict(skill=True, cfg=dict(cache_prefix=True, tool_output=True, compression_mode="auto",
+                                                  schema_router=True, router_gating=True)),
     },
     "longchat": {
         "baseline": dict(skill=False, cfg=dict(cache_prefix=False)),

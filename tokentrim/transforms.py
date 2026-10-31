@@ -76,7 +76,7 @@ def optimize(gw, payload: dict, conversation_id, report):
 
     if cfg.tool_output:
         def compress():
-            comp = ToolOutputCompressor(gw.store, cfg.min_tool_output_tokens)
+            comp = ToolOutputCompressor(gw.store, cfg.min_tool_output_tokens, json_mode=cfg.compression_mode)
             raw_sent = conv.setdefault("raw_tool_outputs", set())
             done = 0
             seen_user = []
@@ -88,7 +88,7 @@ def optimize(gw, payload: dict, conversation_id, report):
                 h = hashlib.sha256(m["content"].encode()).hexdigest()
                 if h in raw_sent:
                     continue  # already sent uncompressed earlier: changing it now would break the cache
-                result = comp.compress(m["content"], keep_terms=task_terms(seen_user))
+                result = comp.compress(m["content"], keep_terms=task_terms(seen_user), task_text="\n".join(seen_user))
                 if result.ref and result.ref in conv.get("retrieved_refs", ()):
                     result = None  # the model needed this original once: keep it raw for the rest of the run
                 if result.ref and rates:
@@ -169,7 +169,18 @@ def optimize(gw, payload: dict, conversation_id, report):
                 payload["tools"] = list(tools) + [SEARCH_TOOL]
                 return
             frozen = conv.get("tool_selection")
+            chain = set()
+            if frozen is None and cfg.router_gating:
+                ok, why, chain = router.gate(tools, payload["messages"], cfg.router_min_tools, cfg.router_margin,
+                                             cfg.router_chain)
+                if not ok:
+                    conv["tool_selection"] = {tool_name(t) for t in tools}
+                    conv["router_gated"] = why
+                    notes.append(f"Tool routing skipped: {why}")
+                    return
             selected, first = router.select(tools, payload["messages"], payload.get("tool_choice"), frozen)
+            if first and chain:
+                selected = selected | chain
             removed = [t for t in tools if tool_name(t) not in selected]
             if not removed:
                 conv["tool_selection"] = selected

@@ -252,6 +252,33 @@ def compress_text(text: str, protect=None) -> str:
     return "\n".join(_keep_with_context(lines, sorted(set(keep)), context=1))
 
 
+EXACT_TASK = re.compile(r"\b(exact(ly)?|verbatim|precise(ly)?|identifiers?|ids?|span|trace|release|parent|uuid|"
+                        r"hash|sha|checksum|which (record|span|node|item))\b", re.I)
+ID_KEYS = ("id", "span_id", "node_id", "uid", "key", "uuid")
+
+
+def json_risk(text: str, task_text: str = "") -> tuple[str, str]:
+    """Risk-aware JSON mode (v5.2). ``conservative`` (lossless) when the task asks for exact extraction AND the
+    JSON holds record arrays with ids plus parent links or nested containers (where dropping or flattening rows
+    can change which value belongs to which record); otherwise ``lossy``. Deterministic; returns (mode, reason)."""
+    try:
+        value = json.loads(text)
+    except ValueError:
+        return "lossy", "not JSON"
+    exact = EXACT_TASK.search(task_text or "")
+    for ptr in _record_arrays(value):
+        rows = _get(value, ptr)
+        keys = set().union(*(r.keys() for r in rows))
+        has_id = any(k in keys for k in ID_KEYS) or any(str(k).lower().endswith("_id") for k in keys)
+        linked = any("parent" in str(k).lower() for k in keys) or any(
+            isinstance(x, (dict, list)) for r in rows for x in r.values())
+        if has_id and linked:
+            if exact:
+                return "conservative", f"exact-extraction task ('{exact.group(0)}') over nested/linked records {ptr or '/'}"
+            return "lossy", "linked records but no exact-extraction cue in the task"
+    return "lossy", "no linked records with ids"
+
+
 COMPRESSORS = {"test": compress_test, "log": compress_log, "json": compress_json, "diff": compress_diff,
                "text": compress_text}
 
@@ -262,12 +289,14 @@ class ToolOutputCompressor:
     DEFAULT_KINDS = ("test", "log", "json", "diff")
 
     def __init__(self, store: OriginalStore | None = None, min_tokens: int = 400, max_ratio: float = 0.8,
-                 kinds=DEFAULT_KINDS, json_mode: str = "lossy"):
+                 kinds=DEFAULT_KINDS, json_mode: str = "lossy", lossless_max_ratio: float = 0.9):
         self.store = store or OriginalStore()
         self.min_tokens, self.max_ratio, self.kinds = min_tokens, max_ratio, tuple(kinds)
-        self.json_mode = json_mode  # "lossy" (flagged records + parent chain kept) or "conservative" (lossless)
+        # "lossy" (flagged records + parent chain kept), "conservative" (lossless) or "auto" (json_risk per output)
+        self.json_mode = json_mode
+        self.lossless_max_ratio = lossless_max_ratio  # a lossless view needs no recovery, so a smaller saving is ok
 
-    def compress(self, text: str, keep_terms=()) -> Compressed:
+    def compress(self, text: str, keep_terms=(), task_text: str = "") -> Compressed:
         """``keep_terms``: identifiers from the task (e.g. "r-417", "job ci-4000"); lines containing them are
         protected too (query-aware). Callers must pass a set that is stable for a given message."""
         protect = PROTECT
@@ -280,22 +309,31 @@ class ToolOutputCompressor:
         kind = classify(text)
         if kind not in self.kinds:
             return Compressed(text, kind, None, before, before, "")
+        mode, why = self.json_mode, ""
         try:
-            body = (compress_json(text, protect=protect, mode=self.json_mode) if kind == "json"
+            if kind == "json" and mode == "auto":
+                mode, why = json_risk(text, task_text)
+            body = (compress_json(text, protect=protect, mode=mode) if kind == "json"
                     else COMPRESSORS[kind](text, protect=protect))
         except Exception:  # fail open
             return Compressed(text, kind, None, before, before, f"tool output ({kind}) left unchanged: compressor error")
         ref = self.store.put(text, "orig")
-        out = (f"{body}\n[TokenTrim: {kind} output compressed {before:,}->~{estimate_tokens(body):,} tokens; "
-               f"errors, failures, summaries and task identifiers kept verbatim; "
-               f"full original only if a needed detail is missing: retrieve_original(\"{ref}\")]")
+        lossless = kind == "json" and mode == "conservative"
+        if lossless:
+            out = (f"{body}\n[TokenTrim: JSON re-serialised losslessly {before:,}->~{estimate_tokens(body):,} tokens "
+                   f"(one record per line with its JSON Pointer; nothing omitted). Original: {ref}]")
+        else:
+            out = (f"{body}\n[TokenTrim: {kind} output compressed {before:,}->~{estimate_tokens(body):,} tokens; "
+                   f"errors, failures, summaries and task identifiers kept verbatim; "
+                   f"full original only if a needed detail is missing: retrieve_original(\"{ref}\")]")
         after = estimate_tokens(out)
-        if after > self.max_ratio * before:
+        if after > (self.lossless_max_ratio if lossless else self.max_ratio) * before:
             return Compressed(text, kind, None, before, before,
                               f"tool output ({kind}, {before:,} tok) left unchanged: saving too small")
         return Compressed(out, kind, ref, before, after,
                           f"Compressed {kind} tool output {before:,}->{after:,} tokens "
-                          f"(-{100 * (before - after) / before:.0f}%), original recoverable as {ref}")
+                          f"(-{100 * (before - after) / before:.0f}%){' losslessly' if lossless else ''}, "
+                          f"original recoverable as {ref}" + (f" [json mode {mode}: {why}]" if why else ""))
 
 
 ID_TERM = re.compile(r"\b(?=[\w.-]*\d)(?=[\w.-]*[A-Za-z])[A-Za-z][\w.-]*[-_.][\w.-]*\w\b|\b[A-Za-z]+\d+[A-Za-z\d]*\b")

@@ -99,6 +99,41 @@ class SchemaRouter:
                 selected.add(name)
         return selected, "initial"
 
+    GENERIC_PARAMS = {"query", "options", "limit", "path", "id", "name", "text", "start", "end", "line", "value",
+                      "page", "size", "offset", "format", "type", "mode", "data", "input", "args", "key"}
+
+    def gate(self, tools, messages, min_tools=16, margin=0.8, chain=True):
+        """Deterministic gating (v5.2). Returns (route, reason, chain_tools). ``route=False`` means keep every
+        tool (the router is not trusted for this conversation):
+        * few tools: ``len(tools) <= min_tools``, so the saving is small and the risk is not worth it;
+        * low confidence: the BM25 cut is not separated (first excluded score >= margin x last kept score),
+          or the task matches fewer tools than would be kept.
+        When routing, ``chain_tools`` are tools whose parameter names refer to an entity that appears in the task
+        or in tool results seen so far (e.g. ``build`` when a build/release id is in play). They are the next
+        links of a dependency chain, so they are kept as well."""
+        names = [tool_name(t) for t in tools]
+        if len(tools) <= min_tools:
+            return False, f"only {len(tools)} tools (<= {min_tools}): all kept", set()
+        must = (self.essential | used_tool_names(messages)) & set(names)
+        ranked = [(sc, n) for sc, n in bm25_rank(task_text(messages), tools) if n not in must]
+        positive = [p for p in ranked if p[0] > 0]
+        if len(positive) <= self.keep:
+            return False, f"low confidence: task matches only {len(positive)} tools", set()
+        last, nxt = positive[self.keep - 1][0], positive[self.keep][0]
+        if nxt >= margin * last:
+            return False, (f"low confidence: no clear cut between kept and dropped tools "
+                           f"(score {nxt:.1f} vs {last:.1f}); all kept"), set()
+        found = set()
+        if chain:
+            seen = set(_tokens(" ".join(
+                (m.get("content") if isinstance(m.get("content"), str) else "") for m in messages)))
+            for t in tools:
+                props = ((t.get("function") or t).get("parameters") or {}).get("properties") or {}
+                words = {w for p in props for w in _tokens(p.replace("_", " "))} - self.GENERIC_PARAMS
+                if words and words & seen:
+                    found.add(tool_name(t))
+        return True, "", found
+
     def search(self, query: str, tools: list[dict], limit: int = 5) -> list[dict]:
         ranked = [n for s, n in bm25_rank(query, tools) if s > 0][:limit]
         by = {tool_name(t): t for t in tools}

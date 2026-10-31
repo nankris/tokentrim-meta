@@ -201,7 +201,7 @@ class GatewayTests(unittest.TestCase):
 
     def test_schema_router_with_search_tools_recovery(self):
         up = MockChatUpstream(responder=responder_factory())
-        gw = Gateway(up, GatewayConfig(schema_router=True, schema_keep=2))
+        gw = Gateway(up, GatewayConfig(schema_router=True, schema_keep=2, router_gating=False))
         p = {"model": MODEL, "tools": TOOLS, "messages": [{"role": "user", "content": "run the unit tests"}]}
         data, rep = gw.complete(p, "c1")
         self.assertTrue(any("Removed" in e and "unused tool schemas" in e for e in rep.explanations))
