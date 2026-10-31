@@ -1,0 +1,8 @@
+{
+ "gradable": 797,
+ "of": 797,
+ "oracle_pass": 797,
+ "other_repo_chunk_pass": 2,
+ "same_repo_other_build_chunk_pass": 258,
+ "same_repo_n": 797
+}

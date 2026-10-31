@@ -76,7 +76,8 @@ def optimize(gw, payload: dict, conversation_id, report):
 
     if cfg.tool_output:
         def compress():
-            comp = ToolOutputCompressor(gw.store, cfg.min_tool_output_tokens, json_mode=cfg.compression_mode)
+            comp = ToolOutputCompressor(gw.store, cfg.min_tool_output_tokens, json_mode=cfg.compression_mode,
+                                        text_logs=getattr(cfg, "text_logs", False))
             raw_sent = conv.setdefault("raw_tool_outputs", set())
             done = 0
             seen_user = []

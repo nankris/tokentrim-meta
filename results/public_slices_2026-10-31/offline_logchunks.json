@@ -1,0 +1,27 @@
+{
+ "n_logs": 797,
+ "tokens_median": 19504,
+ "shipped_kind_counts": {
+  "text": 776,
+  "test": 21
+ },
+ "shipped_compressed": 0,
+ "dev": {
+  "logs": 450,
+  "repos": 45,
+  "chunk_gradable_in_raw_log": 427,
+  "ci_compressed": 438,
+  "ci_mean_size_ratio": 0.211,
+  "ci_chunk_retained": 399,
+  "ci_chunk_retained_rate": 0.934
+ },
+ "test": {
+  "logs": 347,
+  "repos": 35,
+  "chunk_gradable_in_raw_log": 347,
+  "ci_compressed": 324,
+  "ci_mean_size_ratio": 0.252,
+  "ci_chunk_retained": 310,
+  "ci_chunk_retained_rate": 0.893
+ }
+}

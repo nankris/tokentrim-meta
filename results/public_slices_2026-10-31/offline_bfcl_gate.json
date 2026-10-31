@@ -1,0 +1,21 @@
+{
+ "items": 1053,
+ "tool_count_buckets": {
+  "<=4": 702,
+  "5-8": 324,
+  "9-16": 25,
+  ">16": 2
+ },
+ "gate_decisions": {
+  "only 2 tools": 224,
+  "only 4 tools": 176,
+  "only 5 tools": 195,
+  "only 9 tools": 11,
+  "only 3 tools": 302,
+  "only 6 tools": 78,
+  "only 8 tools": 18,
+  "only 7 tools": 33,
+  "only 10 tools": 14,
+  "low confidence": 2
+ }
+}

@@ -1,0 +1,58 @@
+{
+ "outputs_checked": 11268,
+ "agree": 11268,
+ "agreement": 1.0,
+ "by_case": {
+  "oracle": {
+   "n": 1477,
+   "tokentrim_valid": 1470,
+   "agree": 1477
+  },
+  "wrong_func": {
+   "n": 1477,
+   "tokentrim_valid": 0,
+   "agree": 1477
+  },
+  "drop_required": {
+   "n": 1265,
+   "tokentrim_valid": 0,
+   "agree": 1265
+  },
+  "value_changed": {
+   "n": 1215,
+   "tokentrim_valid": 0,
+   "agree": 1215
+  },
+  "case_space_variant": {
+   "n": 1215,
+   "tokentrim_valid": 1210,
+   "agree": 1215
+  },
+  "wrong_type": {
+   "n": 1215,
+   "tokentrim_valid": 0,
+   "agree": 1215
+  },
+  "extra_param": {
+   "n": 1477,
+   "tokentrim_valid": 0,
+   "agree": 1477
+  },
+  "no_call": {
+   "n": 1477,
+   "tokentrim_valid": 0,
+   "agree": 1477
+  },
+  "number_changed": {
+   "n": 226,
+   "tokentrim_valid": 0,
+   "agree": 226
+  },
+  "reversed_order": {
+   "n": 224,
+   "tokentrim_valid": 222,
+   "agree": 224
+  }
+ },
+ "disagreements": []
+}

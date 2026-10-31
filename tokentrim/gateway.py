@@ -24,6 +24,7 @@ class GatewayConfig:
     pad_prefix_to: int = 0             # optional: pad stable system prefix to a multiple of N tokens (e.g. 128)
     tool_output: bool = False          # ToolOutputCompressor on role=tool messages
     compression_mode: str = "auto"     # JSON: "auto" (risk-aware), "conservative" (lossless) or "lossy"
+    text_logs: bool = False            # v5.4 opt-in: compress unstructured CI/console logs (tail-weighted); OFF by default
     schema_router: bool = False        # Tool Schema Router (keep essentials + relevant, search_tools); OFF by default
     router_gating: bool = True         # v5.2 deterministic gating (False = v5 behaviour, router always applied)
     router_min_tools: int = 16         # gating: with this many client tools or fewer, keep them all

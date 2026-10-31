@@ -252,6 +252,18 @@ def compress_text(text: str, protect=None) -> str:
     return "\n".join(_keep_with_context(lines, sorted(set(keep)), context=1))
 
 
+def compress_ci_text(text: str, protect=None, head: int = 15, tail: int = 60, context: int = 2) -> str:
+    """Unstructured CI/build console logs (v5.4, opt-in): protected lines + first ``head`` + last ``tail`` lines,
+    with ``context`` lines around each kept line. Build logs usually end with the failure (tail-weighted).
+    Parameters were chosen on the LogChunks DEV split (45 repos) only; see benchmarks/PREREGISTRATION_public_slices.md."""
+    lines = text.splitlines()
+    if len(lines) < 30:
+        return text
+    keep = [i for i, l in enumerate(lines) if (protect or PROTECT).search(l)] + list(range(head)) + \
+        list(range(max(0, len(lines) - tail), len(lines)))
+    return "\n".join(_keep_with_context(lines, sorted(set(keep)), context=context))
+
+
 EXACT_TASK = re.compile(r"\b(exact(ly)?|verbatim|precise(ly)?|identifiers?|ids?|span|trace|release|parent|uuid|"
                         r"hash|sha|checksum|which (record|span|node|item))\b", re.I)
 ID_KEYS = ("id", "span_id", "node_id", "uid", "key", "uuid")
@@ -289,12 +301,14 @@ class ToolOutputCompressor:
     DEFAULT_KINDS = ("test", "log", "json", "diff")
 
     def __init__(self, store: OriginalStore | None = None, min_tokens: int = 400, max_ratio: float = 0.8,
-                 kinds=DEFAULT_KINDS, json_mode: str = "lossy", lossless_max_ratio: float = 0.9):
+                 kinds=DEFAULT_KINDS, json_mode: str = "lossy", lossless_max_ratio: float = 0.9,
+                 text_logs: bool = False):
         self.store = store or OriginalStore()
         self.min_tokens, self.max_ratio, self.kinds = min_tokens, max_ratio, tuple(kinds)
         # "lossy" (flagged records + parent chain kept), "conservative" (lossless) or "auto" (json_risk per output)
         self.json_mode = json_mode
         self.lossless_max_ratio = lossless_max_ratio  # a lossless view needs no recovery, so a smaller saving is ok
+        self.text_logs = text_logs  # opt-in: unstructured console logs ("text") via compress_ci_text
 
     def compress(self, text: str, keep_terms=(), task_text: str = "") -> Compressed:
         """``keep_terms``: identifiers from the task (e.g. "r-417", "job ci-4000"); lines containing them are
@@ -307,13 +321,16 @@ class ToolOutputCompressor:
         if before < self.min_tokens or "retrieve_original(" in text:
             return Compressed(text, "skip", None, before, before, "")
         kind = classify(text)
-        if kind not in self.kinds:
+        if kind == "text" and self.text_logs:
+            kind = "ci"
+        if kind not in self.kinds and kind != "ci":
             return Compressed(text, kind, None, before, before, "")
         mode, why = self.json_mode, ""
         try:
             if kind == "json" and mode == "auto":
                 mode, why = json_risk(text, task_text)
             body = (compress_json(text, protect=protect, mode=mode) if kind == "json"
+                    else compress_ci_text(text, protect=protect) if kind == "ci"
                     else COMPRESSORS[kind](text, protect=protect))
         except Exception:  # fail open
             return Compressed(text, kind, None, before, before, f"tool output ({kind}) left unchanged: compressor error")
