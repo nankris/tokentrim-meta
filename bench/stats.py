@@ -129,3 +129,36 @@ def newcombe_difference(s1: float, n1: int, s2: float, n2: int) -> list[float]:
     l2, u2 = wilson(s2, n2)
     d = p2 - p1
     return [d - math.sqrt((p2 - l2) ** 2 + (u1 - p1) ** 2), d + math.sqrt((u2 - p2) ** 2 + (p1 - l1) ** 2)]
+
+
+def newcombe_paired(base: list[bool], other: list[bool]) -> dict:
+    """Newcombe (1998) method 10 for a PAIRED difference of proportions, p_other - p_base, 95% two-sided.
+    Uses the pairing through the continuity-corrected phi of the 2x2 table (phi = 0 when a margin is empty);
+    checked against the StatsDirect and statsmodels worked examples (tests/test_hard_workload.py)."""
+    if len(base) != len(other) or not base:
+        raise ValueError("need equal-length, non-empty paired outcomes")
+    n = len(base)
+    a = sum(1 for x, y in zip(base, other) if x and y)
+    b = sum(1 for x, y in zip(base, other) if x and not y)   # baseline only
+    c = sum(1 for x, y in zip(base, other) if not x and y)   # other only
+    d = n - a - b - c
+    p1, p2 = (a + b) / n, (a + c) / n
+    l1, u1 = wilson(a + b, n)
+    l2, u2 = wilson(a + c, n)
+    den = (a + b) * (c + d) * (a + c) * (b + d)
+    num = a * d - b * c
+    if num > 0:
+        num = max(num - n / 2, 0)  # Newcombe's continuity correction of phi
+    phi = num / math.sqrt(den) if den else 0.0
+    diff = p2 - p1
+    dl = math.sqrt(max(0.0, (p2 - l2) ** 2 - 2 * phi * (p2 - l2) * (u1 - p1) + (u1 - p1) ** 2))
+    du = math.sqrt(max(0.0, (u2 - p2) ** 2 - 2 * phi * (u2 - p2) * (p1 - l1) + (p1 - l1) ** 2))
+    return {"n": n, "both": a, "base_only": b, "other_only": c, "neither": d, "diff": diff,
+            "ci95": [diff - dl, diff + du]}
+
+
+def noninferiority_paired(base: list[bool], other: list[bool], margin: float = 0.05) -> dict:
+    """Pre-registered rule (v5): non-inferior iff the lower 95% bound of p_other - p_base is > -margin."""
+    r = newcombe_paired(base, other)
+    r.update({"margin": margin, "non_inferior": r["ci95"][0] > -margin})
+    return r

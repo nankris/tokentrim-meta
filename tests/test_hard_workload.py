@@ -63,3 +63,24 @@ class HardWorkloadTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PairedNewcombeTest(unittest.TestCase):
+    def test_known_values(self):
+        from bench.stats import newcombe_paired, noninferiority_paired
+        r = newcombe_paired([True] * 24, [True] * 24)
+        self.assertAlmostEqual(r["ci95"][0], -(1 - 24 / (24 + 1.959964 ** 2)), places=3)
+        self.assertFalse(noninferiority_paired([True] * 24, [True] * 24)["non_inferior"])
+        self.assertTrue(noninferiority_paired([True] * 90, [True] * 90)["non_inferior"])
+        # StatsDirect worked example: both 20, first only 12, second only 2, n 50 -> p1-p2 CI 0.056156..0.329207
+        base = [True] * 20 + [True] * 12 + [False] * 2 + [False] * 16
+        oth = [True] * 20 + [False] * 12 + [True] * 2 + [False] * 16
+        r = newcombe_paired(base, oth)
+        self.assertAlmostEqual(r["ci95"][0], -0.329207, places=5)
+        self.assertAlmostEqual(r["ci95"][1], -0.056156, places=5)
+        # statsmodels example [[10, 5], [2, 20]] -> p1-p2 CI (-0.0643926, 0.2211160)
+        base = [True] * 15 + [False] * 22
+        oth = [True] * 10 + [False] * 5 + [True] * 2 + [False] * 20
+        r = newcombe_paired(base, oth)
+        self.assertAlmostEqual(-r["ci95"][1], -0.0643926, places=5)
+        self.assertAlmostEqual(-r["ci95"][0], 0.2211160, places=5)

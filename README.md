@@ -28,6 +28,11 @@ Every optimization the gateway applies prints an explanation line (real call, 20
 
 ![proxy explanation lines](docs/images/proxy_explanations_terminal.png)
 
+## v5 validation round (pre-registered)
+
+The hard-task validation round, its 5 percentage-point non-inferiority margin and its analysis plan were fixed in
+[`benchmarks/PREREGISTRATION_v5.md`](benchmarks/PREREGISTRATION_v5.md) before any v5 API call.
+
 ## Real results (v4, 2026-10-30)
 
 `benchmarks/` runs paired arms on **identical synthetic tasks** with a unique session tag per (task, arm), arm order
