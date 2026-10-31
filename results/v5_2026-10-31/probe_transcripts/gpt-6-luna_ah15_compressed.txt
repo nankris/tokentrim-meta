@@ -1,0 +1,206 @@
+> CALL get_ci_log {"job_id": "ci-7015"}
+RESULT:
+2026-10-25T09:00:03Z DEBUG cache service hit ratio 54% in 85ms
+2026-10-25T09:00:06Z DEBUG cache session hit ratio 42% in 9ms
+2026-10-25T09:00:07Z INFO step 2: Delta module deploy latency replica metric buffer retry.
+2026-10-25T09:00:09Z INFO heartbeat ok
+2026-10-25T09:00:12Z INFO step 4: Parser metric parser retry service shard client client.
+2026-10-25T09:00:13Z DEBUG cache beta hit ratio 54% in 78ms
+[... 408 lines omitted e.g. '2026-10-25T09:00:14Z INFO heartbeat ok']
+2026-10-25T09:15:45Z DEBUG cache config hit ratio 99% in 21ms
+2026-10-25T09:15:45Z WARN req=q-8564 recovered exception, request retried successfully (attempt 2):
+Traceback (most recent call last):
+  File "src/export/client.py", line 288, in send
+    gamma_handler_module_metric_cache()
+  File "src/export/net.py", line 205, in write
+    module_queue_index_request_buffer()
+ConnectionResetError: upstream closed the connection
+2026-10-25T09:15:47Z INFO step 465: Index alpha gamma handler session client replica server.
+[... 5 lines omitted e.g. '2026-10-25T09:15:48Z DEBUG cache gamma hit ratio 46% in 56ms']
+2026-10-25T09:16:05Z INFO step 473: Gamma worker service metric schema handler delta handler.
+2026-10-25T09:16:05Z WARN req=q-7960 recovered exception, request retried successfully (attempt 2):
+Traceback (most recent call last):
+  File "src/export/client.py", line 193, in send
+    index_deploy_parser_parser_beta()
+  File "src/export/net.py", line 222, in write
+    schema_server_gamma_queue_parser()
+ConnectionResetError: upstream closed the connection
+2026-10-25T09:16:08Z DEBUG cache session hit ratio 90% in 23ms
+[... 259 lines omitted e.g. '2026-10-25T09:16:09Z DEBUG cache cache hit ratio 65% in 30ms']
+2026-10-25T09:26:16Z DEBUG cache window hit ratio 51% in 53ms
+2026-10-25T09:26:16Z ERROR req=q-8143 unhandled exception, request failed with HTTP 500:
+Traceback (most recent call last):
+  File "src/export/api.py", line 261, in handle
+    request_server_gamma_client_config()
+  File "src/export/service.py", line 146, in apply
+    index_queue_cache_cache_handler()
+  File "src/export/core.py", line 347, in execute
+    delta_retry_config_retry_window()
+  File "src/export/pool.py", line 172, in acquire
+    parser_worker_queue_worker_config()
+PoolExhaustedError: retry_budget exhausted while processing batch 605
+2026-10-25T09:26:19Z INFO heartbeat ok
+[... 111 lines omitted e.g. '2026-10-25T09:26:21Z INFO step 783: Gamma gamma shard queue replica buffer confi']
+2026-10-25T09:30:32Z INFO step 906: Replica latency handler gamma token server index handler.
+2026-10-25T09:30:35Z INFO step 907: Request cache worker parser config client config metric.
+2026-10-25T09:30:37Z INFO step 908: Cache cache server metric gamma cache worker config.
+2026-10-25T09:30:38Z INFO heartbeat ok
+2026-10-25T09:30:38Z INFO requests: 55 accepted, 2 retried, 1 failed
+2026-10-25T09:30:38Z ERROR job ci-7015 failed: 1 request(s) returned HTTP 500 during the integration stage
+[omitted lines by level: INFO 564, DEBUG 219; every WARN/ERROR/FATAL line and every line mentioning a task identifier is shown above]
+[TokenTrim: log output compressed 15,711->~771 tokens; errors, failures, summaries and task identifiers kept verbatim; full original only if a needed detail is missing: retrieve_original("orig_25356298c3")]
+
+> CALL inspect_spans {"span_root": "q-8143"}
+RESULT:
+{"error": "no spans recorded for that root"}
+
+> CALL retrieve_original {"reference_id": "orig_25356298c3", "pattern": "q-8143"}
+RESULT:
+2 matching lines for /q-8143/:
+402: 2026-10-25T09:13:42Z INFO req=q-8143 accepted trace_ref=tr-74ada3 route=/v2/export/batches client=c-16
+797: 2026-10-25T09:26:16Z ERROR req=q-8143 unhandled exception, request failed with HTTP 500:
+
+> CALL inspect_spans {"span_root": "tr-74ada3"}
+RESULT:
+{"trace_ref":"tr-74ada3","root_service":"export","spans":"<table $.spans>"}
+$.spans:
+[table: 46 rows; columns: span_id, parent, service, op, ms, status, release, note]
+span_id | parent | service | op | ms | status | release | note
+"sp-45c1" | null | "search" | "read_session" | 60 | "ok" | "rel-4612" | ""
+"sp-7d50" | "sp-45c1" | "upload" | "encode_shard" | 299 | "ok" | "rel-4612" | ""
+"sp-4524" | "sp-7d50" | "search" | "call_handler" | 289 | "ok" | "rel-5597" | ""
+"sp-db2e" | "sp-4524" | "export" | "encode_session" | 306 | "ok" | "rel-4612" | ""
+"sp-926b" | "sp-db2e" | "upload" | "read_delta" | 158 | "ok" | "rel-4612" | ""
+"sp-87ad" | "sp-926b" | "search" | "call_retry" | 392 | "ok" | "rel-4612" | ""
+"sp-51d6" | "sp-87ad" | "billing" | "lookup_metric" | 340 | "ok" | "rel-4612" | ""
+"sp-80c8" | "sp-45c1" | "auth" | "encode_latency" | 62 | "ok" | "rel-4612" | ""
+"sp-fc8d" | "sp-45c1" | "export" | "read_parser" | 111 | "ok" | "rel-5597" | ""
+"sp-f7aa" | "sp-fc8d" | "search" | "read_schema" | 208 | "ok" | "rel-4612" | ""
+"sp-7e80" | "sp-f7aa" | "search" | "read_replica" | 389 | "ok" | "rel-4612" | ""
+"sp-9a29" | "sp-7e80" | "search" | "read_client" | 339 | "ok" | "rel-4612" | ""
+"sp-c46c" | "sp-45c1" | "upload" | "encode_latency" | 50 | "ok" | "rel-5597" | ""
+"sp-8a55" | "sp-c46c" | "queue" | "encode_beta" | 221 | "ok" | "rel-4612" | ""
+"sp-e868" | "sp-8a55" | "upload" | "call_alpha" | 212 | "ok" | "rel-5597" | ""
+"sp-c707" | "sp-e868" | "billing" | "read_parser" | 138 | "ok" | "rel-4612" | ""
+"sp-e509" | "sp-c707" | "auth" | "call_server" | 384 | "ok" | "rel-4612" | ""
+"sp-5616" | "sp-e509" | "queue" | "encode_session" | 175 | "ok" | "rel-4612" | ""
+"sp-d21c" | "sp-5616" | "notify" | "read_handler" | 68 | "ok" | "rel-5597" | ""
+"sp-8ca8" | "sp-45c1" | "billing" | "encode_metric" | 115 | "ok" | "rel-4612" | ""
+"sp-d0f4" | "sp-45c1" | "auth" | "lookup_retry" | 303 | "ok" | "rel-4612" | ""
+"sp-caae" | "sp-45c1" | "search" | "encode_parser" | 98 | "ok" | "rel-4612" | ""
+"sp-9f35" | "sp-caae" | "auth" | "call_index" | 370 | "ok" | "rel-4612" | ""
+"sp-fa93" | "sp-9f35" | "search" | "encode_alpha" | 288 | "ok" | "rel-4612" | ""
+"sp-7783" | "sp-fa93" | "search" | "lookup_service" | 341 | "ok" | "rel-5597" | ""
+"sp-fb5b" | "sp-7783" | "upload" | "lookup_client" | 375 | "ok" | "rel-4612" | ""
+"sp-992a" | "sp-45c1" | "export" | "acquire" | 110 | "ERROR" | "rel-4612" | "PoolExhaustedError; setting RETRY_BUDGET"
+"sp-e766" | "sp-992a" | "notify" | "write_window" | 246 | "ok" | "rel-5597" | ""
+"sp-a09f" | "sp-45c1" | "cache" | "lookup_worker" | 367 | "ok" | "rel-5597" | ""
+"sp-08d7" | "sp-a09f" | "export" | "call_gamma" | 104 | "ok" | "rel-4612" | ""
+"sp-17dd" | "sp-08d7" | "export" | "lookup_shard" | 248 | "ok" | "rel-5597" | ""
+"sp-6523" | "sp-45c1" | "search" | "lookup_schema" | 71 | "ok" | "rel-4612" | ""
+"sp-d312" | "sp-45c1" | "billing" | "encode_service" | 339 | "ok" | "rel-4612" | ""
+"sp-bf07" | "sp-d312" | "upload" | "read_queue" | 313 | "ok" | "rel-4612" | ""
+"sp-0453" | "sp-bf07" | "cache" | "write_metric" | 226 | "ok" | "rel-5597" | ""
+"sp-206b" | "sp-0453" | "export" | "read_window" | 29 | "ok" | "rel-4612" | ""
+"sp-f797" | "sp-45c1" | "queue" | "call_service" | 244 | "ok" | "rel-4612" | ""
+"sp-2b9a" | "sp-45c1" | "export" | "read_client" | 285 | "ok" | "rel-5597" | ""
+"sp-07a8" | "sp-2b9a" | "queue" | "write_session" | 67 | "ok" | "rel-4612" | ""
+"sp-3020" | "sp-07a8" | "billing" | "read_retry" | 234 | "ok" | "rel-5597" | ""
+"sp-2ee0" | "sp-45c1" | "search" | "call_delta" | 253 | "ok" | "rel-5597" | ""
+"sp-4592" | "sp-45c1" | "auth" | "lookup_replica" | 63 | "ok" | "rel-5597" | ""
+"sp-5693" | "sp-4592" | "cache" | "write_alpha" | 320 | "ok" | "rel-5597" | ""
+"sp-a384" | "sp-5693" | "billing" | "read_metric" | 36 | "ok" | "rel-5597" | ""
+"sp-50ae" | "sp-a384" | "auth" | "call_request" | 61 | "ok" | "rel-4612" | ""
+"sp-6355" | "sp-45c1" | "export" | "write_replica" | 74 | "ok" | "rel-5597" | ""
+[TokenTrim: json output compressed 2,089->~990 tokens; errors, failures, summaries and task identifiers kept verbatim; full original only if a needed detail is missing: retrieve_original("orig_44bbd6324e")]
+
+> CALL open_artifact_manifest {"build": "rel-4612"}
+RESULT:
+# artifact manifest for build rel-4612 (service export)
+[current]
+METRIC_DEPLOY = 402
+METRIC_DEPLOY = 411
+BUFFER_INDEX = 57
+SESSION_PARSER = 489
+RETRY_BUDGET = 58
+MODULE_REQUEST = 396
+METRIC_CLIENT = 280
+CONFIG_METRIC = 472
+CACHE_REPLICA = 151
+SCHEMA_DEPLOY = 73
+REPLICA_RETRY = 398
+BUFFER_BUFFER = 5
+LATENCY_WINDOW = 198
+METRIC_WINDOW = 489
+HANDLER_REPLICA = 372
+REQUEST_DEPLOY = 178
+PARSER_CACHE = 328
+METRIC_LATENCY = 377
+TOKEN_INDEX = 344
+PARSER_SERVICE = 201
+MODULE_SCHEMA = 310
+SCHEMA_INDEX = 489
+DEPLOY_REQUEST = 370
+DEPLOY_SERVER = 461
+CACHE_SESSION = 60
+RETRY_TOKEN = 378
+SHARD_BUFFER = 483
+DELTA_SERVICE = 335
+GAMMA_METRIC = 227
+LATENCY_WINDOW = 172
+MODULE_PARSER = 412
+WINDOW_HANDLER = 12
+REQUEST_DEPLOY = 226
+PARSER_WORKER = 98
+QUEUE_DELTA = 293
+SERVER_LATENCY = 168
+CONFIG_SESSION = 318
+TOKEN_SHARD = 346
+LATENCY_SERVER = 415
+GAMMA_CLIENT = 480
+HANDLER_GAMMA = 136
+RETRY_QUEUE = 229
+SHARD_BETA = 249
+ALPHA_SERVER = 429
+REPLICA_SCHEMA = 394
+ALPHA_SESSION = 456
+PARSER_SHARD = 331
+QUEUE_TOKEN = 133
+DEPLOY_BUFFER = 256
+CACHE_LATENCY = 287
+SCHEMA_SCHEMA = 244
+QUEUE_PARSER = 371
+METRIC_RETRY = 356
+REQUEST_CLIENT = 405
+CACHE_GAMMA = 115
+SHARD_BUFFER = 220
+WINDOW_RETRY = 384
+TOKEN_MODULE = 228
+CONFIG_MODULE = 326
+LATENCY_LATENCY = 351
+SHARD_PARSER = 246
+
+[previous build rel-9937]
+RETRY_BUDGET = 95
+METRIC_DEPLOY = 421
+METRIC_DEPLOY = 455
+BUFFER_INDEX = 159
+SESSION_PARSER = 344
+MODULE_REQUEST = 404
+METRIC_CLIENT = 264
+CONFIG_METRIC = 159
+CACHE_REPLICA = 339
+SCHEMA_DEPLOY = 163
+REPLICA_RETRY = 386
+BUFFER_BUFFER = 172
+LATENCY_WINDOW = 58
+METRIC_WINDOW = 245
+HANDLER_REPLICA = 452
+REQUEST_DEPLOY = 395
+PARSER_CACHE = 18
+METRIC_LATENCY = 39
+TOKEN_INDEX = 252
+PARSER_SERVICE = 496
+MODULE_SCHEMA = 453
+
+> ANSWER {"exception_type":"PoolExhaustedError","exception_location":"src/export/pool.py:172","request_id":"q-8143","trace_ref":"tr-74ada3","release":"rel-4612","setting":"RETRY_BUDGET=58"}

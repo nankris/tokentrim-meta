@@ -1,0 +1,27 @@
+{
+ "run_id": "v4-agentic_hard-20261031-054001",
+ "workload": "agentic_hard",
+ "arms": [
+  "baseline",
+  "skill",
+  "tool_output",
+  "schema_router",
+  "full_no_router",
+  "full"
+ ],
+ "tasks": 4,
+ "offset": 100,
+ "model": "muse-spark-1.3-contributor",
+ "max_tokens": 16000,
+ "workers": 6,
+ "seed": 7,
+ "rows": 24,
+ "jobs": 24,
+ "stopped_by_cap": false,
+ "spend_this_run_usd": 0.17843881800000003,
+ "ledger_total_usd": 1.5240644419999996,
+ "job_cap_usd": 6.35,
+ "run_cap_usd": 5.0,
+ "data_kind": "REAL",
+ "contributor_mode": "Meta may use request content for training (owner consented; synthetic tasks)"
+}

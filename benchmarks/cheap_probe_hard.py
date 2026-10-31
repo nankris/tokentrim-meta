@@ -7,6 +7,7 @@ Arms: ``raw`` = tool outputs as-is; ``compressed`` = TokenTrim ToolOutputCompres
 """
 from concurrent.futures import ThreadPoolExecutor
 import json
+import os
 import re
 import subprocess
 import sys
@@ -97,6 +98,10 @@ def episode(model, task, arm, max_turns=9):
                     result = r.text
         transcript.append(f"> CALL {name} {json.dumps(args)}\nRESULT:\n{result}")
     score, checks = WH.grade_hard(answer, task, trace)
+    if os.environ.get("TT_PROBE_TRANSCRIPTS"):  # diagnostics only (synthetic data)
+        d = Path(os.environ["TT_PROBE_TRANSCRIPTS"])
+        d.mkdir(parents=True, exist_ok=True)
+        (d / f"{model}_{task['id']}_{arm}.txt").write_text("\n\n".join(transcript) + f"\n\n> ANSWER {answer}\n")
     return {"probe": "hard_agentic", "model": model, "task": task["id"], "arm": arm, "score": score,
             "passed": score == 1.0, "turns": turn + 1, "retrieves": retrieves, "tokens_cli": tokens,
             "fails": [k for k, v in checks.items() if not v], "tool_trace": [n for n, _ in trace]}
@@ -106,10 +111,13 @@ def main():
     model = sys.argv[1]
     n = int(sys.argv[2]) if len(sys.argv) > 2 else 24
     workers = int(sys.argv[3]) if len(sys.argv) > 3 else 4
-    out = Path(f"results/v5_2026-10-31/cheap_probe_hard_{model}.jsonl")
+    only = [x for x in os.environ.get("TT_PROBE_ONLY", "").split(",") if x]  # e.g. "ah00:compressed,ah09:raw"
+    out = Path(os.environ.get("TT_PROBE_OUT", f"results/v5_2026-10-31/cheap_probe_hard_{model}.jsonl"))
     out.parent.mkdir(parents=True, exist_ok=True)
     lock = threading.Lock()
     jobs = [(WH.hard_task(i), arm) for i in range(n) for arm in ("raw", "compressed")]
+    if only:
+        jobs = [j for j in jobs if f"{j[0]['id']}:{j[1]}" in only]
 
     def work(job):
         try:

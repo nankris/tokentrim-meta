@@ -36,3 +36,4 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 64 | [Plain chat: cache barely hit; skill cut output 30%](64-chat-cache-and-skill.md) | Documented |
 | 65 | [Internal tool rounds forgotten on the next turn](65-internal-rounds-not-replayed.md) | Fixed |
 | 66 | [Long-chat failures were a trailing-period grader artifact](66-longchat-grader-trailing-period.md) | Fixed before v5 |
+| 67 | [Luna probe stopped early more on compressed inputs (n.s.)](67-luna-probe-early-stop.md) | Open (watch) |

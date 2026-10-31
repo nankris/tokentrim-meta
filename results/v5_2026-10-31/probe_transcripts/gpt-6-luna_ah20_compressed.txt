@@ -1,0 +1,279 @@
+> CALL get_ci_log {"job_id": "ci-7020"}
+RESULT:
+2026-10-12T09:00:02Z INFO heartbeat ok
+2026-10-12T09:00:03Z INFO step 1: Buffer deploy module delta window buffer beta cache.
+2026-10-12T09:00:06Z INFO step 2: Buffer deploy window service config request token queue.
+2026-10-12T09:00:07Z DEBUG cache delta hit ratio 66% in 89ms
+2026-10-12T09:00:09Z INFO heartbeat ok  [x2 identical lines through '2026-10-12T09:00:11Z INFO hear']
+2026-10-12T09:00:12Z INFO step 6: Buffer deploy queue alpha config alpha client module.
+[... 327 lines omitted e.g. '2026-10-12T09:00:13Z INFO step 7: Deploy cache metric window alpha session worke']
+2026-10-12T09:11:54Z INFO heartbeat ok
+2026-10-12T09:11:54Z WARN req=q-8434 recovered exception, request retried successfully (attempt 2):
+Traceback (most recent call last):
+  File "src/search/client.py", line 115, in send
+    alpha_alpha_client_replica_service()
+  File "src/search/net.py", line 200, in write
+    server_alpha_session_parser_server()
+TimeoutError: upstream closed the connection
+2026-10-12T09:11:56Z DEBUG cache queue hit ratio 53% in 35ms
+[... 17 lines omitted e.g. '2026-10-12T09:11:57Z DEBUG cache module hit ratio 97% in 32ms']
+2026-10-12T09:12:30Z INFO step 387: Retry buffer latency index cache session config window.
+2026-10-12T09:12:30Z WARN req=q-9530 recovered exception, request retried successfully (attempt 2):
+Traceback (most recent call last):
+  File "src/search/client.py", line 98, in send
+    metric_gamma_window_gamma_retry()
+  File "src/search/net.py", line 258, in write
+    retry_index_window_token_deploy()
+ConnectionResetError: upstream closed the connection
+2026-10-12T09:12:31Z INFO heartbeat ok  [x2 identical lines through '2026-10-12T09:12:32Z INFO hear']
+[... 260 lines omitted e.g. '2026-10-12T09:12:33Z DEBUG cache session hit ratio 76% in 15ms']
+2026-10-12T09:21:36Z INFO step 677: Module metric delta queue worker metric server service.
+2026-10-12T09:21:36Z ERROR req=q-4060 unhandled exception, request failed with HTTP 500:
+Traceback (most recent call last):
+  File "src/search/api.py", line 27, in handle
+    window_window_replica_alpha_buffer()
+  File "src/search/service.py", line 292, in apply
+    request_latency_delta_client_worker()
+  File "src/search/core.py", line 65, in execute
+    token_config_deploy_buffer_token()
+  File "src/search/pool.py", line 35, in acquire
+    parser_module_delta_parser_parser()
+PoolExhaustedError: max_inflight exhausted while processing batch 973
+2026-10-12T09:21:37Z DEBUG cache beta hit ratio 52% in 86ms
+[... 123 lines omitted e.g. '2026-10-12T09:21:39Z DEBUG cache server hit ratio 60% in 81ms']
+2026-10-12T09:26:12Z INFO step 819: Server deploy server deploy replica alpha session schema.
+2026-10-12T09:26:13Z DEBUG cache client hit ratio 58% in 33ms
+2026-10-12T09:26:15Z DEBUG cache worker hit ratio 50% in 21ms
+2026-10-12T09:26:16Z DEBUG cache retry hit ratio 51% in 28ms
+2026-10-12T09:26:16Z INFO requests: 61 accepted, 2 retried, 1 failed
+2026-10-12T09:26:16Z ERROR job ci-7020 failed: 1 request(s) returned HTTP 500 during the integration stage
+[omitted lines by level: INFO 550, DEBUG 177; every WARN/ERROR/FATAL line and every line mentioning a task identifier is shown above]
+[TokenTrim: log output compressed 14,450->~791 tokens; errors, failures, summaries and task identifiers kept verbatim; full original only if a needed detail is missing: retrieve_original("orig_98b5d4cd84")]
+
+> CALL inspect_spans {"span_root": "q-4060"}
+RESULT:
+{"error": "no spans recorded for that root"}
+
+> CALL retrieve_original {"reference_id": "orig_98b5d4cd84", "pattern": "q-4060|trace_ref|accepted|release|PoolExhaustedError"}
+RESULT:
+64 matching lines for /q-4060|trace_ref|accepted|release|PoolExhaustedError/:
+35: 2026-10-12T09:01:06Z INFO req=q-5677 accepted trace_ref=tr-4d4f40 route=/v2/search/accounts client=c-31
+48: 2026-10-12T09:01:33Z INFO req=q-2048 accepted trace_ref=tr-8a7070 route=/v2/search/quotes client=c-65
+72: 2026-10-12T09:02:19Z INFO req=q-9530 accepted trace_ref=tr-f057a2 route=/v2/search/jobs client=c-68
+86: 2026-10-12T09:02:44Z INFO req=q-3441 accepted trace_ref=tr-ec9d21 route=/v2/search/quotes client=c-49
+95: 2026-10-12T09:02:58Z INFO req=q-5531 accepted trace_ref=tr-3c9685 route=/v2/search/batches client=c-59
+100: 2026-10-12T09:03:10Z INFO req=q-7548 accepted trace_ref=tr-dc8fce route=/v2/search/items client=c-88
+104: 2026-10-12T09:03:20Z INFO req=q-8034 accepted trace_ref=tr-522296 route=/v2/search/quotes client=c-41
+125: 2026-10-12T09:03:57Z INFO req=q-8798 accepted trace_ref=tr-057749 route=/v2/search/quotes client=c-17
+147: 2026-10-12T09:04:41Z INFO req=q-9358 accepted trace_ref=tr-962260 route=/v2/search/accounts client=c-11
+156: 2026-10-12T09:05:00Z INFO req=q-9822 accepted trace_ref=tr-0826be route=/v2/search/quotes client=c-14
+179: 2026-10-12T09:05:51Z INFO req=q-3189 accepted trace_ref=tr-eb30fc route=/v2/search/items client=c-93
+189: 2026-10-12T09:06:14Z INFO req=q-8647 accepted trace_ref=tr-18bd2e route=/v2/search/items client=c-22
+195: 2026-10-12T09:06:23Z INFO req=q-8771 accepted trace_ref=tr-076c5b route=/v2/search/jobs client=c-37
+200: 2026-10-12T09:06:33Z INFO req=q-4060 accepted trace_ref=tr-000342 route=/v2/search/items client=c-98
+206: 2026-10-12T09:06:44Z INFO req=q-8637 accepted trace_ref=tr-70305e route=/v2/search/jobs client=c-40
+235: 2026-10-12T09:07:42Z INFO req=q-6392 accepted trace_ref=tr-730d32 route=/v2/search/batches client=c-29
+247: 2026-10-12T09:08:01Z INFO req=q-3243 accepted trace_ref=tr-cb0737 route=/v2/search/batches client=c-80
+270: 2026-10-12T09:08:44Z INFO req=q-4471 accepted trace_ref=tr-f18564 route=/v2/search/jobs client=c-85
+278: 2026-10-12T09:08:59Z INFO req=q-1392 accepted trace_ref=tr-1f12b0 route=/v2/search/jobs client=c-87
+288: 2026-10-12T09:09:16Z INFO req=q-9120 accepted trace_ref=tr-af302e route=/v2/search/accounts client=c-68
+307: 2026-10-12T09:09:53Z INFO req=q-1871 accepted trace_ref=tr-f7d634 route=/v2/search/accounts client=c-36
+318: 2026-10-12T09:10:13Z INFO req=q-3246 accepted trace_ref=tr-0a5d33 route=/v2/search/items client=c-38
+327: 2026-10-12T09:10:29Z INFO req=q-9308 accepted trace_ref=tr-a0afb9 route=/v2/search/quotes client=c-65
+338: 2026-10-12T09:10:51Z INFO req=q-2770 accepted trace_ref=tr-4aa5af route=/v2/search/batches client=c-89
+343: 2026-10-12T09:11:04Z INFO req=q-1251 accepted trace_ref=tr-9a88e4 route=/v2/search/batches client=c-81
+360: 2026-10-12T09:11:36Z INFO req=q-8193 accepted trace_ref=tr-cf7bab route=/v2/search/jobs client=c-36
+366: 2026-10-12T09:11:49Z INFO req=q-6050 accepted trace_ref=tr-a9b4a8 route=/v2/search/items client=c-94
+386: 2026-10-12T09:12:14Z INFO req=q-1264 accepted trace_ref=tr-5982c1 route=/v2/search/accounts client=c-29
+394: 2026-10-12T09:12:28Z INFO req=q-6696 accepted trace_ref=tr-a478f1 route=/v2/search/quotes client=c-34
+412: 2026-10-12T09:12:46Z INFO req=q-1917 accepted trace_ref=tr-c3ed06 route=/v2/search/jobs client=c-52
+421: 2026-10-12T09:13:03Z INFO req=q-6557 accepted trace_ref=tr-bffbd1 route=/v2/search/quotes client=c-93
+438: 2026-10-12T09:13:37Z INFO req=q-3867 accepted trace_ref=tr-b72a09 route=/v2/search/jobs client=c-66
+448: 2026-10-12T09:13:56Z INFO req=q-5546 accepted trace_ref=tr-4a2fbe route=/v2/search/accounts client=c-27
+453: 2026-10-12T09:14:05Z INFO req=q-2677 accepted trace_ref=tr-9c8bb0 route=/v2/search/items client=c-17
+478: 2026-10-12T09:14:51Z INFO req=q-4393 accepted trace_ref=tr-4e1d44 route=/v2/search/batches client=c-63
+483: 2026-10-12T09:14:58Z INFO req=q-2482 accepted trace_ref=tr-3bb59d route=/v2/search/items client=c-24
+501: 2026-10-12T09:15:30Z INFO req=q-9739 accepted trace_ref=tr-969f40 route=/v2/search/jobs client=c-28
+524: 2026-10-12T09:16:11Z INFO req=q-1940 accepted trace_ref=tr-ed7dbd route=/v2/search/jobs client=c-25
+529: 2026-10-12T09:16:18Z INFO req=q-8434 accepted trace_ref=tr-54b1a8 route=/v2/search/quotes client=c-57
+537: 2026-10-12T09:16:32Z INFO req=q-9702 accepted trace_ref=tr-e6a7f7 route=/v2/search/items client=c-86
+559: 2026-10-12T09:17:07Z INFO req=q-7371 accepted trace_ref=tr-2dbce7 route=/v2/search/jobs client=c-13
+580: 2026-10-12T09:17:48Z INFO req=q-2581 accepted trace_ref=tr-912635 route=/v2/search/jobs client=c-47
+586: 2026-10-12T09:17:59Z INFO req=q-6689 accepted trace_ref=tr-dfa948 route=/v2/search/jobs client=c-79
+591: 2026-10-12T09:18:10Z INFO req=q-4268 accepted trace_ref=tr-110e3e route=/v2/search/jobs client=c-84
+597: 2026-10-12T09:18:22Z INFO req=q-8330 accepted trace_ref=tr-511888 route=/v2/search/items client=c-21
+626: 2026-10-12T09:19:19Z INFO req=q-2273 accepted trace_ref=tr-e89949 route=/v2/search/accounts client=c-98
+640: 2026-10-12T09:19:51Z INFO req=q-9249 accepted trace_ref=tr-b0573d route=/v2/search/accounts client=c-60
+647: 2026-10-12T09:20:08Z INFO req=q-9843 accepted trace_ref=tr-350067 route=/v2/search/quotes client=c-22
+654: 2026-10-12T09:20:23Z INFO req=q-7836 accepted trace_ref=tr-bad35a route=/v2/search/jobs client=c-49
+661: 2026-10-12T09:20:39Z INFO req=q-8557 accepted trace_ref=tr-d937af route=/v2/search/quotes client=c-28
+669: 2026-10-12T09:20:53Z INFO req=q-7141 accepted trace_ref=tr-baa8de route=/v2/search/quotes client=c-24
+674: 2026-10-12T09:21:03Z INFO req=q-6066 accepted trace_ref=tr-c7811a route=/v2/search/batches client=c-98
+682: 2026-10-12T09:21:19Z INFO req=q-6396 accepted trace_ref=tr-2e069d route=/v2/search/quotes client=c-23
+693: 2026-10-12T09:21:36Z ERROR req=q-4060 unhandled exception, request failed with HTTP 500:
+703: PoolExhaustedError: max_inflight exhausted while processing batch 973
+713: 2026-10-12T09:21:52Z INFO req=q-2024 accepted trace_ref=tr-970ebb route=/v2/search/quotes client=c-19
+723: 2026-10-12T09:22:09Z INFO req=q-3544 accepted trace_ref=tr-6b16e2 route=/v2/search/items client=c-30
+758: 2026-10-12T09:23:22Z INFO req=q-5604 accepted trace_ref=tr-2b0dc2 route=/v2/search/batches client=c-84
+768: 2026-10-12T09:23:39Z INFO req=q-6995 accepted trace_ref=tr-74a5c9 route=/v2/search/accounts client=c-25
+798: 2026-10-12T09:24:40Z INFO req=q-4805 accepted trace_ref=tr-c4e016 route=/v2/search/batches client=c-96
+822: 2026-10-12T09:25:25Z INFO req=q-8040 accepted trace_ref=tr-5c4da8 route=/v2/search/jobs client=c-69
+826: 2026-10-12T09:25:33Z INFO req=q-4516 accepted trace_ref=tr-658dd8 route=/v2/search/quotes client=c-15
+832: 2026-10-12T09:25:46Z INFO req=q-1721 accepted trace_ref=tr-6baf03 route=/v2/search/batches client=c-38
+849: 2026-10-12T09:26:16Z INFO requests: 61 accepted, 2 retried, 1 failed
+
+> CALL inspect_spans {"span_root": "tr-000342"}
+RESULT:
+{"trace_ref":"tr-000342","root_service":"search","spans":"<table $.spans>"}
+$.spans:
+[table: 57 rows; columns: span_id, parent, service, op, ms, status, release, note]
+span_id | parent | service | op | ms | status | release | note
+"sp-b478" | null | "upload" | "encode_latency" | 246 | "ok" | "rel-7627" | ""
+"sp-b6cd" | "sp-b478" | "queue" | "write_client" | 308 | "ok" | "rel-9988" | ""
+"sp-88e2" | "sp-b6cd" | "queue" | "read_retry" | 316 | "ok" | "rel-7627" | ""
+"sp-3bc5" | "sp-b478" | "auth" | "encode_latency" | 86 | "ok" | "rel-9988" | ""
+"sp-66fd" | "sp-3bc5" | "queue" | "encode_parser" | 8 | "ok" | "rel-7627" | ""
+"sp-4745" | "sp-66fd" | "auth" | "read_index" | 148 | "ok" | "rel-7627" | ""
+"sp-86c3" | "sp-b478" | "export" | "encode_client" | 88 | "ok" | "rel-9988" | ""
+"sp-72d0" | "sp-b478" | "auth" | "write_latency" | 235 | "ok" | "rel-7627" | ""
+"sp-cf7d" | "sp-72d0" | "upload" | "call_config" | 145 | "ok" | "rel-9988" | ""
+"sp-4746" | "sp-cf7d" | "export" | "read_client" | 266 | "ok" | "rel-7627" | ""
+"sp-b71f" | "sp-4746" | "cache" | "encode_token" | 241 | "ok" | "rel-7627" | ""
+"sp-c387" | "sp-b71f" | "auth" | "call_worker" | 228 | "ok" | "rel-7627" | ""
+"sp-28ab" | "sp-b478" | "upload" | "call_module" | 27 | "ok" | "rel-9988" | ""
+"sp-84a8" | "sp-b478" | "auth" | "call_client" | 340 | "ok" | "rel-9988" | ""
+"sp-76ce" | "sp-84a8" | "queue" | "call_client" | 154 | "ok" | "rel-7627" | ""
+"sp-c89c" | "sp-76ce" | "queue" | "lookup_queue" | 13 | "ok" | "rel-7627" | ""
+"sp-46df" | "sp-c89c" | "notify" | "write_retry" | 193 | "ok" | "rel-7627" | ""
+"sp-9a18" | "sp-46df" | "billing" | "encode_schema" | 56 | "ok" | "rel-9988" | ""
+"sp-cb85" | "sp-9a18" | "queue" | "call_delta" | 143 | "ok" | "rel-7627" | ""
+"sp-85ee" | "sp-cb85" | "auth" | "read_module" | 301 | "ok" | "rel-9988" | ""
+"sp-5901" | "sp-85ee" | "queue" | "write_request" | 63 | "ok" | "rel-7627" | ""
+"sp-218c" | "sp-5901" | "queue" | "lookup_beta" | 398 | "ok" | "rel-7627" | ""
+"sp-78db" | "sp-b478" | "upload" | "read_server" | 313 | "ok" | "rel-9988" | ""
+"sp-8f2c" | "sp-b478" | "upload" | "call_beta" | 276 | "ok" | "rel-7627" | ""
+"sp-1c15" | "sp-8f2c" | "notify" | "lookup_beta" | 229 | "ok" | "rel-9988" | ""
+"sp-05b7" | "sp-b478" | "search" | "acquire" | 347 | "ERROR" | "rel-9988" | "PoolExhaustedError; setting MAX_INFLIGHT"
+"sp-4e52" | "sp-05b7" | "billing" | "read_module" | 365 | "ok" | "rel-9988" | ""
+"sp-d766" | "sp-4e52" | "export" | "encode_delta" | 56 | "ok" | "rel-9988" | ""
+"sp-7d89" | "sp-b478" | "cache" | "encode_retry" | 35 | "ok" | "rel-9988" | ""
+"sp-35b6" | "sp-7d89" | "search" | "lookup_latency" | 95 | "ok" | "rel-9988" | ""
+"sp-8526" | "sp-b478" | "cache" | "call_gamma" | 226 | "ok" | "rel-7627" | ""
+"sp-afb7" | "sp-8526" | "notify" | "call_service" | 169 | "ok" | "rel-7627" | ""
+"sp-150f" | "sp-b478" | "search" | "write_gamma" | 88 | "ok" | "rel-7627" | ""
+"sp-2c56" | "sp-b478" | "cache" | "call_alpha" | 211 | "ok" | "rel-7627" | ""
+"sp-cdf2" | "sp-2c56" | "queue" | "call_parser" | 349 | "ok" | "rel-7627" | ""
+"sp-6c62" | "sp-b478" | "upload" | "read_latency" | 367 | "ok" | "rel-7627" | ""
+"sp-2845" | "sp-6c62" | "notify" | "read_schema" | 159 | "ok" | "rel-9988" | ""
+"sp-676d" | "sp-b478" | "export" | "write_request" | 219 | "ok" | "rel-7627" | ""
+"sp-ed2b" | "sp-676d" | "export" | "read_alpha" | 369 | "ok" | "rel-9988" | ""
+"sp-e075" | "sp-ed2b" | "export" | "lookup_shard" | 333 | "ok" | "rel-9988" | ""
+"sp-6d69" | "sp-b478" | "upload" | "lookup_client" | 299 | "ok" | "rel-9988" | ""
+"sp-0207" | "sp-b478" | "cache" | "call_metric" | 382 | "ok" | "rel-9988" | ""
+"sp-e81d" | "sp-0207" | "notify" | "read_session" | 358 | "ok" | "rel-7627" | ""
+"sp-d65b" | "sp-b478" | "billing" | "read_retry" | 363 | "ok" | "rel-9988" | ""
+"sp-5994" | "sp-d65b" | "billing" | "call_gamma" | 78 | "ok" | "rel-7627" | ""
+"sp-24a2" | "sp-b478" | "auth" | "write_index" | 321 | "ok" | "rel-9988" | ""
+"sp-685f" | "sp-24a2" | "export" | "read_server" | 141 | "ok" | "rel-7627" | ""
+"sp-27ab" | "sp-685f" | "cache" | "read_module" | 23 | "ok" | "rel-9988" | ""
+"sp-a878" | "sp-b478" | "auth" | "encode_window" | 397 | "ok" | "rel-9988" | ""
+"sp-d19f" | "sp-a878" | "search" | "write_gamma" | 226 | "ok" | "rel-7627" | ""
+"sp-9a64" | "sp-d19f" | "queue" | "lookup_beta" | 381 | "ok" | "rel-9988" | ""
+"sp-d9b7" | "sp-9a64" | "search" | "encode_index" | 318 | "ok" | "rel-7627" | ""
+"sp-2276" | "sp-d9b7" | "cache" | "write_service" | 359 | "ok" | "rel-7627" | ""
+"sp-c87c" | "sp-2276" | "queue" | "write_module" | 251 | "ok" | "rel-7627" | ""
+"sp-4a88" | "sp-c87c" | "search" | "read_server" | 84 | "ok" | "rel-9988" | ""
+"sp-0286" | "sp-b478" | "notify" | "write_window" | 221 | "ok" | "rel-7627" | ""
+"sp-b08b" | "sp-b478" | "notify" | "call_worker" | 107 | "ok" | "rel-9988" | ""
+[TokenTrim: json output compressed 2,573->~1,202 tokens; errors, failures, summaries and task identifiers kept verbatim; full original only if a needed detail is missing: retrieve_original("orig_c65ad8d0eb")]
+
+> CALL open_artifact_manifest {"build": "rel-9988"}
+RESULT:
+# artifact manifest for build rel-9988 (service search)
+[current]
+SERVER_SERVER = 210
+SERVICE_WORKER = 176
+WINDOW_HANDLER = 140
+QUEUE_WINDOW = 255
+TOKEN_TOKEN = 213
+DEPLOY_RETRY = 33
+SERVER_BETA = 11
+DELTA_BETA = 452
+MODULE_WORKER = 34
+REPLICA_DELTA = 351
+RETRY_SERVER = 286
+SHARD_CACHE = 422
+INDEX_CLIENT = 355
+SHARD_TOKEN = 393
+BETA_SESSION = 101
+WORKER_BETA = 24
+DELTA_BETA = 58
+INDEX_HANDLER = 207
+PARSER_DELTA = 365
+INDEX_WINDOW = 63
+SERVICE_QUEUE = 154
+REQUEST_SERVER = 418
+BETA_REQUEST = 257
+PARSER_SESSION = 43
+LATENCY_REPLICA = 157
+GAMMA_LATENCY = 239
+LATENCY_CLIENT = 455
+CACHE_REPLICA = 334
+METRIC_PARSER = 402
+BETA_ALPHA = 26
+ALPHA_SERVER = 319
+DELTA_GAMMA = 468
+DEPLOY_HANDLER = 214
+MODULE_DEPLOY = 82
+MAX_INFLIGHT = 54
+METRIC_PARSER = 339
+SERVICE_SERVICE = 334
+QUEUE_BUFFER = 176
+BUFFER_BETA = 447
+WORKER_WINDOW = 485
+WINDOW_REQUEST = 454
+CONFIG_GAMMA = 237
+RETRY_CONFIG = 488
+REQUEST_GAMMA = 281
+METRIC_SERVICE = 376
+CLIENT_HANDLER = 215
+BUFFER_SERVER = 102
+GAMMA_SESSION = 449
+REQUEST_REPLICA = 266
+PARSER_SERVICE = 269
+BUFFER_SCHEMA = 389
+METRIC_LATENCY = 253
+WINDOW_REQUEST = 239
+QUEUE_INDEX = 354
+SERVER_WINDOW = 136
+MODULE_DELTA = 60
+QUEUE_GAMMA = 118
+REQUEST_LATENCY = 485
+TOKEN_CLIENT = 165
+BETA_INDEX = 179
+WORKER_WORKER = 254
+
+[previous build rel-1985]
+MAX_INFLIGHT = 75
+SERVER_SERVER = 414
+SERVICE_WORKER = 195
+WINDOW_HANDLER = 300
+QUEUE_WINDOW = 287
+TOKEN_TOKEN = 60
+DEPLOY_RETRY = 142
+SERVER_BETA = 321
+DELTA_BETA = 200
+MODULE_WORKER = 209
+REPLICA_DELTA = 125
+RETRY_SERVER = 472
+SHARD_CACHE = 489
+INDEX_CLIENT = 79
+SHARD_TOKEN = 102
+BETA_SESSION = 451
+WORKER_BETA = 481
+DELTA_BETA = 177
+INDEX_HANDLER = 197
+PARSER_DELTA = 249
+INDEX_WINDOW = 96
+
+> ANSWER {"exception_type":"PoolExhaustedError","exception_location":"src/search/pool.py:35","request_id":"q-4060","trace_ref":"tr-000342","release":"rel-9988","setting":"MAX_INFLIGHT=54"}

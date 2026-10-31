@@ -236,7 +236,7 @@ def main(argv=None):
     p.add_argument("--workers", type=int, default=6)
     p.add_argument("--max-tokens", type=int, default=16000)
     p.add_argument("--run-cap-usd", type=float, default=5.0)
-    p.add_argument("--job-cap-usd", type=float, default=12.0)
+    p.add_argument("--job-cap-usd", type=float, default=6.35)  # v5: $1.3456 spent before + $5 round cap
     p.add_argument("--ledger", default="/workspace/tokentrim-work/spend_ledger.json")
     p.add_argument("--out", default=None)
     p.add_argument("--mock", action="store_true")
@@ -246,7 +246,7 @@ def main(argv=None):
     p.add_argument("--results-dir", default="results/v4_2026-10-30")
     a = p.parse_args(argv)
     arms = a.arms.split(",") if a.arms else list(ARMS[a.workload])
-    run_id = f"v4-{a.workload}-{datetime.now().strftime('%Y%m%d-%H%M%S')}" + ("-mock" if a.mock else "")
+    run_id = f"{Path(a.results_dir).name.split('_')[0]}-{a.workload}-{datetime.now().strftime('%Y%m%d-%H%M%S')}" + ("-mock" if a.mock else "")
     out = Path(a.out or f"{a.results_dir}/{a.workload}{'_mock' if a.mock else ''}")
     out.mkdir(parents=True, exist_ok=True)
     if a.mock:

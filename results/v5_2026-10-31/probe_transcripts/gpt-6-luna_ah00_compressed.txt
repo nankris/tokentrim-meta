@@ -1,0 +1,355 @@
+> CALL get_ci_log {"job_id": "ci-7000"}
+RESULT:
+2026-10-10T09:00:02Z INFO heartbeat ok
+2026-10-10T09:00:04Z INFO step 1: Delta service buffer service alpha beta handler token.
+2026-10-10T09:00:06Z DEBUG cache request hit ratio 49% in 28ms
+2026-10-10T09:00:08Z INFO heartbeat ok  [x3 identical lines through '2026-10-10T09:00:13Z INFO hear']
+2026-10-10T09:00:14Z DEBUG cache config hit ratio 98% in 34ms
+2026-10-10T09:00:17Z DEBUG cache schema hit ratio 88% in 20ms
+[... 275 lines omitted e.g. '2026-10-10T09:00:20Z DEBUG cache window hit ratio 69% in 80ms']
+2026-10-10T09:10:44Z DEBUG cache config hit ratio 95% in 77ms
+2026-10-10T09:10:44Z WARN req=q-5580 recovered exception, request retried successfully (attempt 2):
+Traceback (most recent call last):
+  File "src/auth/client.py", line 259, in send
+    deploy_request_server_session_parser()
+  File "src/auth/net.py", line 146, in write
+    session_alpha_request_index_token()
+ConnectionResetError: upstream closed the connection
+2026-10-10T09:10:47Z INFO heartbeat ok
+[... 37 lines omitted e.g. '2026-10-10T09:10:49Z INFO step 319: Beta service beta module shard latency serve']
+2026-10-10T09:12:12Z INFO step 363: Session config queue handler deploy token buffer alpha.
+2026-10-10T09:12:12Z WARN req=q-5345 recovered exception, request retried successfully (attempt 2):
+Traceback (most recent call last):
+  File "src/auth/client.py", line 222, in send
+    worker_index_service_delta_server()
+  File "src/auth/net.py", line 230, in write
+    retry_request_server_alpha_replica()
+ConnectionResetError: upstream closed the connection
+2026-10-10T09:12:14Z INFO step 364: Alpha latency worker window token worker module shard.
+[... 288 lines omitted e.g. '2026-10-10T09:12:17Z INFO heartbeat ok']
+2026-10-10T09:23:12Z INFO heartbeat ok
+2026-10-10T09:23:12Z ERROR req=q-6718 unhandled exception, request failed with HTTP 500:
+Traceback (most recent call last):
+  File "src/auth/api.py", line 25, in handle
+    session_metric_gamma_replica_buffer()
+  File "src/auth/service.py", line 245, in apply
+    retry_queue_server_service_shard()
+  File "src/auth/core.py", line 167, in execute
+    shard_queue_beta_latency_index()
+PoolExhaustedError: max_inflight exhausted while processing batch 438
+2026-10-10T09:23:13Z INFO step 684: Beta alpha module delta module alpha delta token.
+[... 158 lines omitted e.g. '2026-10-10T09:23:15Z INFO step 685: Latency buffer buffer window buffer latency ']
+2026-10-10T09:28:39Z DEBUG cache delta hit ratio 66% in 24ms
+2026-10-10T09:28:41Z INFO step 859: Parser module service module gamma retry beta retry.
+2026-10-10T09:28:43Z DEBUG cache token hit ratio 95% in 6ms
+2026-10-10T09:28:46Z INFO heartbeat ok
+2026-10-10T09:28:46Z INFO requests: 64 accepted, 2 retried, 1 failed
+2026-10-10T09:28:46Z ERROR job ci-7000 failed: 1 request(s) returned HTTP 500 during the integration stage
+[omitted lines by level: INFO 577, DEBUG 181; every WARN/ERROR/FATAL line and every line mentioning a task identifier is shown above]
+[TokenTrim: log output compressed 15,091->~737 tokens; errors, failures, summaries and task identifiers kept verbatim; full original only if a needed detail is missing: retrieve_original("orig_7609339440")]
+
+> CALL inspect_spans {"span_root": "q-6718"}
+RESULT:
+{"error": "no spans recorded for that root"}
+
+> CALL retrieve_original {"reference_id": "orig_7609339440", "pattern": "q-6718|trace_ref|accepted|request"}
+RESULT:
+155 matching lines for /q-6718|trace_ref|accepted|request/:
+3: 2026-10-10T09:00:06Z DEBUG cache request hit ratio 49% in 28ms
+17: 2026-10-10T09:00:37Z INFO step 16: Index replica alpha latency delta window worker request.
+21: 2026-10-10T09:00:46Z INFO step 20: Metric parser latency session request config token handler.
+22: 2026-10-10T09:00:49Z INFO req=q-3985 accepted trace_ref=tr-1b59ad route=/v2/auth/jobs client=c-51
+28: 2026-10-10T09:01:00Z INFO step 27: Request schema handler server shard token service queue.
+33: 2026-10-10T09:01:09Z INFO req=q-5822 accepted trace_ref=tr-4f34d6 route=/v2/auth/quotes client=c-74
+44: 2026-10-10T09:01:34Z INFO step 43: Gamma schema service request request cache alpha buffer.
+45: 2026-10-10T09:01:35Z INFO step 44: Cache request module parser session buffer session config.
+51: 2026-10-10T09:01:46Z INFO step 50: Request config alpha buffer handler service gamma alpha.
+69: 2026-10-10T09:02:21Z INFO req=q-2001 accepted trace_ref=tr-14e707 route=/v2/auth/batches client=c-45
+78: 2026-10-10T09:02:42Z INFO req=q-4343 accepted trace_ref=tr-af6df6 route=/v2/auth/items client=c-30
+83: 2026-10-10T09:02:51Z INFO req=q-2610 accepted trace_ref=tr-e49f95 route=/v2/auth/jobs client=c-18
+85: 2026-10-10T09:02:56Z INFO step 84: Client alpha window config request deploy client delta.
+104: 2026-10-10T09:03:31Z INFO req=q-6454 accepted trace_ref=tr-40cf47 route=/v2/auth/quotes client=c-55
+120: 2026-10-10T09:04:02Z INFO step 119: Deploy cache request module alpha config handler config.
+124: 2026-10-10T09:04:09Z INFO req=q-3351 accepted trace_ref=tr-ba3671 route=/v2/auth/batches client=c-63
+128: 2026-10-10T09:04:20Z INFO req=q-6562 accepted trace_ref=tr-56b2c0 route=/v2/auth/accounts client=c-66
+130: 2026-10-10T09:04:24Z INFO step 129: Server metric module request replica shard deploy client.
+139: 2026-10-10T09:04:44Z INFO req=q-1479 accepted trace_ref=tr-bd2076 route=/v2/auth/quotes client=c-22
+141: 2026-10-10T09:04:48Z INFO step 140: Metric deploy alpha handler deploy parser config request.
+144: 2026-10-10T09:04:55Z INFO step 143: Beta server token metric deploy session request shard.
+146: 2026-10-10T09:04:58Z DEBUG cache request hit ratio 82% in 38ms
+148: 2026-10-10T09:05:02Z INFO req=q-6458 accepted trace_ref=tr-ced4af route=/v2/auth/batches client=c-94
+158: 2026-10-10T09:05:22Z INFO req=q-2332 accepted trace_ref=tr-ac7565 route=/v2/auth/accounts client=c-55
+168: 2026-10-10T09:05:42Z INFO req=q-1819 accepted trace_ref=tr-a94ff5 route=/v2/auth/jobs client=c-87
+169: 2026-10-10T09:05:45Z INFO step 168: Shard server client request shard latency client index.
+170: 2026-10-10T09:05:46Z INFO step 169: Worker buffer session queue beta delta beta request.
+171: 2026-10-10T09:05:47Z INFO step 170: Delta beta schema request server beta handler beta.
+191: 2026-10-10T09:06:23Z INFO step 190: Latency alpha schema alpha worker request request replica.
+192: 2026-10-10T09:06:24Z INFO step 191: Latency beta config server index gamma request client.
+207: 2026-10-10T09:06:54Z INFO req=q-7866 accepted trace_ref=tr-b425c3 route=/v2/auth/jobs client=c-54
+208: 2026-10-10T09:06:57Z INFO step 207: Session deploy client queue queue request shard metric.
+211: 2026-10-10T09:07:02Z INFO req=q-9684 accepted trace_ref=tr-ec2e6f route=/v2/auth/jobs client=c-68
+219: 2026-10-10T09:07:16Z INFO step 218: Worker request beta beta latency token token shard.
+229: 2026-10-10T09:07:39Z INFO req=q-9719 accepted trace_ref=tr-cfc943 route=/v2/auth/jobs client=c-90
+230: 2026-10-10T09:07:42Z INFO step 229: Module replica shard request request request replica replica.
+231: 2026-10-10T09:07:43Z INFO step 230: Cache replica config gamma window queue request parser.
+232: 2026-10-10T09:07:44Z INFO step 231: Request schema buffer cache latency alpha request session.
+238: 2026-10-10T09:07:59Z INFO req=q-1483 accepted trace_ref=tr-5d1e4d route=/v2/auth/quotes client=c-33
+247: 2026-10-10T09:08:16Z DEBUG cache request hit ratio 82% in 76ms
+250: 2026-10-10T09:08:24Z INFO req=q-3752 accepted trace_ref=tr-713a0a route=/v2/auth/jobs client=c-68
+254: 2026-10-10T09:08:31Z INFO step 253: Session request latency client shard window request gamma.
+269: 2026-10-10T09:09:01Z INFO req=q-8118 accepted trace_ref=tr-cc9e6a route=/v2/auth/quotes client=c-59
+270: 2026-10-10T09:09:03Z INFO step 269: Window deploy service deploy latency cache request server.
+279: 2026-10-10T09:09:22Z INFO step 278: Token queue queue request worker client config window.
+282: 2026-10-10T09:09:28Z INFO req=q-3082 accepted trace_ref=tr-bd8140 route=/v2/auth/batches client=c-94
+286: 2026-10-10T09:09:38Z INFO step 285: Request metric cache replica worker gamma session retry.
+287: 2026-10-10T09:09:40Z INFO step 286: Request window client client window retry module service.
+289: 2026-10-10T09:09:44Z INFO req=q-6718 accepted trace_ref=tr-c2980b route=/v2/auth/quotes client=c-95
+300: 2026-10-10T09:10:10Z INFO req=q-5457 accepted trace_ref=tr-8e2c0f route=/v2/auth/jobs client=c-25
+304: 2026-10-10T09:10:18Z INFO step 303: Parser beta beta request delta index shard server.
+305: 2026-10-10T09:10:21Z INFO req=q-3996 accepted trace_ref=tr-efa378 route=/v2/auth/batches client=c-86
+308: 2026-10-10T09:10:26Z INFO step 307: Latency config request window token alpha session shard.
+312: 2026-10-10T09:10:32Z INFO req=q-8703 accepted trace_ref=tr-a7fcaf route=/v2/auth/items client=c-15
+316: 2026-10-10T09:10:39Z INFO step 315: Beta module metric parser window request config request.
+319: 2026-10-10T09:10:44Z WARN req=q-5580 recovered exception, request retried successfully (attempt 2):
+322:     deploy_request_server_session_parser()
+324:     session_alpha_request_index_token()
+329: 2026-10-10T09:10:54Z INFO req=q-3584 accepted trace_ref=tr-b1cbc2 route=/v2/auth/accounts client=c-31
+333: 2026-10-10T09:11:01Z INFO req=q-2497 accepted trace_ref=tr-d63bdb route=/v2/auth/items client=c-78
+342: 2026-10-10T09:11:19Z INFO req=q-3931 accepted trace_ref=tr-fc4fe9 route=/v2/auth/accounts client=c-76
+345: 2026-10-10T09:11:26Z INFO step 337: Session module window server request deploy queue latency.
+346: 2026-10-10T09:11:28Z INFO step 338: Handler retry index request latency queue cache server.
+354: 2026-10-10T09:11:39Z INFO step 346: Shard request cache client buffer latency alpha service.
+355: 2026-10-10T09:11:41Z INFO req=q-5794 accepted trace_ref=tr-a2f121 route=/v2/auth/accounts client=c-41
+356: 2026-10-10T09:11:43Z INFO step 348: Config request token retry request shard index queue.
+367: 2026-10-10T09:12:03Z INFO req=q-6640 accepted trace_ref=tr-01d74a route=/v2/auth/jobs client=c-79
+368: 2026-10-10T09:12:04Z INFO step 360: Worker worker replica gamma session latency request index.
+372: 2026-10-10T09:12:12Z WARN req=q-5345 recovered exception, request retried successfully (attempt 2):
+377:     retry_request_server_alpha_replica()
+392: 2026-10-10T09:12:39Z INFO req=q-4260 accepted trace_ref=tr-a6b01e route=/v2/auth/jobs client=c-95
+394: 2026-10-10T09:12:44Z INFO step 379: Token metric request replica retry deploy retry latency.
+396: 2026-10-10T09:12:48Z INFO step 381: Metric client latency token request cache metric module.
+400: 2026-10-10T09:12:58Z INFO step 385: Session session replica server shard alpha worker request.
+401: 2026-10-10T09:12:59Z INFO step 386: Parser worker queue window session request beta gamma.
+406: 2026-10-10T09:13:09Z DEBUG cache request hit ratio 97% in 9ms
+412: 2026-10-10T09:13:17Z INFO req=q-5736 accepted trace_ref=tr-16a430 route=/v2/auth/quotes client=c-72
+416: 2026-10-10T09:13:28Z INFO step 401: Worker replica token index alpha schema request request.
+420: 2026-10-10T09:13:39Z INFO step 405: Gamma module beta config window token token request.
+424: 2026-10-10T09:13:48Z INFO req=q-5751 accepted trace_ref=tr-5f60cb route=/v2/auth/quotes client=c-82
+431: 2026-10-10T09:14:01Z INFO step 416: Queue queue handler beta shard metric server request.
+436: 2026-10-10T09:14:14Z INFO step 421: Beta queue latency request queue buffer latency window.
+438: 2026-10-10T09:14:19Z INFO step 423: Queue deploy server metric handler session worker request.
+442: 2026-10-10T09:14:29Z INFO req=q-4825 accepted trace_ref=tr-99f55a route=/v2/auth/quotes client=c-77
+444: 2026-10-10T09:14:34Z INFO step 429: Service delta worker window window session request retry.
+446: 2026-10-10T09:14:37Z INFO req=q-7185 accepted trace_ref=tr-b50695 route=/v2/auth/quotes client=c-65
+450: 2026-10-10T09:14:45Z INFO req=q-1270 accepted trace_ref=tr-186f27 route=/v2/auth/items client=c-18
+452: 2026-10-10T09:14:49Z DEBUG cache request hit ratio 77% in 23ms
+456: 2026-10-10T09:14:58Z INFO req=q-6922 accepted trace_ref=tr-50d5c7 route=/v2/auth/batches client=c-37
+457: 2026-10-10T09:15:00Z INFO step 442: Beta beta deploy token client request queue server.
+461: 2026-10-10T09:15:07Z INFO req=q-1692 accepted trace_ref=tr-7317c1 route=/v2/auth/accounts client=c-14
+471: 2026-10-10T09:15:28Z INFO req=q-7350 accepted trace_ref=tr-51e76e route=/v2/auth/accounts client=c-83
+481: 2026-10-10T09:15:48Z INFO step 466: Shard replica beta shard request worker token handler.
+489: 2026-10-10T09:16:07Z INFO req=q-4062 accepted trace_ref=tr-a84afd route=/v2/auth/quotes client=c-88
+490: 2026-10-10T09:16:09Z INFO step 475: Latency worker session buffer buffer token request client.
+503: 2026-10-10T09:16:35Z INFO req=q-4743 accepted trace_ref=tr-2ff3cf route=/v2/auth/items client=c-18
+508: 2026-10-10T09:16:45Z INFO step 493: Session handler shard alpha shard replica request parser.
+511: 2026-10-10T09:16:49Z INFO step 496: Beta delta request metric replica metric buffer beta.
+513: 2026-10-10T09:16:53Z INFO step 498: Buffer client schema shard worker request metric index.
+514: 2026-10-10T09:16:56Z INFO step 499: Gamma session shard beta request config deploy client.
+517: 2026-10-10T09:17:02Z INFO step 502: Request metric shard window schema index token module.
+520: 2026-10-10T09:17:08Z INFO req=q-9862 accepted trace_ref=tr-1aea5a route=/v2/auth/items client=c-81
+521: 2026-10-10T09:17:11Z INFO step 506: Replica cache queue cache session replica shard request.
+522: 2026-10-10T09:17:13Z INFO step 507: Parser session buffer request index module parser alpha.
+538: 2026-10-10T09:17:49Z INFO step 523: Client replica module beta alpha request module replica.
+555: 2026-10-10T09:18:18Z INFO req=q-5476 accepted trace_ref=tr-9e2b98 route=/v2/auth/accounts client=c-48
+564: 2026-10-10T09:18:36Z INFO step 549: Shard server index parser window gamma request buffer.
+568: 2026-10-10T09:18:42Z INFO req=q-6681 accepted trace_ref=tr-a82154 route=/v2/auth/accounts client=c-45
+575: 2026-10-10T09:18:58Z INFO step 560: Shard service token gamma session index request replica.
+576: 2026-10-10T09:19:01Z INFO req=q-7085 accepted trace_ref=tr-71a05d route=/v2/auth/quotes client=c-16
+587: 2026-10-10T09:19:21Z INFO req=q-7368 accepted trace_ref=tr-50a399 route=/v2/auth/accounts client=c-88
+598: 2026-10-10T09:19:43Z INFO step 583: Service request latency latency alpha replica deploy latency.
+604: 2026-10-10T09:19:53Z INFO req=q-1663 accepted trace_ref=tr-80b7e7 route=/v2/auth/jobs client=c-35
+610: 2026-10-10T09:20:07Z INFO req=q-6001 accepted trace_ref=tr-fb3841 route=/v2/auth/batches client=c-10
+619: 2026-10-10T09:20:28Z INFO req=q-8180 accepted trace_ref=tr-236d07 route=/v2/auth/jobs client=c-64
+627: 2026-10-10T09:20:45Z INFO step 612: Delta index shard buffer alpha request module session.
+637: 2026-10-10T09:21:06Z INFO step 622: Retry request cache server alpha buffer retry delta.
+644: 2026-10-10T09:21:23Z INFO step 629: Service handler module service request replica deploy handler.
+646: 2026-10-10T09:21:27Z INFO step 631: Window replica server module schema window request index.
+652: 2026-10-10T09:21:37Z INFO req=q-9011 accepted trace_ref=tr-560d28 route=/v2/auth/items client=c-18
+663: 2026-10-10T09:22:03Z INFO step 648: Module token gamma beta config client request queue.
+664: 2026-10-10T09:22:06Z INFO step 649: Handler shard handler client buffer request module queue.
+669: 2026-10-10T09:22:17Z INFO req=q-7316 accepted trace_ref=tr-9b2676 route=/v2/auth/quotes client=c-57
+675: 2026-10-10T09:22:30Z INFO req=q-5559 accepted trace_ref=tr-41d5e8 route=/v2/auth/items client=c-83
+679: 2026-10-10T09:22:37Z INFO req=q-5345 accepted trace_ref=tr-6d9d0e route=/v2/auth/accounts client=c-33
+686: 2026-10-10T09:22:48Z INFO req=q-8368 accepted trace_ref=tr-960508 route=/v2/auth/accounts client=c-41
+691: 2026-10-10T09:22:58Z INFO req=q-8065 accepted trace_ref=tr-3f1213 route=/v2/auth/items client=c-43
+699: 2026-10-10T09:23:12Z ERROR req=q-6718 unhandled exception, request failed with HTTP 500:
+721: 2026-10-10T09:23:37Z INFO step 697: Alpha config request replica worker window service index.
+723: 2026-10-10T09:23:42Z INFO req=q-3283 accepted trace_ref=tr-e02c97 route=/v2/auth/batches client=c-44
+730: 2026-10-10T09:23:53Z INFO step 706: Delta cache replica metric worker cache request schema.
+732: 2026-10-10T09:23:56Z INFO req=q-6818 accepted trace_ref=tr-ffbc34 route=/v2/auth/jobs client=c-82
+733: 2026-10-10T09:23:57Z INFO step 709: Deploy handler handler schema request metric gamma session.
+741: 2026-10-10T09:24:12Z INFO req=q-8348 accepted trace_ref=tr-c0b34f route=/v2/auth/jobs client=c-52
+743: 2026-10-10T09:24:15Z INFO step 719: Worker request schema schema worker config worker request.
+751: 2026-10-10T09:24:32Z INFO req=q-2040 accepted trace_ref=tr-3f0efb route=/v2/auth/quotes client=c-18
+756: 2026-10-10T09:24:37Z INFO req=q-5357 accepted trace_ref=tr-b8243e route=/v2/auth/batches client=c-45
+760: 2026-10-10T09:24:48Z INFO step 736: Request handler deploy config request parser module deploy.
+763: 2026-10-10T09:24:54Z INFO step 739: Buffer alpha cache delta module parser worker request.
+769: 2026-10-10T09:25:04Z INFO req=q-5580 accepted trace_ref=tr-05834b route=/v2/auth/accounts client=c-49
+788: 2026-10-10T09:25:47Z INFO req=q-7696 accepted trace_ref=tr-23c0b9 route=/v2/auth/quotes client=c-68
+799: 2026-10-10T09:26:09Z INFO step 775: Module alpha worker session retry request config queue.
+801: 2026-10-10T09:26:12Z INFO step 777: Client request parser alpha handler service shard buffer.
+808: 2026-10-10T09:26:23Z INFO req=q-6741 accepted trace_ref=tr-bf4892 route=/v2/auth/jobs client=c-36
+811: 2026-10-10T09:26:28Z INFO step 787: Metric index shard beta request parser index beta.
+812: 2026-10-10T09:26:29Z INFO step 788: Service gamma config parser index request queue queue.
+813: 2026-10-10T09:26:32Z INFO req=q-4104 accepted trace_ref=tr-228fdd route=/v2/auth/jobs client=c-39
+830: 2026-10-10T09:27:06Z INFO step 806: Replica metric config alpha request replica alpha alpha.
+860: 2026-10-10T09:27:57Z INFO req=q-3619 accepted trace_ref=tr-2e40d5 route=/v2/auth/items client=c-28
+865: 2026-10-10T09:28:06Z INFO req=q-5410 accepted trace_ref=tr-fd8957 route=/v2/auth/quotes client=c-16
+868: 2026-10-10T09:28:10Z INFO step 844: Service service request window request gamma deploy shard.
+871: 2026-10-10T09:28:15Z INFO step 847: Schema service metric token worker worker deploy request.
+877: 2026-10-10T09:28:27Z INFO step 853: Session request beta deploy config module schema module.
+886: 2026-10-10T09:28:46Z INFO requests: 64 accepted, 2 retried, 1 failed
+887: 2026-10-10T09:28:46Z ERROR job ci-7000 failed: 1 request(s) returned HTTP 500 during the integration stage
+
+> CALL inspect_spans {"span_root": "tr-c2980b"}
+RESULT:
+{"trace_ref":"tr-c2980b","root_service":"auth","spans":"<table $.spans>"}
+$.spans:
+[table: 44 rows; columns: span_id, parent, service, op, ms, status, release, note]
+span_id | parent | service | op | ms | status | release | note
+"sp-a463" | null | "queue" | "read_latency" | 225 | "ok" | "rel-7643" | ""
+"sp-69b1" | "sp-a463" | "upload" | "write_deploy" | 261 | "ok" | "rel-7643" | ""
+"sp-00b2" | "sp-69b1" | "queue" | "encode_module" | 46 | "ok" | "rel-7643" | ""
+"sp-317e" | "sp-00b2" | "cache" | "write_deploy" | 134 | "ok" | "rel-7643" | ""
+"sp-5a79" | "sp-a463" | "auth" | "lookup_queue" | 310 | "ok" | "rel-2804" | ""
+"sp-9569" | "sp-a463" | "auth" | "read_module" | 392 | "ok" | "rel-2804" | ""
+"sp-827e" | "sp-a463" | "export" | "call_schema" | 289 | "ok" | "rel-2804" | ""
+"sp-5f49" | "sp-a463" | "auth" | "write_worker" | 302 | "ok" | "rel-7643" | ""
+"sp-12af" | "sp-5f49" | "queue" | "encode_latency" | 181 | "ok" | "rel-2804" | ""
+"sp-0906" | "sp-12af" | "upload" | "read_alpha" | 374 | "ok" | "rel-7643" | ""
+"sp-77eb" | "sp-0906" | "auth" | "read_window" | 398 | "ok" | "rel-2804" | ""
+"sp-f90c" | "sp-a463" | "queue" | "call_buffer" | 53 | "ok" | "rel-2804" | ""
+"sp-f3f7" | "sp-f90c" | "auth" | "acquire" | 397 | "ERROR" | "rel-7643" | "PoolExhaustedError; setting MAX_INFLIGHT"
+"sp-e53b" | "sp-a463" | "billing" | "write_schema" | 230 | "ok" | "rel-7643" | ""
+"sp-fbb1" | "sp-e53b" | "auth" | "call_cache" | 205 | "ok" | "rel-7643" | ""
+"sp-4656" | "sp-a463" | "search" | "call_client" | 282 | "ok" | "rel-7643" | ""
+"sp-ba19" | "sp-4656" | "upload" | "lookup_delta" | 270 | "ok" | "rel-7643" | ""
+"sp-f8ae" | "sp-ba19" | "notify" | "read_server" | 150 | "ok" | "rel-2804" | ""
+"sp-3fd7" | "sp-a463" | "queue" | "lookup_replica" | 143 | "ok" | "rel-7643" | ""
+"sp-8a73" | "sp-3fd7" | "notify" | "encode_retry" | 349 | "ok" | "rel-2804" | ""
+"sp-bc3e" | "sp-8a73" | "auth" | "read_config" | 134 | "ok" | "rel-7643" | ""
+"sp-b975" | "sp-bc3e" | "upload" | "write_queue" | 40 | "ok" | "rel-2804" | ""
+"sp-4edc" | "sp-b975" | "auth" | "call_alpha" | 15 | "ok" | "rel-7643" | ""
+"sp-9e5a" | "sp-a463" | "search" | "lookup_buffer" | 44 | "ok" | "rel-2804" | ""
+"sp-ff42" | "sp-9e5a" | "auth" | "encode_session" | 337 | "ok" | "rel-7643" | ""
+"sp-2dae" | "sp-a463" | "cache" | "write_deploy" | 400 | "ok" | "rel-2804" | ""
+"sp-02ca" | "sp-2dae" | "cache" | "encode_worker" | 55 | "ok" | "rel-7643" | ""
+"sp-bbea" | "sp-02ca" | "upload" | "write_buffer" | 57 | "ok" | "rel-2804" | ""
+"sp-dfea" | "sp-a463" | "upload" | "write_module" | 379 | "ok" | "rel-2804" | ""
+"sp-45a6" | "sp-a463" | "billing" | "lookup_token" | 226 | "ok" | "rel-7643" | ""
+"sp-6c95" | "sp-a463" | "cache" | "read_worker" | 132 | "ok" | "rel-7643" | ""
+"sp-a540" | "sp-6c95" | "queue" | "write_parser" | 303 | "ok" | "rel-7643" | ""
+"sp-a289" | "sp-a540" | "auth" | "lookup_deploy" | 148 | "ok" | "rel-2804" | ""
+"sp-d612" | "sp-a289" | "queue" | "read_metric" | 273 | "ok" | "rel-7643" | ""
+"sp-2539" | "sp-a463" | "billing" | "call_replica" | 393 | "ok" | "rel-2804" | ""
+"sp-05a6" | "sp-a463" | "export" | "read_config" | 145 | "ok" | "rel-2804" | ""
+"sp-2faa" | "sp-a463" | "auth" | "read_shard" | 74 | "ok" | "rel-7643" | ""
+"sp-8ef4" | "sp-2faa" | "billing" | "lookup_handler" | 57 | "ok" | "rel-7643" | ""
+"sp-e686" | "sp-8ef4" | "auth" | "lookup_latency" | 164 | "ok" | "rel-7643" | ""
+"sp-76df" | "sp-e686" | "billing" | "lookup_buffer" | 260 | "ok" | "rel-2804" | ""
+"sp-c01d" | "sp-76df" | "search" | "write_parser" | 259 | "ok" | "rel-2804" | ""
+"sp-83d9" | "sp-a463" | "billing" | "call_alpha" | 46 | "ok" | "rel-2804" | ""
+"sp-c704" | "sp-83d9" | "search" | "write_delta" | 16 | "ok" | "rel-2804" | ""
+"sp-7342" | "sp-a463" | "search" | "encode_worker" | 195 | "ok" | "rel-7643" | ""
+[TokenTrim: json output compressed 1,994->~945 tokens; errors, failures, summaries and task identifiers kept verbatim; full original only if a needed detail is missing: retrieve_original("orig_c8aaf15b5a")]
+
+> CALL open_artifact_manifest {"build": "rel-7643"}
+RESULT:
+# artifact manifest for build rel-7643 (service auth)
+[current]
+MODULE_RETRY = 6
+MODULE_HANDLER = 394
+PARSER_SERVER = 200
+BETA_HANDLER = 313
+QUEUE_INDEX = 43
+BETA_CONFIG = 24
+BETA_PARSER = 439
+REQUEST_CACHE = 53
+BUFFER_TOKEN = 263
+PARSER_SERVICE = 137
+WINDOW_INDEX = 244
+DEPLOY_INDEX = 410
+CONFIG_DEPLOY = 456
+BETA_MODULE = 445
+DEPLOY_SERVICE = 165
+CACHE_BETA = 425
+HANDLER_SESSION = 382
+HANDLER_TOKEN = 276
+SHARD_INDEX = 446
+CLIENT_CACHE = 63
+CLIENT_PARSER = 49
+CLIENT_SERVER = 346
+SESSION_METRIC = 495
+CLIENT_BETA = 115
+SESSION_REPLICA = 23
+BUFFER_ALPHA = 426
+SHARD_METRIC = 222
+MAX_INFLIGHT = 32
+CACHE_CLIENT = 156
+ALPHA_DELTA = 318
+INDEX_CLIENT = 398
+RETRY_BUFFER = 161
+WINDOW_CONFIG = 261
+ALPHA_SERVICE = 363
+RETRY_METRIC = 489
+CONFIG_TOKEN = 47
+DELTA_REQUEST = 276
+CLIENT_CONFIG = 42
+QUEUE_CACHE = 365
+GAMMA_SESSION = 227
+GAMMA_CLIENT = 199
+CLIENT_ALPHA = 451
+CONFIG_SERVER = 308
+BETA_GAMMA = 300
+SERVER_DEPLOY = 138
+ALPHA_ALPHA = 53
+BUFFER_HANDLER = 487
+TOKEN_GAMMA = 447
+SESSION_WORKER = 235
+REPLICA_SERVER = 354
+DELTA_REQUEST = 214
+SERVICE_CACHE = 27
+PARSER_SERVICE = 266
+SESSION_LATENCY = 156
+METRIC_REPLICA = 71
+INDEX_SERVER = 439
+SERVER_QUEUE = 17
+SERVER_REQUEST = 404
+SERVER_BETA = 231
+SERVICE_WINDOW = 196
+BETA_PARSER = 191
+
+[previous build rel-5230]
+MAX_INFLIGHT = 57
+MODULE_RETRY = 208
+MODULE_HANDLER = 252
+PARSER_SERVER = 247
+BETA_HANDLER = 442
+QUEUE_INDEX = 33
+BETA_CONFIG = 221
+BETA_PARSER = 497
+REQUEST_CACHE = 366
+BUFFER_TOKEN = 51
+PARSER_SERVICE = 313
+WINDOW_INDEX = 122
+DEPLOY_INDEX = 182
+CONFIG_DEPLOY = 136
+BETA_MODULE = 354
+DEPLOY_SERVICE = 241
+CACHE_BETA = 148
+HANDLER_SESSION = 409
+HANDLER_TOKEN = 402
+SHARD_INDEX = 25
+CLIENT_CACHE = 62
+
+> ANSWER {"exception_type":"PoolExhaustedError","exception_location":"src/auth/core.py:167","request_id":"q-6718","trace_ref":"tr-c2980b","release":"rel-7643","setting":"MAX_INFLIGHT=32"}

@@ -1,0 +1,196 @@
+> CALL get_ci_log {"job_id": "ci-7009"}
+RESULT:
+2026-10-19T09:00:01Z INFO step 0: Index alpha gamma service service server parser replica.
+2026-10-19T09:00:04Z INFO heartbeat ok
+2026-10-19T09:00:05Z DEBUG cache replica hit ratio 90% in 60ms
+2026-10-19T09:00:07Z INFO step 3: Buffer alpha parser beta cache deploy client module.
+2026-10-19T09:00:09Z DEBUG cache handler hit ratio 92% in 67ms
+2026-10-19T09:00:11Z INFO step 5: Request cache token deploy beta index parser alpha.
+[... 282 lines omitted e.g. '2026-10-19T09:00:14Z INFO step 6: Index replica session buffer request server wo']
+2026-10-19T09:10:37Z INFO heartbeat ok
+2026-10-19T09:10:37Z WARN req=q-8701 recovered exception, request retried successfully (attempt 2):
+Traceback (most recent call last):
+  File "src/billing/client.py", line 101, in send
+    delta_shard_retry_replica_delta()
+  File "src/billing/net.py", line 294, in write
+    config_alpha_parser_index_shard()
+ConnectionResetError: upstream closed the connection
+2026-10-19T09:10:38Z INFO req=q-7913 accepted trace_ref=tr-fcc7ec route=/v2/billing/items client=c-11
+[... 49 lines omitted e.g. '2026-10-19T09:10:39Z INFO step 321: Buffer latency client service queue parser c']
+2026-10-19T09:12:31Z INFO step 380: Index retry shard beta schema buffer shard parser.
+2026-10-19T09:12:31Z WARN req=q-5468 recovered exception, request retried successfully (attempt 2):
+Traceback (most recent call last):
+  File "src/billing/client.py", line 95, in send
+    gamma_replica_cache_token_parser()
+  File "src/billing/net.py", line 185, in write
+    token_window_server_deploy_deploy()
+ConnectionResetError: upstream closed the connection
+2026-10-19T09:12:32Z INFO heartbeat ok
+[... 310 lines omitted e.g. '2026-10-19T09:12:33Z DEBUG cache beta hit ratio 77% in 57ms']
+2026-10-19T09:23:38Z INFO step 719: Request token request gamma parser cache alpha config.
+2026-10-19T09:23:38Z ERROR req=q-9138 unhandled exception, request failed with HTTP 500:
+Traceback (most recent call last):
+  File "src/billing/api.py", line 248, in handle
+    buffer_server_handler_config_window()
+  File "src/billing/service.py", line 106, in apply
+    replica_cache_service_session_metric()
+  File "src/billing/core.py", line 322, in execute
+    session_service_session_delta_server()
+  File "src/billing/pool.py", line 375, in acquire
+    gamma_token_parser_shard_deploy()
+TokenScopeError: pool_size exhausted while processing batch 356
+2026-10-19T09:23:41Z INFO heartbeat ok
+[... 142 lines omitted e.g. '2026-10-19T09:23:42Z DEBUG cache index hit ratio 82% in 52ms']
+2026-10-19T09:29:18Z INFO step 888: Index parser queue delta worker beta queue alpha.
+2026-10-19T09:29:19Z DEBUG cache token hit ratio 63% in 60ms
+2026-10-19T09:29:22Z INFO heartbeat ok
+2026-10-19T09:29:23Z DEBUG cache session hit ratio 68% in 55ms
+2026-10-19T09:29:23Z INFO requests: 54 accepted, 2 retried, 1 failed
+2026-10-19T09:29:23Z ERROR job ci-7009 failed: 1 request(s) returned HTTP 500 during the integration stage
+[omitted lines by level: INFO 590, DEBUG 193; every WARN/ERROR/FATAL line and every line mentioning a task identifier is shown above]
+[TokenTrim: log output compressed 15,505->~769 tokens; errors, failures, summaries and task identifiers kept verbatim; full original only if a needed detail is missing: retrieve_original("orig_e9f64f4494")]
+
+> CALL retrieve_original {"reference_id": "orig_e9f64f4494", "pattern": "q-9138"}
+RESULT:
+2 matching lines for /q-9138/:
+414: 2026-10-19T09:13:01Z INFO req=q-9138 accepted trace_ref=tr-a05d86 route=/v2/billing/batches client=c-28
+735: 2026-10-19T09:23:38Z ERROR req=q-9138 unhandled exception, request failed with HTTP 500:
+
+> CALL inspect_spans {"span_root": "tr-a05d86"}
+RESULT:
+{"trace_ref":"tr-a05d86","root_service":"billing","spans":"<table $.spans>"}
+$.spans:
+[table: 40 rows; columns: span_id, parent, service, op, ms, status, release, note]
+span_id | parent | service | op | ms | status | release | note
+"sp-78f5" | null | "export" | "encode_cache" | 216 | "ok" | "rel-3778" | ""
+"sp-4f24" | "sp-78f5" | "billing" | "write_metric" | 317 | "ok" | "rel-5063" | ""
+"sp-3255" | "sp-4f24" | "cache" | "lookup_schema" | 134 | "ok" | "rel-5063" | ""
+"sp-e744" | "sp-3255" | "auth" | "lookup_worker" | 113 | "ok" | "rel-5063" | ""
+"sp-eeb2" | "sp-e744" | "queue" | "lookup_alpha" | 118 | "ok" | "rel-5063" | ""
+"sp-1fb5" | "sp-78f5" | "cache" | "lookup_queue" | 193 | "ok" | "rel-3778" | ""
+"sp-9be4" | "sp-1fb5" | "export" | "read_parser" | 45 | "ok" | "rel-5063" | ""
+"sp-ee2b" | "sp-9be4" | "export" | "lookup_schema" | 200 | "ok" | "rel-3778" | ""
+"sp-ae8f" | "sp-ee2b" | "billing" | "lookup_queue" | 74 | "ok" | "rel-3778" | ""
+"sp-f7ce" | "sp-78f5" | "export" | "encode_retry" | 69 | "ok" | "rel-5063" | ""
+"sp-5777" | "sp-f7ce" | "export" | "lookup_client" | 60 | "ok" | "rel-3778" | ""
+"sp-5081" | "sp-5777" | "notify" | "encode_client" | 386 | "ok" | "rel-5063" | ""
+"sp-31f8" | "sp-78f5" | "auth" | "encode_client" | 17 | "ok" | "rel-5063" | ""
+"sp-5587" | "sp-78f5" | "export" | "encode_module" | 84 | "ok" | "rel-3778" | ""
+"sp-7f66" | "sp-5587" | "cache" | "call_window" | 248 | "ok" | "rel-5063" | ""
+"sp-8ed4" | "sp-7f66" | "billing" | "acquire" | 45 | "ERROR" | "rel-5063" | "TokenScopeError; setting POOL_SIZE"
+"sp-db58" | "sp-8ed4" | "cache" | "read_server" | 338 | "ok" | "rel-3778" | ""
+"sp-d66a" | "sp-78f5" | "queue" | "read_request" | 99 | "ok" | "rel-3778" | ""
+"sp-1712" | "sp-d66a" | "search" | "read_beta" | 194 | "ok" | "rel-5063" | ""
+"sp-5d32" | "sp-78f5" | "search" | "write_request" | 379 | "ok" | "rel-3778" | ""
+"sp-825f" | "sp-5d32" | "cache" | "write_delta" | 97 | "ok" | "rel-5063" | ""
+"sp-b029" | "sp-825f" | "export" | "write_beta" | 290 | "ok" | "rel-5063" | ""
+"sp-4ab8" | "sp-78f5" | "upload" | "lookup_parser" | 50 | "ok" | "rel-5063" | ""
+"sp-a537" | "sp-4ab8" | "upload" | "lookup_buffer" | 190 | "ok" | "rel-5063" | ""
+"sp-11f5" | "sp-78f5" | "search" | "read_handler" | 339 | "ok" | "rel-5063" | ""
+"sp-3770" | "sp-11f5" | "cache" | "read_index" | 320 | "ok" | "rel-5063" | ""
+"sp-bc82" | "sp-3770" | "cache" | "encode_latency" | 355 | "ok" | "rel-5063" | ""
+"sp-322b" | "sp-bc82" | "queue" | "lookup_request" | 19 | "ok" | "rel-3778" | ""
+"sp-6ae2" | "sp-78f5" | "billing" | "write_gamma" | 397 | "ok" | "rel-3778" | ""
+"sp-aa69" | "sp-78f5" | "notify" | "write_session" | 75 | "ok" | "rel-3778" | ""
+"sp-1fee" | "sp-78f5" | "billing" | "write_shard" | 46 | "ok" | "rel-3778" | ""
+"sp-0969" | "sp-1fee" | "export" | "read_replica" | 303 | "ok" | "rel-3778" | ""
+"sp-a1c7" | "sp-78f5" | "auth" | "encode_deploy" | 369 | "ok" | "rel-3778" | ""
+"sp-8f7b" | "sp-78f5" | "auth" | "write_gamma" | 6 | "ok" | "rel-5063" | ""
+"sp-cad6" | "sp-8f7b" | "export" | "write_cache" | 294 | "ok" | "rel-5063" | ""
+"sp-d895" | "sp-78f5" | "search" | "lookup_service" | 349 | "ok" | "rel-3778" | ""
+"sp-1dbc" | "sp-78f5" | "queue" | "write_config" | 356 | "ok" | "rel-5063" | ""
+"sp-aeb0" | "sp-78f5" | "search" | "call_cache" | 227 | "ok" | "rel-5063" | ""
+"sp-d050" | "sp-78f5" | "search" | "call_replica" | 305 | "ok" | "rel-5063" | ""
+"sp-6f77" | "sp-78f5" | "notify" | "call_buffer" | 284 | "ok" | "rel-5063" | ""
+[TokenTrim: json output compressed 1,818->~868 tokens; errors, failures, summaries and task identifiers kept verbatim; full original only if a needed detail is missing: retrieve_original("orig_bc418dad16")]
+
+> CALL open_artifact_manifest {"build": "rel-5063"}
+RESULT:
+# artifact manifest for build rel-5063 (service billing)
+[current]
+SERVICE_TOKEN = 340
+LATENCY_ALPHA = 286
+MODULE_DELTA = 278
+MODULE_DEPLOY = 101
+SERVER_WORKER = 220
+HANDLER_LATENCY = 223
+SESSION_INDEX = 451
+HANDLER_CONFIG = 354
+TOKEN_GAMMA = 415
+INDEX_CACHE = 199
+CACHE_SERVER = 228
+RETRY_MODULE = 64
+QUEUE_WORKER = 173
+PARSER_REQUEST = 142
+BUFFER_SERVICE = 241
+PARSER_SERVER = 39
+REQUEST_CONFIG = 186
+BUFFER_LATENCY = 486
+DEPLOY_SCHEMA = 310
+INDEX_GAMMA = 294
+POOL_SIZE = 4
+GAMMA_SHARD = 62
+LATENCY_REQUEST = 273
+RETRY_GAMMA = 304
+BETA_SCHEMA = 105
+MODULE_METRIC = 447
+TOKEN_DEPLOY = 28
+PARSER_LATENCY = 104
+SHARD_DELTA = 338
+SCHEMA_PARSER = 86
+LATENCY_SERVER = 410
+QUEUE_PARSER = 170
+PARSER_REPLICA = 139
+SCHEMA_LATENCY = 307
+SHARD_HANDLER = 489
+SERVER_SESSION = 324
+SERVICE_LATENCY = 463
+HANDLER_GAMMA = 221
+LATENCY_METRIC = 281
+SCHEMA_RETRY = 183
+SERVER_SERVICE = 74
+CONFIG_BETA = 93
+DELTA_SCHEMA = 29
+REQUEST_MODULE = 374
+RETRY_QUEUE = 47
+REQUEST_PARSER = 239
+SHARD_CONFIG = 80
+CLIENT_PARSER = 77
+CLIENT_TOKEN = 420
+WORKER_CONFIG = 300
+CONFIG_RETRY = 281
+SERVICE_BETA = 275
+SCHEMA_SERVER = 151
+SERVER_CACHE = 202
+INDEX_SCHEMA = 109
+PARSER_SESSION = 446
+SCHEMA_GAMMA = 47
+HANDLER_MODULE = 407
+RETRY_QUEUE = 311
+HANDLER_INDEX = 355
+HANDLER_SERVICE = 200
+
+[previous build rel-3321]
+POOL_SIZE = 35
+SERVICE_TOKEN = 98
+LATENCY_ALPHA = 381
+MODULE_DELTA = 355
+MODULE_DEPLOY = 48
+SERVER_WORKER = 291
+HANDLER_LATENCY = 118
+SESSION_INDEX = 118
+HANDLER_CONFIG = 17
+TOKEN_GAMMA = 465
+INDEX_CACHE = 24
+CACHE_SERVER = 53
+RETRY_MODULE = 217
+QUEUE_WORKER = 268
+PARSER_REQUEST = 312
+BUFFER_SERVICE = 133
+PARSER_SERVER = 139
+REQUEST_CONFIG = 446
+BUFFER_LATENCY = 282
+DEPLOY_SCHEMA = 433
+INDEX_GAMMA = 93
+
+> ANSWER {"exception_type":"TokenScopeError","exception_location":"src/billing/pool.py:375","request_id":"q-9138","trace_ref":"tr-a05d86","release":"rel-5063","setting":"POOL_SIZE=4"}
