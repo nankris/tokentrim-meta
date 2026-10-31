@@ -1,0 +1,46 @@
+{
+ "raw": {
+  "correct": 99,
+  "n": 100,
+  "nested_correct": 50,
+  "n_nested": 50,
+  "flat_correct": 49,
+  "n_flat": 50,
+  "retrieves": 0,
+  "usd_total_est": 0.0313262,
+  "usd_per_correct_est": 0.0003164262626262626
+ },
+ "legacy_table": {
+  "correct": 100,
+  "n": 100,
+  "nested_correct": 50,
+  "n_nested": 50,
+  "flat_correct": 50,
+  "n_flat": 50,
+  "retrieves": 0,
+  "usd_total_est": 0.0199226,
+  "usd_per_correct_est": 0.000199226
+ },
+ "structured": {
+  "correct": 100,
+  "n": 100,
+  "nested_correct": 50,
+  "n_nested": 50,
+  "flat_correct": 50,
+  "n_flat": 50,
+  "retrieves": 0,
+  "usd_total_est": 0.024544499999999997,
+  "usd_per_correct_est": 0.00024544499999999995
+ },
+ "structured_lossy": {
+  "correct": 100,
+  "n": 100,
+  "nested_correct": 50,
+  "n_nested": 50,
+  "flat_correct": 50,
+  "n_flat": 50,
+  "retrieves": 0,
+  "usd_total_est": 0.009812999999999999,
+  "usd_per_correct_est": 9.812999999999998e-05
+ }
+}
