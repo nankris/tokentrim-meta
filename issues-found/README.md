@@ -38,3 +38,4 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 66 | [Long-chat failures were a trailing-period grader artifact](66-longchat-grader-trailing-period.md) | Fixed before v5 |
 | 67 | [Luna probe stopped early more on compressed inputs (n.s.)](67-luna-probe-early-stop.md) | Open (watch) |
 | 68 | [Full looped on search_tools after a wrong argument (ah50)](68-search-tools-loop.md) | Open (fix proposed) |
+| 69 | [Full read a wrong release from tabularized span JSON (ah43)](69-wrong-release-from-table.md) | Open (fix proposed) |
