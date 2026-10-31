@@ -40,3 +40,6 @@ Each file: symptom, repro, root cause (if known), fix/status.
 | 68 | [Full looped on search_tools after a wrong argument (ah50)](68-search-tools-loop.md) | Fixed (v5.1, loop guard) |
 | 69 | [Full read a wrong release from tabularized span JSON (ah43)](69-wrong-release-from-table.md) | Fixed (v5.1) |
 | 70 | [Ledger failure modes made explicitly fail-closed](70-ledger-fail-closed.md) | Fixed (v5.1) |
+| 71 | [Shipped compression did nothing on real CI logs (0/797)](71-ci-log-compression-noop.md) | Mitigated (opt-in text_logs) |
+| 72 | [Router gate never routes on natural BFCL catalogues](72-router-gate-never-routes-bfcl.md) | Documented |
+| 73 | [Validation probe silently used the wrong CLI (0/96)](73-haiku-probe-wrong-cli-path.md) | Fixed |

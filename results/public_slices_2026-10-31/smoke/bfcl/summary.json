@@ -1,0 +1,197 @@
+{
+ "workload": "bfcl",
+ "run_id": "pub-bfcl-20261031-202911",
+ "model": "muse-spark-1.3-contributor",
+ "spend_this_run_usd": 0.0072237,
+ "ledger_total_usd": 6.52381221399999,
+ "stopped_by_cap": false,
+ "rows": 8,
+ "items": 2,
+ "errors": 0,
+ "margin": 0.05,
+ "arms": {
+  "baseline": {
+   "n": 2,
+   "passed": 1,
+   "pass_rate": 0.5,
+   "pass_ci95": [
+    0.09453120463920084,
+    0.9054687953607992
+   ],
+   "prompt_tokens_mean": 10469.0,
+   "output_tokens_mean": 221.0,
+   "usd_mean": 0.0010910999999999998,
+   "usd_total": 0.0021821999999999996,
+   "calls_mean": 1.0,
+   "errors": 0,
+   "error_types": {
+    "value_error:other": 1
+   },
+   "search_tools": 0,
+   "items_with_search": 0,
+   "internal_leak": 0,
+   "routed": 0,
+   "gated": 0
+  },
+  "compression_only": {
+   "n": 2,
+   "passed": 1,
+   "pass_rate": 0.5,
+   "pass_ci95": [
+    0.09453120463920084,
+    0.9054687953607992
+   ],
+   "prompt_tokens_mean": 10591.0,
+   "output_tokens_mean": 193.5,
+   "usd_mean": 0.0010978,
+   "usd_total": 0.0021956,
+   "calls_mean": 1.0,
+   "errors": 0,
+   "error_types": {
+    "value_error:other": 1
+   },
+   "search_tools": 0,
+   "items_with_search": 0,
+   "internal_leak": 0,
+   "routed": 0,
+   "gated": 0,
+   "vs_baseline_pass": {
+    "n": 2,
+    "both": 1,
+    "base_only": 0,
+    "other_only": 0,
+    "neither": 1,
+    "diff": 0.0,
+    "ci95": [
+     -0.5734194695183232,
+     0.5734194695183232
+    ],
+    "margin": 0.05,
+    "non_inferior": false
+   },
+   "vs_baseline_prompt_tokens": {
+    "mean": -1.1653453051867417,
+    "ci95": [
+     -1.2206103051525763,
+     -1.1148679521155076
+    ],
+    "n": 2
+   },
+   "vs_baseline_usd": {
+    "mean": -0.6140592063055733,
+    "ci95": [
+     -0.823833700546039,
+     -0.42168145480102937
+    ],
+    "n": 2
+   }
+  },
+  "router_gated": {
+   "n": 2,
+   "passed": 1,
+   "pass_rate": 0.5,
+   "pass_ci95": [
+    0.09453120463920084,
+    0.9054687953607992
+   ],
+   "prompt_tokens_mean": 10470.0,
+   "output_tokens_mean": 208.5,
+   "usd_mean": 0.0010887000000000002,
+   "usd_total": 0.0021774000000000003,
+   "calls_mean": 1.0,
+   "errors": 0,
+   "error_types": {
+    "value_error:other": 1
+   },
+   "search_tools": 0,
+   "items_with_search": 0,
+   "internal_leak": 0,
+   "routed": 0,
+   "gated": 2,
+   "vs_baseline_pass": {
+    "n": 2,
+    "both": 1,
+    "base_only": 0,
+    "other_only": 0,
+    "neither": 1,
+    "diff": 0.0,
+    "ci95": [
+     -0.5734194695183232,
+     0.5734194695183232
+    ],
+    "margin": 0.05,
+    "non_inferior": false
+   },
+   "vs_baseline_prompt_tokens": {
+    "mean": -0.009552010698251982,
+    "ci95": [
+     -0.010005002501250625,
+     -0.009138261902586127
+    ],
+    "n": 2
+   },
+   "vs_baseline_usd": {
+    "mean": 0.21996150673628678,
+    "ci95": [
+     0.06705623143978952,
+     0.3601862426425126
+    ],
+    "n": 2
+   }
+  },
+  "router_forced": {
+   "n": 2,
+   "passed": 1,
+   "pass_rate": 0.5,
+   "pass_ci95": [
+    0.09453120463920084,
+    0.9054687953607992
+   ],
+   "prompt_tokens_mean": 3025.5,
+   "output_tokens_mean": 158.5,
+   "usd_mean": 0.00033425,
+   "usd_total": 0.0006685,
+   "calls_mean": 1.0,
+   "errors": 0,
+   "error_types": {
+    "value_error:other": 1
+   },
+   "search_tools": 0,
+   "items_with_search": 0,
+   "internal_leak": 0,
+   "routed": 2,
+   "gated": 0,
+   "vs_baseline_pass": {
+    "n": 2,
+    "both": 1,
+    "base_only": 0,
+    "other_only": 0,
+    "neither": 1,
+    "diff": 0.0,
+    "ci95": [
+     -0.5734194695183232,
+     0.5734194695183232
+    ],
+    "margin": 0.05,
+    "non_inferior": false
+   },
+   "vs_baseline_prompt_tokens": {
+    "mean": 71.10039163243863,
+    "ci95": [
+     69.38469234617308,
+     72.66745864936489
+    ],
+    "n": 2
+   },
+   "vs_baseline_usd": {
+    "mean": 69.36577765557693,
+    "ci95": [
+     66.98917520835329,
+     71.54528683123957
+    ],
+    "n": 2
+   }
+  }
+ },
+ "label": "TokenTrim system evaluation on a small public slice; not a leaderboard result"
+}
