@@ -27,7 +27,8 @@ def analyze(dirs, margin=0.05):
     by = collections.defaultdict(dict)
     for r in rows:
         by[r["task_id"]][r["arm"]] = r
-    arms = sorted({r["arm"] for r in rows}, key=lambda a: (a != "baseline", a))
+    order = ["baseline", "skill", "tool_output", "schema_router", "full_no_router", "full_no_history", "full"]
+    arms = sorted({r["arm"] for r in rows}, key=lambda a: (order.index(a) if a in order else 99, a))
     out = {"workload": rows[0]["workload"] if rows else None, "runs": [m.get("run_id") for m in metas],
            "spend_usd": sum(m.get("spend_this_run_usd") or 0 for m in metas),
            "stopped_by_cap": any(m.get("stopped_by_cap") for m in metas),

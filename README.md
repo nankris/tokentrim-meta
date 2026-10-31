@@ -7,6 +7,15 @@ input on Muse Spark Contributor), not the minimum token count.
 > **Contributor-mode disclosure.** All real measurements below use `muse-spark-1.3-contributor`. On the Contributor
 > tier **Meta may use request content for training.** The owner consented; every benchmark task is synthetic.
 
+> **What the numbers are.** Every result in this README is a **TokenTrim system evaluation**: the same Meta model,
+> called with and without TokenTrim's modules, on identical synthetic tasks. It measures TokenTrim, not any model, and
+> it makes no comparison between model providers. The cheap Claude/Codex CLI probes only check task sets and graders
+> before Meta money is spent. They are never a gateway upstream, and their scores are not a model ranking.
+
+> **Local proxy only.** The gateway is a local process. It binds to `127.0.0.1` by default and calls the Meta API
+> with the operator's own key from the environment, which is never logged. This project has no shared or hosted
+> gateway, and no one else's traffic or keys go through it.
+
 ## Three layers, every module opt-in
 
 | Layer | What | Needs | Where |
@@ -33,7 +42,7 @@ Every optimization the gateway applies prints an explanation line (real call, 20
 The hard-task validation round, its 5 percentage-point non-inferiority margin and its analysis plan were fixed in
 [`benchmarks/PREREGISTRATION_v5.md`](benchmarks/PREREGISTRATION_v5.md) before any v5 API call.
 
-## Real results (v4, 2026-10-30)
+## TokenTrim system evaluation, v4 (2026-10-30)
 
 `benchmarks/` runs paired arms on **identical synthetic tasks** with a unique session tag per (task, arm), arm order
 randomized and interleaved per task, 2 warm-up calls excluded, `max_tokens` 16,000, and paired bootstrap 95% CIs
@@ -75,6 +84,12 @@ What this does and does not show:
 - **Quality:** no observed loss in agentic or chat (24/24 in every arm). That is a **ceiling effect, not a
   non-inferiority proof**: with 24/24 vs 24/24 the 95% interval of the pass-rate difference is about +-14 points
   (issue 62). Long-conversation pass counts (10-12 of 12) are too small to compare.
+- **Post-hoc correction (v5, issue 66):** every v4 long-conversation failure was the same grader artifact. The
+  model answered "Blue Plate Co." and the expected value was "Blue Plate Co"; the only difference is the trailing
+  period. Re-graded with the fixed grader, every long-conversation arm is 12/12. So the 10/12 for skill only was
+  not a skill effect. The table keeps the counts as originally graded.
+- **Note on Full (agentic):** it ran before the issue 65 fix, which replays internal `retrieve_original` /
+  `search_tools` rounds into later turns. The v5 runs use the fix.
 - **Truncation:** 0 of 2,058 benchmark calls ended `finish_reason=length` (`max_tokens` 16,000), vs 114 of 255 in the
   v2 run, where reasoning tokens exhausted `max_tokens` (issue 47).
 - Workloads are synthetic and generated deterministically (`benchmarks/workloads.py`); they were tuned once on small
@@ -199,7 +214,13 @@ python3 -m tokentrim.proxy --port 8787 --upstream-base-url https://api.meta.ai/v
 # any OpenAI client:  OpenAI(base_url="http://127.0.0.1:8787/v1", api_key="unused")
 ```
 
-A live smoke call on 2026-10-30 worked with curl and with the official `openai` Python client against the real Meta API ([`proxy_smoke.md`](results/real_meta_2026-10-30_v3/proxy_smoke.md)). **Scope:** plain-text chat completions only (`model`, `messages`, `max_tokens`/`max_completion_tokens`). `tools` and `stream: true` are rejected with HTTP 400, so it is **not yet a drop-in for tool-calling coding agents** (issue 51). The proxy uses its own upstream key; the client's `Authorization` header is ignored.
+A live smoke call on 2026-10-30 worked with curl and with the official `openai` Python client against the real Meta API ([`proxy_smoke.md`](results/real_meta_2026-10-30_v3/proxy_smoke.md)).
+- **This v3 proxy** (`tokentrim/proxy.py`) handles plain-text chat completions only. It rejects `tools` and
+  `stream: true` with HTTP 400 (issue 51).
+- **The v4 gateway server** (`tokentrim.server`, quickstart at the top) accepts tools, buffered streaming, and the
+  Anthropic `/v1/messages` front-end.
+- **Both** are local, loopback-only processes. They use the operator's own upstream key and ignore the client's
+  `Authorization` header. There is no shared gateway.
 
 ## Works with other agents (v3 notes; v4 added `/v1/messages`, tools and buffered streaming)
 
